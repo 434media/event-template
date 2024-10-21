@@ -13,6 +13,8 @@ import { TechBloc } from "~/components/cta/TechBloc";
 import { TechVC } from "~/components/cta/TechVC";
 import { TechCommunity } from "~/components/cta/TechCommunity";
 import { TechFinalist } from "~/components/cta/TechFinalist";
+import { TechPartners } from "~/components/cta/TechPartners";
+import { TechHost } from "~/components/cta/TechHost";
 
 
 export const meta: MetaFunction = () => {
@@ -94,6 +96,8 @@ export default function Index() {
       <Hero />
       <main className="bg-white">
         <Container className="mt-10">
+          <TechHost />
+          <TechPartners />
           <TechLogo />
           <TechStartup />
           <TechVC />

@@ -173,12 +173,12 @@ export function TechVC() {
          <Container>
             <FadeIn>
             <div ref={setReferenceWindowRef}>
-               <h2 className="font-mono text-xs/5 font-semibold uppercase tracking-widest text-neutral-500 data-[dark]:text-neutral-400">
-                  Fuel Your Tech Startup
-               </h2>
-               <h3 className="mt-2 max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
+               <h3 className="max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
                   Venture Capital Track by MGV Capital
                </h3>
+               <h2 className="mt-6 font-mono text-xs/5 font-semibold uppercase tracking-widest text-neutral-500 data-[dark]:text-neutral-400">
+                  Fuel Your Tech Startup
+               </h2>
             </div>
             </FadeIn>
          </Container>
