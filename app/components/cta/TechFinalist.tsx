@@ -1,6 +1,6 @@
-import * as Headless from '@headlessui/react';
-import { clsx } from 'clsx';
+
 import {
+   AnimatePresence,
    MotionValue,
    motion,
    useMotionValueEvent,
@@ -8,57 +8,35 @@ import {
    useSpring,
    type HTMLMotionProps,
 } from 'framer-motion';
+import * as Headless from '@headlessui/react';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import useMeasure, { type RectReadOnly } from 'react-use-measure';
 import { Container } from '~/components/ui/Container';
 import { FadeIn } from '../ui/FadeIn';
-
-const trackFinalist = [
-   {
-      img: 'https://media.licdn.com/dms/image/v2/D5622AQHtsHGV39SOcA/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572443?e=1732147200&v=beta&t=U5cPeP_IDQAC0dfiuMhbTp0qdws7IhEs-WwRXio0ioo',
-      name: 'David Wessels',
-      title: 'Founder',
-      topic: 'JUST-IN-TRAPS',
-   },
-   {
-      img: 'https://media.licdn.com/dms/image/v2/D5622AQHdXSq_VSQt5w/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572592?e=1732147200&v=beta&t=64O-vTpadyddP4dbP7FdiZLi1ops25Z8vfOAfxuPoGo',
-      name: 'David Esra',
-      title: 'Founder',
-      topic: 'BobiHealth',
-   },
-   {
-      img: 'https://media.licdn.com/dms/image/v2/D5622AQEL7PEYNdxezg/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572751?e=1732147200&v=beta&t=J87fY7t-qhQW69eXhP8UTbEPZRisK7PHNpeDTAGYnpk',
-      name: 'José Alberto Díaz García',
-      title: 'Founder',
-      topic: "Balam",
-   },
-   {
-      img: 'https://media.licdn.com/dms/image/v2/D5622AQGLB9pSQPB16Q/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572531?e=1732147200&v=beta&t=r8TOkm8AqVkoznf_XZ7R3A0UrXAhpp6l3GOfNBXpoc8',
-      name: 'Kyle Walker',
-      title: 'Founder',
-      topic: "Axicle, Inc",
-   },
-   {
-      img: 'https://media.licdn.com/dms/image/v2/D5622AQF2Op90TXdhXQ/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572623?e=1732147200&v=beta&t=wnjLo73ixAoQrxsMt6MM2Xm4Xnfx4jY9UjRL-u4grj4',
-      name: 'Nicholas Kaufmann',
-      title: 'Founder',
-      topic: 'Wild Forge',
-   },
-];
+import { XCircleIcon } from '@heroicons/react/16/solid';
+import clsx from 'clsx';
 
 function TopicCard({
    name,
    title,
    img,
-   children,
+   description,
+   link,
+   topic,
    bounds,
    scrollX,
+   isActive,
+   onClick,
    ...props
 }: {
    img: string;
    name: string;
    title: string;
-   children: React.ReactNode;
+   description: string;
+   link: string;
+   topic: string;
+   isActive: boolean;
+   onClick: () => void;
    bounds: RectReadOnly;
    scrollX: MotionValue<number>;
 } & HTMLMotionProps<'div'>) {
@@ -84,8 +62,8 @@ function TopicCard({
    }, [ref, bounds.width, bounds.left, bounds.right]);
 
    let opacity = useSpring(computeOpacity(), {
-      stiffness: 154,
-      damping: 23,
+      stiffness: 100,
+      damping: 20,
    });
 
    useLayoutEffect(() => {
@@ -101,7 +79,11 @@ function TopicCard({
          ref={ref}
          style={{ opacity }}
          {...props}
-         className="relative flex aspect-[9/16] w-72 shrink-0 snap-start scroll-ml-[var(--scroll-padding)] flex-col justify-end overflow-hidden rounded-3xl sm:aspect-[3/4] sm:w-96"
+         className={clsx(
+            'relative flex aspect-[9/16] w-72 shrink-0 snap-start scroll-ml-[var(--scroll-padding)] flex-col justify-end overflow-hidden rounded-3xl sm:aspect-[3/4] sm:w-96',
+            isActive && 'ring-4 ring-indigo-600 bg-opacity-25' // Add a ring and background opacity to indicate the active card
+         )}
+         onClick={onClick}
       >
          <img
             alt="profile headshot of speaker"
@@ -119,7 +101,7 @@ function TopicCard({
                      aria-hidden="true"
                      className="absolute -translate-x-full"
                   ></span>
-                  {children}
+                  {topic}
                   <span aria-hidden="true" className="absolute"></span>
                </p>
             </blockquote>
@@ -132,6 +114,59 @@ function TopicCard({
                </p>
             </figcaption>
          </figure>
+         <AnimatePresence>
+            {isActive && (
+               <div className="fixed inset-0 h-screen z-50 overflow-auto">
+                  <motion.div
+                     initial={{ opacity: 0 }}
+                     animate={{ opacity: 1 }}
+                     exit={{ opacity: 0 }}
+                     className="bg-black/80 backdrop-blur-lg h-full w-full fixed inset-0"
+                  />
+                  <motion.div
+                     initial={{ opacity: 0, y: 50 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     exit={{ opacity: 0, y: 50 }}
+                     transition={{ duration: 0.3, ease: 'easeInOut' }}
+                     ref={ref}
+                     className="max-w-5xl mx-auto bg-white dark:bg-neutral-900 h-fit z-[60] my-10 p-4 md:p-10 rounded-3xl font-sans relative"
+                  >
+                     <button
+                        className="sticky top-4 right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
+                        onClick={() => onClick()}
+                     >
+                        <XCircleIcon className="size-4 text-white dark:text-black" />
+                     </button>
+                     <img
+                        alt="profile headshot of speaker"
+                        src={img}
+                        className="mt-6 w-full h-60 lg:h-96 object-cover rounded-t-3xl"
+                     />
+                     <motion.p
+                        className="text-base font-medium text-black dark:text-white mt-4"
+                     >
+                        {title}
+                     </motion.p>
+                     <motion.p
+                        className="text-2xl md:text-5xl font-semibold text-neutral-700 mt-2 dark:text-white"
+                     >
+                        {name}
+                     </motion.p>
+                     <div className="py-10">
+                        <p className="text-sm text-neutral-700">{description}</p>
+                        <a
+                           href={link}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="mt-4 block text-sm text-blue-500 underline"
+                        >
+                           Learn more
+                        </a>
+                     </div>
+                  </motion.div>
+               </div>
+            )}
+         </AnimatePresence>
       </motion.div>
    );
 }
@@ -140,12 +175,10 @@ export function TechFinalist() {
    let scrollRef = useRef<HTMLDivElement | null>(null);
    let { scrollX } = useScroll({ container: scrollRef });
    let [setReferenceWindowRef, bounds] = useMeasure();
-   let [activeIndex, setActiveIndex] = useState(0);
+   let [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-   useMotionValueEvent(scrollX, 'change', (x) => {
-      setActiveIndex(
-         Math.floor(x / scrollRef.current!.children[0].clientWidth)
-      );
+   useMotionValueEvent(scrollX, 'change', () => {
+      // Do not change activeIndex on scroll
    });
 
    function scrollTo(index: number) {
@@ -155,17 +188,17 @@ export function TechFinalist() {
    }
 
    return (
-      <div className="overflow-hidden py-16">
+      <div className="overflow-hidden py-16 sm:py-24 lg:py-40">
          <Container>
             <FadeIn>
-            <div ref={setReferenceWindowRef}>
-               <h3 className="max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
-                  Announcing the Tech Fuel 2024 Finalists!
-               </h3>
-               <h2 className="mt-6 font-mono text-xs/5 font-semibold uppercase tracking-widest text-neutral-500 data-[dark]:text-neutral-400">
-                Powered by Bexar County Economic & Community Development
-               </h2>
-            </div>
+               <div ref={setReferenceWindowRef}>
+                  <h3 className="max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
+                     Tech Startup Track by Rackspace
+                  </h3>
+                  <h2 className="mt-6 font-mono text-xs/5 font-semibold uppercase tracking-widest text-neutral-500 data-[dark]:text-neutral-400">
+                     Elevate Your Tech Strategy
+                  </h2>
+               </div>
             </FadeIn>
          </Container>
          <div
@@ -177,19 +210,20 @@ export function TechFinalist() {
                '[--scroll-padding:max(theme(spacing.6),calc((100vw-theme(maxWidth.2xl))/2))] lg:[--scroll-padding:max(theme(spacing.8),calc((100vw-theme(maxWidth.7xl))/2))]',
             ])}
          >
-            {trackFinalist.map(({ img, name, title, topic}, talkIndex) => (
+            {trackFinalist.map(({ img, name, title, topic, description, link }, talkIndex) => (
                <TopicCard
                   key={talkIndex}
                   name={name}
                   title={title}
                   img={img}
+                  description={description}
+                  link={link}
+                  topic={topic}
                   bounds={bounds}
                   scrollX={scrollX}
-                  onClick={() => scrollTo(talkIndex)}
-               >
-                  {topic}
-                  
-               </TopicCard>
+                  isActive={activeIndex === talkIndex}
+                  onClick={() => setActiveIndex(activeIndex === talkIndex ? null : talkIndex)}
+               />
             ))}
             <div className="w-[42rem] shrink-0 sm:w-[54rem]" />
          </div>
@@ -217,3 +251,46 @@ export function TechFinalist() {
       </div>
    );
 }
+
+const trackFinalist = [
+   {
+      img: 'https://media.licdn.com/dms/image/v2/D5622AQHtsHGV39SOcA/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572443?e=1732147200&v=beta&t=U5cPeP_IDQAC0dfiuMhbTp0qdws7IhEs-WwRXio0ioo',
+      name: 'David Wessels',
+      title: 'Founder',
+      topic: 'JUST-IN-TRAPS',
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+   {
+      img: 'https://media.licdn.com/dms/image/v2/D5622AQHdXSq_VSQt5w/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572592?e=1732147200&v=beta&t=64O-vTpadyddP4dbP7FdiZLi1ops25Z8vfOAfxuPoGo',
+      name: 'David Esra',
+      title: 'Founder',
+      topic: 'BobiHealth',
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+   {
+      img: 'https://media.licdn.com/dms/image/v2/D5622AQEL7PEYNdxezg/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572751?e=1732147200&v=beta&t=J87fY7t-qhQW69eXhP8UTbEPZRisK7PHNpeDTAGYnpk',
+      name: 'José Alberto Díaz García',
+      title: 'Founder',
+      topic: "Balam",
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+   {
+      img: 'https://media.licdn.com/dms/image/v2/D5622AQGLB9pSQPB16Q/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572531?e=1732147200&v=beta&t=r8TOkm8AqVkoznf_XZ7R3A0UrXAhpp6l3GOfNBXpoc8',
+      name: 'Kyle Walker',
+      title: 'Founder',
+      topic: "Axicle, Inc",
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+   {
+      img: 'https://media.licdn.com/dms/image/v2/D5622AQF2Op90TXdhXQ/feedshare-shrink_1280/feedshare-shrink_1280/0/1729101572623?e=1732147200&v=beta&t=wnjLo73ixAoQrxsMt6MM2Xm4Xnfx4jY9UjRL-u4grj4',
+      name: 'Nicholas Kaufmann',
+      title: 'Founder',
+      topic: 'Wild Forge',
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+];

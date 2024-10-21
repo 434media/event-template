@@ -16,7 +16,6 @@ import { TechFinalist } from "~/components/cta/TechFinalist";
 import { TechPartners } from "~/components/cta/TechPartners";
 import { TechHost } from "~/components/cta/TechHost";
 
-
 export const meta: MetaFunction = () => {
   return [
      {

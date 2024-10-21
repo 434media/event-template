@@ -1,6 +1,5 @@
-import * as Headless from '@headlessui/react';
-import { clsx } from 'clsx';
 import {
+   AnimatePresence,
    MotionValue,
    motion,
    useMotionValueEvent,
@@ -8,64 +7,37 @@ import {
    useSpring,
    type HTMLMotionProps,
 } from 'framer-motion';
+import * as Headless from '@headlessui/react';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import useMeasure, { type RectReadOnly } from 'react-use-measure';
 import { Container } from '~/components/ui/Container';
 import { FadeIn } from '../ui/FadeIn';
-
-const trackTalks = [
-   {
-      img: 'https://media.licdn.com/dms/image/v2/C4D03AQGEZjHfP-XgTg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1580413347613?e=1733356800&v=beta&t=UZFamjvPVyqyrigyDYQeavRnb6wLjRVHS3-O-FK3oM0',
-      name: 'Justin Pelletier',
-      title: 'Global Enterprise Discount Manager',
-      topic: 'Leveraging Funding and Support from Hyperscalers',
-      time: '10:00 AM - 11:00 AM',
-   },
-   {
-      img: 'https://media.licdn.com/dms/image/v2/D5603AQE5YVIWjui8ig/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1708466408918?e=1733356800&v=beta&t=-LqWlPr8JvcaeW-YB2EZuDDKIcBAjYJhQhBHQKXdsRY',
-      name: 'David Schrader',
-      title: 'Director at Rackspace',
-      topic: 'Security Best Practices in the Cloud',
-      time: '11:20 PM - 12:10 PM',
-   },
-   {
-      img: 'https://media.licdn.com/dms/image/v2/D5603AQFR392MmuIxCQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1709319601485?e=1733356800&v=beta&t=8ke7py5lHyBQ5CRmxwqyuOBrlHhwD8-yYtaC2ME8Pzc',
-      name: 'John Crabaugh',
-      title: 'Director, Cyber Security at Rackspace',
-      topic: 'Security Best Practices in the Cloud',
-      time: '11:20 PM - 12:10 PM',
-   },
-   {
-      img: 'https://media.licdn.com/dms/image/v2/C5603AQF7CIGMXAoK7A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516346829339?e=1733356800&v=beta&t=FCzKLuXCE4NZOXZUKyQyLb4acNxcivOJZVyEBmehvtE',
-      name: 'Zachary Symm',
-      title: 'Product Manager for Managed Public Cloud',
-      topic: 'Security Best Practices in the Cloud',
-      time: '11:20 AM - 12:10 PM',
-   },
-   {
-      img: 'https://techbloc.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fcdd6ab39-b2ad-4b58-8e2e-897f04f27d12%2F7e89fbb1-a847-4b4d-a565-c3fa63a4ff86%2F1691540993462.jpeg?table=block&id=d8155c9c-af65-4588-9fa1-740ea06a5766&spaceId=cdd6ab39-b2ad-4b58-8e2e-897f04f27d12&width=400&userId=&cache=v2',
-      name: 'Matthew Parker',
-      title: 'Senior Manager, Cloud Practice Engineering at Rackspace',
-      topic: 'Balancing Simplicity and Complexity in Cloud Architecture',
-      time: '12:30 PM - 1:20 PM',
-   },
-];
+import { XCircleIcon } from '@heroicons/react/16/solid';
+import clsx from 'clsx';
 
 function TopicCard({
    name,
    title,
    img,
    time,
-   children,
+   description,
+   link,
+   topic,
    bounds,
    scrollX,
+   isActive,
+   onClick,
    ...props
 }: {
    img: string;
    name: string;
    title: string;
    time: string;
-   children: React.ReactNode;
+   description: string;
+   link: string;
+   topic: string;
+   isActive: boolean;
+   onClick: () => void;
    bounds: RectReadOnly;
    scrollX: MotionValue<number>;
 } & HTMLMotionProps<'div'>) {
@@ -91,8 +63,8 @@ function TopicCard({
    }, [ref, bounds.width, bounds.left, bounds.right]);
 
    let opacity = useSpring(computeOpacity(), {
-      stiffness: 154,
-      damping: 23,
+      stiffness: 100,
+      damping: 20,
    });
 
    useLayoutEffect(() => {
@@ -108,7 +80,11 @@ function TopicCard({
          ref={ref}
          style={{ opacity }}
          {...props}
-         className="relative flex aspect-[9/16] w-72 shrink-0 snap-start scroll-ml-[var(--scroll-padding)] flex-col justify-end overflow-hidden rounded-3xl sm:aspect-[3/4] sm:w-96"
+         className={clsx(
+            'relative flex aspect-[9/16] w-72 shrink-0 snap-start scroll-ml-[var(--scroll-padding)] flex-col justify-end overflow-hidden rounded-3xl sm:aspect-[3/4] sm:w-96',
+            isActive && 'ring-4 ring-indigo-600 bg-opacity-25' // Add a ring and background opacity to indicate the active card
+         )}
+         onClick={onClick}
       >
          <img
             alt="profile headshot of speaker"
@@ -126,7 +102,7 @@ function TopicCard({
                      aria-hidden="true"
                      className="absolute -translate-x-full"
                   ></span>
-                  {children}
+                  {topic}
                   <span aria-hidden="true" className="absolute"></span>
                </p>
             </blockquote>
@@ -139,6 +115,59 @@ function TopicCard({
                </p>
             </figcaption>
          </figure>
+         <AnimatePresence>
+            {isActive && (
+               <div className="fixed inset-0 h-screen z-50 overflow-auto">
+                  <motion.div
+                     initial={{ opacity: 0 }}
+                     animate={{ opacity: 1 }}
+                     exit={{ opacity: 0 }}
+                     className="bg-black/80 backdrop-blur-lg h-full w-full fixed inset-0"
+                  />
+                  <motion.div
+                     initial={{ opacity: 0, y: 50 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     exit={{ opacity: 0, y: 50 }}
+                     transition={{ duration: 0.3, ease: 'easeInOut' }}
+                     ref={ref}
+                     className="max-w-5xl mx-auto bg-white dark:bg-neutral-900 h-fit z-[60] my-10 p-4 md:p-10 rounded-3xl font-sans relative"
+                  >
+                     <button
+                        className="sticky top-4 right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
+                        onClick={() => onClick()}
+                     >
+                        <XCircleIcon className="size-4 text-white dark:text-black" />
+                     </button>
+                     <img
+                        alt="profile headshot of speaker"
+                        src={img}
+                        className="mt-6 w-full h-60 lg:h-96 object-cover rounded-t-3xl"
+                     />
+                     <motion.p
+                        className="text-base font-medium text-black dark:text-white mt-4"
+                     >
+                        {title}
+                     </motion.p>
+                     <motion.p
+                        className="text-2xl md:text-5xl font-semibold text-neutral-700 mt-2 dark:text-white"
+                     >
+                        {name}
+                     </motion.p>
+                     <div className="py-10">
+                        <p className="text-sm text-neutral-700">{description}</p>
+                        <a
+                           href={link}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="mt-4 block text-sm text-blue-500 underline"
+                        >
+                           Learn more
+                        </a>
+                     </div>
+                  </motion.div>
+               </div>
+            )}
+         </AnimatePresence>
       </motion.div>
    );
 }
@@ -147,12 +176,10 @@ export function TechStartup() {
    let scrollRef = useRef<HTMLDivElement | null>(null);
    let { scrollX } = useScroll({ container: scrollRef });
    let [setReferenceWindowRef, bounds] = useMeasure();
-   let [activeIndex, setActiveIndex] = useState(0);
+   let [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-   useMotionValueEvent(scrollX, 'change', (x) => {
-      setActiveIndex(
-         Math.floor(x / scrollRef.current!.children[0].clientWidth)
-      );
+   useMotionValueEvent(scrollX, 'change', () => {
+      // Do not change activeIndex on scroll
    });
 
    function scrollTo(index: number) {
@@ -165,14 +192,14 @@ export function TechStartup() {
       <div className="overflow-hidden py-16 sm:py-24 lg:py-40">
          <Container>
             <FadeIn>
-            <div ref={setReferenceWindowRef}>
-               <h3 className="max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
-                  Tech Startup Track by Rackspace
-               </h3>
-               <h2 className="mt-6 font-mono text-xs/5 font-semibold uppercase tracking-widest text-neutral-500 data-[dark]:text-neutral-400">
-                  Elevate Your Tech Strategy
-               </h2>
-            </div>
+               <div ref={setReferenceWindowRef}>
+                  <h3 className="max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
+                     Tech Startup Track by Rackspace
+                  </h3>
+                  <h2 className="mt-6 font-mono text-xs/5 font-semibold uppercase tracking-widest text-neutral-500 data-[dark]:text-neutral-400">
+                     Elevate Your Tech Strategy
+                  </h2>
+               </div>
             </FadeIn>
          </Container>
          <div
@@ -184,22 +211,21 @@ export function TechStartup() {
                '[--scroll-padding:max(theme(spacing.6),calc((100vw-theme(maxWidth.2xl))/2))] lg:[--scroll-padding:max(theme(spacing.8),calc((100vw-theme(maxWidth.7xl))/2))]',
             ])}
          >
-            {trackTalks.map(({ img, name, title, topic, time }, talkIndex) => (
+            {trackTalks.map(({ img, name, title, topic, time, description, link }, talkIndex) => (
                <TopicCard
                   key={talkIndex}
                   name={name}
                   title={title}
                   time={time}
                   img={img}
+                  description={description}
+                  link={link}
+                  topic={topic}
                   bounds={bounds}
                   scrollX={scrollX}
-                  onClick={() => scrollTo(talkIndex)}
-               >
-                  {topic}
-                  <span className="mt-2 block text-sm/6 text-neutral-400">
-                     {time}
-                  </span>
-               </TopicCard>
+                  isActive={activeIndex === talkIndex}
+                  onClick={() => setActiveIndex(activeIndex === talkIndex ? null : talkIndex)}
+               />
             ))}
             <div className="w-[42rem] shrink-0 sm:w-[54rem]" />
          </div>
@@ -227,3 +253,51 @@ export function TechStartup() {
       </div>
    );
 }
+
+const trackTalks = [
+   {
+      img: 'https://media.licdn.com/dms/image/v2/C4D03AQGEZjHfP-XgTg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1580413347613?e=1733356800&v=beta&t=UZFamjvPVyqyrigyDYQeavRnb6wLjRVHS3-O-FK3oM0',
+      name: 'Justin Pelletier',
+      title: 'Global Enterprise Discount Manager',
+      topic: 'Leveraging Funding and Support from Hyperscalers',
+      time: '10:00 AM - 11:00 AM',
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+   {
+      img: 'https://media.licdn.com/dms/image/v2/D5603AQE5YVIWjui8ig/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1708466408918?e=1733356800&v=beta&t=-LqWlPr8JvcaeW-YB2EZuDDKIcBAjYJhQhBHQKXdsRY',
+      name: 'David Schrader',
+      title: 'Director at Rackspace',
+      topic: 'Security Best Practices in the Cloud',
+      time: '11:20 PM - 12:10 PM',
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+   {
+      img: 'https://media.licdn.com/dms/image/v2/D5603AQFR392MmuIxCQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1709319601485?e=1733356800&v=beta&t=8ke7py5lHyBQ5CRmxwqyuOBrlHhwD8-yYtaC2ME8Pzc',
+      name: 'John Crabaugh',
+      title: 'Director, Cyber Security at Rackspace',
+      topic: 'Security Best Practices in the Cloud',
+      time: '11:20 PM - 12:10 PM',
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+   {
+      img: 'https://media.licdn.com/dms/image/v2/C5603AQF7CIGMXAoK7A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516346829339?e=1733356800&v=beta&t=FCzKLuXCE4NZOXZUKyQyLb4acNxcivOJZVyEBmehvtE',
+      name: 'Zachary Symm',
+      title: 'Product Manager for Managed Public Cloud',
+      topic: 'Security Best Practices in the Cloud',
+      time: '11:20 AM - 12:10 PM',
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+   {
+      img: 'https://techbloc.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fcdd6ab39-b2ad-4b58-8e2e-897f04f27d12%2F7e89fbb1-a847-4b4d-a565-c3fa63a4ff86%2F1691540993462.jpeg?table=block&id=d8155c9c-af65-4588-9fa1-740ea06a5766&spaceId=cdd6ab39-b2ad-4b58-8e2e-897f04f27d12&width=400&userId=&cache=v2',
+      name: 'Matthew Parker',
+      title: 'Senior Manager, Cloud Practice Engineering at Rackspace',
+      topic: 'Balancing Simplicity and Complexity in Cloud Architecture',
+      time: '12:30 PM - 1:20 PM',
+      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      link: 'https://example.com/justin-pelletier',
+   },
+];
