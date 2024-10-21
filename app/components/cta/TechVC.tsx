@@ -104,6 +104,9 @@ function TopicCard({
                   ></span>
                   {topic}
                   <span aria-hidden="true" className="absolute"></span>
+                  <span className="mt-2 block text-sm/6 text-neutral-400">
+                     {time}
+                  </span>
                </p>
             </blockquote>
             <figcaption className="mt-6 border-t border-white/20 pt-6">
@@ -154,7 +157,11 @@ function TopicCard({
                         {name}
                      </motion.p>
                      <div className="py-10">
-                        <p className="text-sm text-neutral-700">{description}</p>
+                        <span className="mt-2 block text-sm/6 text-neutral-400">
+                           {time}
+                        </span>
+                        <p className="text-2xl bg-gradient-to-r from-[#fff1be] from-[28%] via-[#ee87cb] via-[70%] to-[#b060ff] bg-clip-text text-transparent">{topic}</p>
+                        <p className="text-sm text-neutral-300">{description}</p>
                         <a
                            href={link}
                            target="_blank"
@@ -194,10 +201,11 @@ export function TechVC() {
             <FadeIn>
                <div ref={setReferenceWindowRef}>
                   <h3 className="max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
-                     Tech Startup Track by Rackspace
+                     Venture Capital Track by MGV Capital
                   </h3>
-                  <h2 className="mt-6 font-mono text-xs/5 font-semibold uppercase tracking-widest text-neutral-500 data-[dark]:text-neutral-400">
-                     Elevate Your Tech Strategy
+                  <h2 className="mt-6 max-w-xl text-xl text-neutral-600">
+                     <strong>Fuel Your Tech Startup!</strong>{' '}
+                     Dive deep into the world of venture capital and discover the latest trends and strategies
                   </h2>
                </div>
             </FadeIn>
