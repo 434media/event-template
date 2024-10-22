@@ -302,7 +302,7 @@ const trackTalks = [
    {
       img: 'https://media.licdn.com/dms/image/v2/D5603AQEpGeK5VHopuw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1722698749875?e=1730937600&v=beta&t=CcZWlOyBQ5voQ1MU96qJ2bWPUlAH-E3W-mWxXXDSKSw',
       name: 'Patrick Robinson',
-      title: 'DOTNET User Group',
+      title: 'Professional Software Consultant',
       topic: 'Test Driven Development From Database to UI',
       time: '1:40 PM - 2:30 PM',
       description: 'Learn how to write effective tests and ensure code quality throughout your development process.',
@@ -311,16 +311,16 @@ const trackTalks = [
    {
       img: 'https://media.licdn.com/dms/image/v2/D5603AQH7KT3-KFQqLw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1676941396548?e=1730937600&v=beta&t=eaS_P0DthA7fCLhFDg7aVmMGT_p40_k8WxyVbGsuVzI',
       name: 'Samad Ahmed',
-      title: 'Alamo Python | Founder of chamoy.io',
+      title: 'Founder of Chamoy.io',
       topic: "Exploring Swarm: OpenAI's Multi-agent Framework",
       time: '2:50 PM - 3:40 PM',
-      description: 'Learn how to leverage funding and support from hyperscalers to maximize your enterprise discounts.',
+      description: "Dive deep into the world of multi-agent systems with OpenAI's Swarm. This talk will explore the capabilities and potential applications of Swarm, a powerful framework designed to facilitate the creation and training of complex multi-agent environments.",
       link: 'https://www.linkedin.com/in/samadahmed/',
    },
    {
       img: 'https://media.licdn.com/dms/image/v2/C5603AQGw6v8HH2SfTA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1660914421679?e=1730937600&v=beta&t=P4914QHsloxWqjZ5irl4NGAPVMsAEGL3i8tNnEtVr-c',
       name: 'Sagar Kewalramani',
-      title: 'Google Developer Groups',
+      title: 'Practice Lead, Field Solution Architect',
       topic: 'The Power of Multi-Modal AI in Our Daily Lives',
       time: '4:00 PM - 5:00 PM',
       description: 'This talk will delve into the latest advancements and real-world applications of AI that combine multiple modalities like text, images, and audio.',
