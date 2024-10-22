@@ -101,9 +101,9 @@ export default function Index() {
           <TechStartup />
           <TechVC />
           <TechCommunity />
+          <TechForm />
           <TechFinalist />
           <TechFuel />
-          <TechForm />
           <TechBloc />
         </Container>
       </main>
