@@ -41,15 +41,15 @@ export function TechPartners({
             <div className="h-px flex-auto bg-neutral-200" />
           </FadeIn>
           <FadeInStagger faster>
-            <ul role="list" className="mt-4 grid grid-cols-2 place-items-center gap-0.5 overflow-hidden sm:mx-0 md:grid-cols-4 md:place-items-start">
+            <ul role="list" className="mt-4 grid grid-cols-2 place-items-center gap-0.5 overflow-hidden sm:mx-0 md:grid-cols-5 md:place-items-start">
               {clients.partners.map(({ name, image, alt }) => (
                 <li key={name} className="p-8 sm:p-10">
                   <FadeIn>
                     <img 
-                        src={image} 
-                        alt={alt} 
-                        className="max-h-12 w-full object-contain md:max-h-14"
-                        />
+                      src={image} 
+                      alt={alt} 
+                      className="max-h-12 w-full object-contain md:max-h-14"
+                    />
                   </FadeIn>
                 </li>
               ))}
@@ -71,9 +71,9 @@ export function TechPartners({
       { name: 'MassChallenge', image: 'https://masschallenge.org/wp-content/uploads/2022/06/mc-logo@2x.png', alt: 'MassChallenge' },
     ],
     partners: [
-      { name: 'IBM', image: 'https://www.ibm.com/design/language/1ee5d3842f1ef9a4026cbb5f6f41ba25/rebus-light.svg', alt: 'IBM' },
-      { name: 'KIPP', image: 'https://media.licdn.com/dms/image/v2/C4D0BAQFN75EUL1eQPA/company-logo_200_200/company-logo_200_200/0/1630543418103/kipp_foundation_logo?e=1737590400&v=beta&t=2yGIBQR73lDzf6izF4kscUxt4nhxTLTtSBnCub2ng4Q', alt: 'KIPP' },
-      { name: 'AWS', image: 'https://mgvcapital.com/wp-content/uploads/2021/09/aws.png', alt: 'AWS' },
-      { name: 'Google', image: 'https://media.licdn.com/dms/image/v2/C4D0BAQHiNSL4Or29cg/company-logo_200_200/company-logo_200_200/0/1631311446380?e=1737590400&v=beta&t=Ln0a0UktQhWPN55fyufvEVrrVXsW_7Z78PjOjzk6F_g', alt: 'Google' },
+      { name: 'IBM', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570609/hashing2_g4on33.svg', alt: 'IBM' },
+      { name: 'Google', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570438/google_rp9nql.svg', alt: 'Google' },
+      { name: 'AWS', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570946/amazonwebservices_juiivn.svg', alt: 'AWS' },
+      { name: 'KIPP', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570308/hashing_kkdqfr.svg', alt: 'KIPP' },
     ],
   };
