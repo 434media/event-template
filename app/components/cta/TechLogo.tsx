@@ -17,7 +17,7 @@ export function TechLogo() {
             </div>
             <div className="mt-16">
                 <img
-                    src="https://res.cloudinary.com/jessebubble/image/upload/v1727649123/techday-all_mbbvby.svg"
+                    src="https://res.cloudinary.com/jessebubble/image/upload/v1729696697/techday-tracks_oeqts8.svg"
                     className="h-full w-full object-contain"
                     alt="Tech Day Logo"
                 />

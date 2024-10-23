@@ -3,11 +3,12 @@ import { FadeIn } from '~/components/ui/FadeIn';
 
 export function TechBloc() {
    return (
+      <>
       <div className="mx-2 my-40 rounded-3xl bg-neutral-950 bg-[url('https://res.cloudinary.com/jessebubble/image/upload/v1727662921/duotone-dots-2-dots_axkyty.png')] bg-cover bg-right pb-24 pt-72 lg:pt-36">
          <Container>
             <FadeIn>
                <div className="grid grid-cols-1 lg:grid-cols-[384px_1fr_1fr]">
-                  <div className="-mt-96 lg:-mt-52">
+                  <div className="-mt-80 lg:-mt-52">
                      <div className="-m-2 rounded-3xl bg-white/15 shadow-[inset_0_0_2px_1px_#ffffff4d] ring-1 ring-black/5 max-lg:mx-auto max-lg:max-w-xs">
                         <div className="rounded-3xl p-2 shadow-md shadow-black/5">
                            <div className="overflow-hidden rounded-3xl shadow-2xl outline outline-1 -outline-offset-1 outline-black/10">
@@ -45,5 +46,18 @@ export function TechBloc() {
             </FadeIn>
          </Container>
       </div>
+
+      <div className="-mt-24 py-24 sm:py-32">
+        <Container className="">
+        <FadeIn>
+                <img
+                    src="https://res.cloudinary.com/jessebubble/image/upload/v1729697036/techday-header_odewv9.svg"
+                    className="h-full w-full object-contain"
+                    alt="Tech Day Logo"
+                />
+        </FadeIn>
+        </Container>
+        </div>
+      </>
    );
 }
