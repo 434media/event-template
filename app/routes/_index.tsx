@@ -42,7 +42,7 @@ export const meta: MetaFunction = () => {
      {
         property: 'og:image',
         content:
-           'https://res.cloudinary.com/jessebubble/image/upload/v1729486057/unreal-sept-8-techday_ysnimr.png',
+           'https://res.cloudinary.com/jessebubble/image/upload/v1729709464/flyers-4-techday_dlaxvx.png',
      },
   ];
 };
