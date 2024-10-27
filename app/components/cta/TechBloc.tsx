@@ -51,7 +51,7 @@ export function TechBloc() {
         <Container className="">
         <FadeIn>
                 <img
-                    src="https://res.cloudinary.com/jessebubble/image/upload/v1729697036/techday-header_odewv9.svg"
+                    src="https://res.cloudinary.com/jessebubble/image/upload/v1727649123/techday-all_mbbvby.svg"
                     className="h-full w-full object-contain"
                     alt="Tech Day Logo"
                 />

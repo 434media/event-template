@@ -5,7 +5,6 @@ import { Button } from "~/components/ui/Button";
 import { Navbar } from "~/components/ui/Navbar";
 import { Link } from "@remix-run/react";
 import { ChevronRightIcon } from '@heroicons/react/16/solid'
-import { TechLogo } from "~/components/cta/TechLogo";
 import { TechFuel } from "~/components/cta/TechFuel";
 import { TechForm } from "~/components/cta/TechForm";
 import { TechStartup } from "~/components/cta/TechStartup";
@@ -99,7 +98,6 @@ export default function Index() {
         <Container className="mt-10">
           <TechHost />
           <TechPartners />
-          <TechLogo />
           <TechStartup />
           <TechVC />
           <TechCommunity />
