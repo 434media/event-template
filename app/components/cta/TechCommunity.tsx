@@ -11,6 +11,7 @@ import * as Headless from '@headlessui/react';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import useMeasure, { type RectReadOnly } from 'react-use-measure';
 import { Container } from '~/components/ui/Container';
+import { Cover } from "~/components/ui/Cover";
 import { FadeIn } from '../ui/FadeIn';
 import { XCircleIcon } from '@heroicons/react/16/solid';
 import clsx from 'clsx';
@@ -161,7 +162,7 @@ function TopicCard({
                            {time}
                         </span>
                         <p className="text-2xl bg-gradient-to-r from-[#fff1be] from-[28%] via-[#ee87cb] via-[70%] to-[#b060ff] bg-clip-text text-transparent">{topic}</p>
-                        <p className="text-sm text-neutral-300">{description}</p>
+                        <p className="text-sm text-neutral-300 max-w-3xl">{description}</p>
                         <a
                            href={link}
                            target="_blank"
@@ -201,7 +202,7 @@ export function TechCommunity() {
             <FadeIn>
                <div ref={setReferenceWindowRef}>
                   <h3 className="max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
-                     Tech Community Track by DEVSA
+                     Tech Community Track by <Cover>DEVSA</Cover>
                   </h3>
                   <h2 className="mt-6 max-w-xl text-xl text-neutral-600">
                      <strong>Passionate Tech Enthusiast!</strong>{' '}

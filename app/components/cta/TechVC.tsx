@@ -11,6 +11,7 @@ import * as Headless from '@headlessui/react';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import useMeasure, { type RectReadOnly } from 'react-use-measure';
 import { Container } from '~/components/ui/Container';
+import { Cover } from "~/components/ui/Cover";
 import { FadeIn } from '../ui/FadeIn';
 import { XCircleIcon } from '@heroicons/react/16/solid';
 import clsx from 'clsx';
@@ -201,7 +202,7 @@ export function TechVC() {
             <FadeIn>
                <div ref={setReferenceWindowRef}>
                   <h3 className="max-w-3xl text-pretty text-4xl font-medium tracking-tighter text-neutral-950 data-[dark]:text-white sm:text-6xl">
-                     Venture Capital Track by MGV Capital
+                     Venture Capital Track by <Cover>MGV Capital</Cover>
                   </h3>
                   <h2 className="mt-6 max-w-xl text-xl text-neutral-600">
                      <strong>Fuel Your Tech Startup!</strong>{' '}
