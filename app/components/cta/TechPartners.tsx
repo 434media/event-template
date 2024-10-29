@@ -27,7 +27,7 @@ export function TechPartners({
                     <img 
                         src={image} 
                         alt={alt}
-                        className="max-h-12 w-full object-contain md:max-h-14"
+                        className="h-8 max-sm:mx-auto lg:h-12 w-full object-contain"
                         />
                   </FadeIn>
                 </li>
@@ -41,14 +41,14 @@ export function TechPartners({
             <div className="h-px flex-auto bg-neutral-200" />
           </FadeIn>
           <FadeInStagger faster>
-            <ul role="list" className="mt-4 grid grid-cols-2 place-items-center gap-0.5 overflow-hidden sm:mx-0 md:grid-cols-5 md:place-items-start">
+            <ul role="list" className="mt-4 grid grid-cols-3 place-items-center gap-0.5 overflow-hidden sm:mx-0 md:grid-cols-5 md:place-items-start">
               {clients.partners.map(({ name, image, alt }) => (
                 <li key={name} className="p-8 sm:p-10">
                   <FadeIn>
                     <img 
                       src={image} 
                       alt={alt} 
-                      className="max-h-12 w-full object-contain md:max-h-14"
+                      className="h-8 max-sm:mx-auto lg:h-12 w-full object-contain"
                     />
                   </FadeIn>
                 </li>
@@ -87,8 +87,9 @@ export function TechPartners({
       { name: 'Seals', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730051013/seals_klli1w.svg', alt: 'Seals' },
       { name: 'Google', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570438/google_rp9nql.svg', alt: 'Google' },
       { name: 'AWS', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570946/amazonwebservices_juiivn.svg', alt: 'AWS' },
-      { name: 'Dux Capital', image: 'https://media.licdn.com/dms/image/v2/C4E0BAQG2Ky4Ql03whA/company-logo_200_200/company-logo_200_200/0/1674223925710/duxcapital_logo?e=1737590400&v=beta&t=r9HtAfLKQS8Mq0jE6wuucPJ57R3wi0ecZ_Z6764bXfQ', alt: 'Dux Capital' },
+      { name: 'Sputnik ATX', image: 'https://images.squarespace-cdn.com/content/v1/5984957a2994ca9e4bfab3ff/1510851488512-BZPXZI9H3UMLD4WS0W8V/Teal_Sputnik.png?format=1500w', alt: 'Sputnik ATX' },
       { name: 'Yana', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730049225/flyers-19-square_3_wdem6d.png', alt: 'Yana' },
       { name: 'balam', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730048684/flyers-19-square_2_osq1gp.png', alt: 'balam' },
+      { name: 'Dux Capital', image: 'https://media.licdn.com/dms/image/v2/C4E0BAQG2Ky4Ql03whA/company-logo_200_200/company-logo_200_200/0/1674223925710/duxcapital_logo?e=1737590400&v=beta&t=r9HtAfLKQS8Mq0jE6wuucPJ57R3wi0ecZ_Z6764bXfQ', alt: 'Dux Capital' },
     ],
   };
