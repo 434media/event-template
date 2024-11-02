@@ -91,6 +91,8 @@ export function TechPartners({
       { name: 'Yana', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730049225/flyers-19-square_3_wdem6d.png', alt: 'Yana' },
       { name: 'balam', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730048684/flyers-19-square_2_osq1gp.png', alt: 'balam' },
       { name: 'Sputnik ATX', image: 'https://images.squarespace-cdn.com/content/v1/5984957a2994ca9e4bfab3ff/1510851488512-BZPXZI9H3UMLD4WS0W8V/Teal_Sputnik.png?format=1500w', alt: 'Sputnik ATX' },
+      { name: 'Founder Institute', image: 'https://fi.co/images/FI_logo.png', alt: 'Founder Institute' },
+      { name: 'Emerge and Rise', image: 'https://images.squarespace-cdn.com/content/v1/6617fa74e0f1dd166e6380db/a3b6ae0d-cba2-4c94-9045-273787d3f69a/Emerge+and+Rise+logo+.png', alt: 'Emerge and Rise' },
       { name: 'Dux Capital', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730298919/flyers-21-square_4_nnt6c0.png', alt: 'Dux Capital' },
     ],
   };
