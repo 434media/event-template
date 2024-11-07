@@ -301,7 +301,7 @@ const trackTalks = [
       link: 'https://www.linkedin.com/in/wesetheredge/',
    },
    {
-      img: 'https://media.licdn.com/dms/image/v2/D5603AQEpGeK5VHopuw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1722698749875?e=1730937600&v=beta&t=CcZWlOyBQ5voQ1MU96qJ2bWPUlAH-E3W-mWxXXDSKSw',
+      img: 'https://media.licdn.com/dms/image/v2/D5603AQEpGeK5VHopuw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1722698749875?e=1736380800&v=beta&t=JDB2uv-r_0HzVw-E0W_HraBY9seQ5Ym_orKdQqqiALI',
       name: 'Patrick Robinson',
       title: 'Professional Software Consultant',
       topic: 'Test Driven Development From Database to UI',
@@ -310,7 +310,7 @@ const trackTalks = [
       link: 'https://www.linkedin.com/in/patrick-robinson-dev/',
    },
    {
-      img: 'https://media.licdn.com/dms/image/v2/D5603AQH7KT3-KFQqLw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1676941396548?e=1730937600&v=beta&t=eaS_P0DthA7fCLhFDg7aVmMGT_p40_k8WxyVbGsuVzI',
+      img: 'https://media.licdn.com/dms/image/v2/D5603AQH7KT3-KFQqLw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1676941396548?e=1736380800&v=beta&t=PefOAhPFBdHmG4rmkXZE3mHSD2ktYmnSlpzcV9ihbc4',
       name: 'Samad Ahmed',
       title: 'Founder of Chamoy.io',
       topic: "Exploring Swarm: OpenAI's Multi-agent Framework",
@@ -319,7 +319,7 @@ const trackTalks = [
       link: 'https://www.linkedin.com/in/samadahmed/',
    },
    {
-      img: 'https://media.licdn.com/dms/image/v2/C5603AQGw6v8HH2SfTA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1660914421679?e=1730937600&v=beta&t=P4914QHsloxWqjZ5irl4NGAPVMsAEGL3i8tNnEtVr-c',
+      img: 'https://media.licdn.com/dms/image/v2/C5603AQGw6v8HH2SfTA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1660914421679?e=1736380800&v=beta&t=il4sqexRLCAAfI_skkIuerTDn2zxUkcVsz5VFv0td4M',
       name: 'Sagar Kewalramani',
       title: 'Practice Lead, Field Solution Architect',
       topic: 'The Power of Multi-Modal AI in Our Daily Lives',
