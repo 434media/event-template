@@ -345,7 +345,7 @@ import {
        link: 'https://my.codeflight.io/',
     },
     {
-       img: 'https://media.licdn.com/dms/image/v2/C560BAQH_oUgDug2ueA/company-logo_200_200/company-logo_200_200/0/1662518564184?e=1739404800&v=beta&t=yzLV75ZVuLaNJdPOiVDldO3Qmw5QYtcF_HZhXllCS4o',
+       img: 'https://media.licdn.com/dms/image/v2/D5603AQE42hCaSPwmKw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1696226954604?e=1736985600&v=beta&t=Cq1-TmJ6V_8vW5Hk1qhpcgQp0z3RWukr1GiprK6xbTY',
        name: 'Marco Torres',
        title: 'Lead Developer',
        topic: 'itDoes! Interactive',
@@ -372,7 +372,7 @@ import {
        link: 'https://www.linkedin.com/in/thien-le1/',
     },
     {
-       img: 'https://media.licdn.com/dms/image/v2/C4D0BAQH68oVI-sC8IA/company-logo_200_200/company-logo_200_200/0/1633327119642/smart_border_systems_logo?e=1739404800&v=beta&t=HqUje6DN1GZGsSj65ImhB2mldNYgM5YMFnj4Ti1cvYI',
+       img: 'https://media.licdn.com/dms/image/v2/D5603AQFHEB2dtOC7uw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1665212980290?e=1736985600&v=beta&t=HZDk31pbV31uDHzXslcdXoFnJu7m_D25Xf_EPO29cHw',
        name: 'Eduardo Cabrera',
        title: 'Founder of Smart Border Systems',
        topic: 'Smart Border Systems',
@@ -381,7 +381,7 @@ import {
        link: 'https://www.smartborder.systems/',
     },
     {
-       img: 'https://media.licdn.com/dms/image/v2/D562DAQGzmb8ttQrl7A/profile-treasury-image-shrink_1920_1920/profile-treasury-image-shrink_1920_1920/0/1731198066520?e=1731963600&v=beta&t=CWwMLGzpUdWzirldmB4hEO16c1XhlUL4u6pszkba_vg',
+       img: 'https://media.licdn.com/dms/image/v2/D4D03AQGk_3S1vpm0RA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1665083705897?e=1736985600&v=beta&t=nDGRe1g9bCc_CoFal9RWJu0QmHxcfM4gRm8lFJz6a4g',
        name: 'Sameer Siddiqui',
        title: 'Founder of Drone Washing Solutions',
        topic: 'Drone Washing Solutions',
@@ -390,7 +390,7 @@ import {
        link: 'https://www.linkedin.com/in/sameer-siddiqui-597785252/',
     },
     {
-       img: 'https://media.licdn.com/dms/image/v2/D560BAQFe2xXtaeX17Q/company-logo_200_200/company-logo_200_200/0/1727388209977/populaceapp_logo?e=1739404800&v=beta&t=lAdUnJSCuWEibpr4ltsud69Ked4eBvNCXvSAnbOzPGA',
+       img: 'https://media.licdn.com/dms/image/v2/D5603AQEuP1wVt0sQJw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1697634575666?e=1736985600&v=beta&t=NWKOd1l4lvi7PAq6yY81tMfAIu31iihoA4R9vCe25vs',
        name: 'Michael Cervantes',
        title: 'Strategy & Innovation Architect',
        topic: 'Populace',
@@ -408,7 +408,7 @@ import {
        link: 'https://maverickmri.com/',
     },
     {
-       img: 'https://media.licdn.com/dms/image/v2/D560BAQHPiTInmG4hnw/company-logo_200_200/company-logo_200_200/0/1715175289668/soulmobility_logo?e=1739404800&v=beta&t=cUKSELjMAZ9V3OASFEzxtI2RV8EMBjow03UuZ3LV6Y0',
+       img: 'https://media.licdn.com/dms/image/v2/D5603AQGaVgTay7cRXg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1687796270347?e=1736985600&v=beta&t=aFhEGx50pMRtbSFoC-HhtdBhnadkkPVw8zWtb68riIw',
        name: 'Todd Hargroder',
        title: 'Founder of Soul Mobility',
        topic: 'Soul Mobility',
