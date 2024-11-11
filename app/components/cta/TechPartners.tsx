@@ -1,6 +1,7 @@
 import { Container } from '~/components/ui/Container'
 import { FadeIn, FadeInStagger } from '~/components/ui/FadeIn'
 import clsx from 'clsx'
+import { a } from 'framer-motion/client';
 
 export function TechPartners({
     className,
@@ -27,7 +28,7 @@ export function TechPartners({
                     <img 
                         src={image} 
                         alt={alt}
-                        className="h-8 max-sm:mx-auto lg:h-12 w-full object-contain"
+                        className="h-8 max-lg:mx-auto lg:h-12 w-full object-contain"
                         />
                   </FadeIn>
                 </li>
@@ -48,7 +49,7 @@ export function TechPartners({
                     <img 
                       src={image} 
                       alt={alt} 
-                      className="h-8 max-sm:mx-auto lg:h-12 w-full object-contain"
+                      className="h-8 max-lg:mx-auto lg:h-12 w-full object-contain"
                     />
                   </FadeIn>
                 </li>
@@ -62,6 +63,7 @@ export function TechPartners({
 
   const clients = {
     sponsors: [
+      { name: 'Frost', image: 'https://www.frostbank.com/.resources/aurora-theme/webresources/static/icons/frost-logos/frost-logo-black.svg', alt: 'Frost' },
       { name: 'AT&T', image: 'https://simpleicons.org/icons/atandt.svg', alt: 'AT&T' },
       { name: 'Bexar County Economic Development Department', image: 'https://www.bexar.org/ImageRepository/Document?documentId=19121', alt: 'Bexar County Economic Development Department' },
       { name: 'Rackspace', image: 'https://www.rackspace.com/sites/default/files/2024-06/option%20a.png', alt: 'Rackspace' },
@@ -69,6 +71,7 @@ export function TechPartners({
       { name: 'Port San Antonio', image: 'https://www.portsanantonio.us/sites/default/files/topLogo.png', alt: 'Port San Antonio' },
       { name: 'JP Morgan Chase', image: 'https://www.jpmorganchase.com/content/dam/jpmorganchase/images/logos/jpmc-logo.svg', alt: 'JP Morgan Chase' },
       { name: 'MassChallenge', image: 'https://masschallenge.org/wp-content/uploads/2022/06/mc-logo@2x.png', alt: 'MassChallenge' },
+      { name: 'Prime Example', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730051638/PE_rid5v1.svg', alt: 'Prime Example' },
     ],
     partners: [
       { name: 'IBM', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570609/hashing2_g4on33.svg', alt: 'IBM' },
@@ -79,20 +82,21 @@ export function TechPartners({
       { name: 'Active Capital', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730046360/ac_dj69tc.svg', alt: 'Active Capital' },
       { name: 'Irys', image: 'https://cdn.prod.website-files.com/656523769ed473294d46608c/6611b67923c7219dd09fdb22_irys-logotype.svg', alt: 'Irys' },
       { name: 'Float Me', image: 'https://cdn.prod.website-files.com/6642b643aa34fc2dc7d83344/6642b643aa34fc2dc7d8335a_Logo_black.svg', alt: 'Float me' },
-      { name: 'Angel Hub', image: 'https://custom-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_300,w_300,f_auto,q_auto/1375226/940696_318615.png', alt: 'Angel Hub' },
-      { name: 'Prime Example', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730051638/PE_rid5v1.svg', alt: 'Prime Example' },
       { name: 'BKC Angel Network', image: 'https://static.wixstatic.com/media/a4e8ec_bcbf94ef54e247c3ac0cc8239145b706~mv2.png/v1/fill/w_552,h_224,al_c,lg_1,q_85,enc_auto/2020-08-17_09-15-03.png', alt: 'Boerne Kendal County Angel network' },
+      { name: 'Dux Capital', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730298919/flyers-21-square_4_nnt6c0.png', alt: 'Dux Capital' },
+      { name: 'Google', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570438/google_rp9nql.svg', alt: 'Google' },
       { name: 'Fabra', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1718688641/fabra_okgahc.png', alt: 'Fabra AI' },
       { name: 'Delta Protect', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730050300/DP_fbmbxo.svg', alt: 'Delta Protect' },
+      { name: 'Padilla', image: 'https://padilla.law/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2020/05/cropped-Padilla-Law-logo3767.jpg.webp', alt: 'Padilla' },
       { name: 'Seals', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730051013/seals_klli1w.svg', alt: 'Seals' },
-      { name: 'Google', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570438/google_rp9nql.svg', alt: 'Google' },
+      { name: 'Emerge and Rise', image: 'https://images.squarespace-cdn.com/content/v1/6617fa74e0f1dd166e6380db/a3b6ae0d-cba2-4c94-9045-273787d3f69a/Emerge+and+Rise+logo+.png', alt: 'Emerge and Rise' },
       { name: 'AWS', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1729570946/amazonwebservices_juiivn.svg', alt: 'AWS' },
       { name: 'UTSA', image: 'https://www.utsa.edu/marcomstudio/images/utsa-wordmark-rowdy-head-signature-left-aligned.svg', alt: 'UTSA' },
+      { name: 'Founder Institute', image: 'https://fi.co/images/FI_logo.png', alt: 'Founder Institute' },
+      { name: 'Sputnik ATX', image: 'https://images.squarespace-cdn.com/content/v1/5984957a2994ca9e4bfab3ff/1510851488512-BZPXZI9H3UMLD4WS0W8V/Teal_Sputnik.png?format=1500w', alt: 'Sputnik ATX' },
       { name: 'Yana', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730049225/flyers-19-square_3_wdem6d.png', alt: 'Yana' },
       { name: 'balam', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730048684/flyers-19-square_2_osq1gp.png', alt: 'balam' },
-      { name: 'Sputnik ATX', image: 'https://images.squarespace-cdn.com/content/v1/5984957a2994ca9e4bfab3ff/1510851488512-BZPXZI9H3UMLD4WS0W8V/Teal_Sputnik.png?format=1500w', alt: 'Sputnik ATX' },
-      { name: 'Founder Institute', image: 'https://fi.co/images/FI_logo.png', alt: 'Founder Institute' },
-      { name: 'Emerge and Rise', image: 'https://images.squarespace-cdn.com/content/v1/6617fa74e0f1dd166e6380db/a3b6ae0d-cba2-4c94-9045-273787d3f69a/Emerge+and+Rise+logo+.png', alt: 'Emerge and Rise' },
-      { name: 'Dux Capital', image: 'https://res.cloudinary.com/jessebubble/image/upload/v1730298919/flyers-21-square_4_nnt6c0.png', alt: 'Dux Capital' },
+      { name: 'Angel Hub', image: 'https://custom-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_300,w_300,f_auto,q_auto/1375226/940696_318615.png', alt: 'Angel Hub' },
+      { name: 'AEM', image: 'https://scontent-dfw5-1.xx.fbcdn.net/v/t39.30808-6/327059111_762481845311324_358368972635129650_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=iGxJxZE66mcQ7kNvgHtv6Y7&_nc_zt=23&_nc_ht=scontent-dfw5-1.xx&_nc_gid=AtdKu9JQ91LjsebkLt_TMxL&oh=00_AYAY7tTtYNgutFnkIqdUSSMdx8qpNMhcoE-rHT1P9Kfcew&oe=67384044', alt: 'AEM' },
     ],
   };
