@@ -1,86 +1,7 @@
 import { PlusGrid, PlusGridItem, PlusGridRow } from '~/components/ui/PlusGrid'
-import { Button } from './Button'
 import { Container } from './Container'
 import { Gradient } from './Gradient'
 import { Link } from '@remix-run/react'
-import { Logo } from './Logo'
-
-/* function CallToAction() {
-    return (
-        <div className="relative pb-16 pt-20 text-center sm:py-24">
-            <hgroup>
-                <h2 className='text-neutral-600'>Tech Day 2024</h2>
-                <p className="mt-6 text-3xl font-medium tracking-tight text-gray-950 sm:text-5xl">
-                    San Antonio's Tech Ecosystem
-                </p>
-      </hgroup>
-      <p className="mx-auto mt-6 max-w-xs text-sm/6 text-gray-500">
-        Tech Day brings together the entire tech ecosystem to support innovation and growth
-      </p>
-      <div className="mt-6">
-        <Button className="w-full sm:w-auto" to="https://lu.ma/bf2uuit8?tk=jwPfnw">
-          Learn more
-        </Button>
-      </div>
-    </div>
-  )
-} */
-
-function SitemapHeading({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-sm/6 font-medium text-gray-950/50">{children}</h3>
-}
-
-function SitemapLinks({ children }: { children: React.ReactNode }) {
-  return <ul className="mt-6 space-y-4 text-sm/6">{children}</ul>
-}
-
-function SitemapLink(props: React.ComponentPropsWithoutRef<typeof Link>) {
-  return (
-    <li>
-      <Link
-        {...props}
-        className="font-medium text-gray-950 data-[hover]:text-gray-950/75"
-      />
-    </li>
-  )
-}
-
-/* function Sitemap() {
-  return (
-    <>
-      <div>
-        <SitemapHeading>Product</SitemapHeading>
-        <SitemapLinks>
-          <SitemapLink to="/pricing">Pricing</SitemapLink>
-          <SitemapLink to="#">Analysis</SitemapLink>
-          <SitemapLink to="#">API</SitemapLink>
-        </SitemapLinks>
-      </div>
-      <div>
-        <SitemapHeading>Company</SitemapHeading>
-        <SitemapLinks>
-          <SitemapLink to="#">Careers</SitemapLink>
-          <SitemapLink to="/blog">Blog</SitemapLink>
-          <SitemapLink to="/company">Company</SitemapLink>
-        </SitemapLinks>
-      </div>
-      <div>
-        <SitemapHeading>Support</SitemapHeading>
-        <SitemapLinks>
-          <SitemapLink to="#">Help center</SitemapLink>
-          <SitemapLink to="#">Community</SitemapLink>
-        </SitemapLinks>
-      </div>
-      <div>
-        <SitemapHeading>Company</SitemapHeading>
-        <SitemapLinks>
-          <SitemapLink to="#">Terms of service</SitemapLink>
-          <SitemapLink to="#">Privacy policy</SitemapLink>
-        </SitemapLinks>
-      </div>
-    </>
-  )
-} */
 
 function SocialIconX(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -155,25 +76,42 @@ export function Footer() {
       <Gradient className="relative">
         <div className="absolute inset-2 rounded-3xl bg-white/80" />
         <Container>
-          {/* <CallToAction /> */}
           <PlusGrid className="">
-            {/* <PlusGridRow>
-              <div className="grid grid-cols-2 gap-y-10 pb-6 lg:grid-cols-6 lg:gap-8">
-                <div className="col-span-2 flex">
-                  <PlusGridItem className="pt-6 lg:pb-6">
-                    <Logo className="h-9 sm:h-32" />
-                  </PlusGridItem>
-                </div>
-                <div className="col-span-2 grid grid-cols-2 gap-x-8 gap-y-12 lg:col-span-4 lg:grid-cols-subgrid lg:pt-6">
-                  <Sitemap />
-                </div>
-              </div>
-            </PlusGridRow> */}
             <PlusGridRow className="flex justify-between">
               <div>
                 <PlusGridItem className="py-3">
                   <Copyright />
                 </PlusGridItem>
+              </div>
+              <div className="flex">
+                <PlusGridItem className="flex items-center gap-8 py-3">
+                  <SocialLinks />
+                </PlusGridItem>
+              </div>
+            </PlusGridRow>
+          </PlusGrid>
+        </Container>
+      </Gradient>
+    </footer>
+  )
+}
+
+export function Navbar() {
+  return (
+    <footer>
+      <Gradient className="relative">
+        <div className="absolute inset-2 rounded-3xl bg-white/80" />
+        <Container>
+          <PlusGrid className="">
+            <PlusGridRow className="flex justify-between">
+              <div>
+                <div className="py-3">
+                  <img
+                    src="https://devsa-assets.s3.us-east-2.amazonaws.com/TB+Full+Logo.png"
+                    alt="Tech Bloc"
+                    className="h-9"
+                  />
+                </div>
               </div>
               <div className="flex">
                 <PlusGridItem className="flex items-center gap-8 py-3">
