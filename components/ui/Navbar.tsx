@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Disclosure,
   DisclosureButton,
@@ -5,7 +7,7 @@ import {
 } from '@headlessui/react'
 import { Bars2Icon } from '@heroicons/react/24/solid'
 import { motion } from 'framer-motion'
-import { Link } from '@remix-run/react'
+import Link from 'next/link';
 import { Logo } from './Logo'
 import { PlusGrid, PlusGridItem, PlusGridRow } from './PlusGrid'
 
@@ -22,7 +24,7 @@ function DesktopNav() {
       {links.map(({ href, label }) => (
         <PlusGridItem key={href} className="relative flex">
           <Link
-            to={href}
+            href={href}
             className="flex items-center px-4 py-3 text-base font-medium text-gray-950 bg-blend-multiply data-[hover]:bg-black/[2.5%]"
           >
             {label}
@@ -59,7 +61,7 @@ function MobileNav() {
             }}
             key={href}
           >
-            <Link to={href} className="text-base font-medium text-gray-950">
+            <Link href={href} className="text-base font-medium text-gray-950">
               {label}
             </Link>
           </motion.div>
@@ -75,15 +77,15 @@ function MobileNav() {
 
 export function Navbar({ banner }: { banner?: React.ReactNode }) {
   return (
-    <Disclosure as="header" className="pt-12 sm:pt-16">
+    <Disclosure as="header" className="bg-rose-600">
       <PlusGrid>
         <PlusGridRow className="relative flex justify-between">
           <div className="relative flex gap-6">
-            {/* <PlusGridItem className="py-3">
-              <Link to="/" title="Home">
+            <PlusGridItem className="py-3">
+              <Link href="/" title="Home">
                 <Logo className="h-9" />
               </Link>
-            </PlusGridItem> */}
+            </PlusGridItem>
             {banner && (
               <div className="relative items-center py-3 lg:flex">
                 {banner}

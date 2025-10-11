@@ -1,7 +1,7 @@
-import { PlusGrid, PlusGridItem, PlusGridRow } from '~/components/ui/PlusGrid'
+import { PlusGrid, PlusGridItem, PlusGridRow } from './PlusGrid'
 import { Container } from './Container'
 import { Gradient } from './Gradient'
-import { Link } from '@remix-run/react'
+import Link from 'next/link';
 
 function SocialIconX(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -35,7 +35,7 @@ function SocialLinks() {
   return (
     <>
       <Link
-        to="https://www.facebook.com/TechBloc"
+        href="https://www.facebook.com/TechBloc"
         target="_blank"
         aria-label="Visit us on Facebook"
         className="text-gray-950 data-[hover]:text-gray-950/75"
@@ -43,7 +43,7 @@ function SocialLinks() {
         <SocialIconFacebook className="size-4" />
       </Link>
       <Link
-        to="https://twitter.com/SATechBloc"
+        href="https://twitter.com/SATechBloc"
         target="_blank"
         aria-label="Visit us on X"
         className="text-gray-950 data-[hover]:text-gray-950/75"
@@ -51,7 +51,7 @@ function SocialLinks() {
         <SocialIconX className="size-4" />
       </Link>
       <Link
-        to="https://www.linkedin.com/company/sa-tech-bloc/"
+        href="https://www.linkedin.com/company/sa-tech-bloc/"
         target="_blank"
         aria-label="Visit us on LinkedIn"
         className="text-gray-950 data-[hover]:text-gray-950/75"

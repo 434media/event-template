@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
-import { Link } from '@remix-run/react'
 import { ReactNode } from 'react';
+import Link from 'next/link';
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline';
@@ -21,7 +21,7 @@ const variants = {
     'relative inline-flex items-center justify-center px-4 py-[calc(theme(spacing.2)-1px)]',
     'rounded-full border border-transparent bg-white/15 shadow-md ring-1 ring-[#D15052]/15',
     'after:absolute after:inset-0 after:rounded-full after:shadow-[inset_0_0_2px_1px_#ffffff4d]',
-    'whitespace-nowrap text-base font-medium text-gray-950',
+    'whitespace-nowrap text-base font-medium text-gray-50',
     'data-[disabled]:bg-white/15 data-[hover]:bg-white/20 data-[disabled]:opacity-40',
   ),
   outline: clsx(
@@ -39,7 +39,7 @@ export function Button({ variant = 'primary', href, className, children, ...prop
 
    if (href) {
       return (
-         <Link to={href} className={className} {...props}>
+         <Link href={href} className={className} {...props}>
             {inner}
          </Link>
       );

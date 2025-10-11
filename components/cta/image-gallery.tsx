@@ -1,6 +1,8 @@
+"use client"
+
 import { useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
-import { Button } from "~/components/ui/Button"
+import { Button } from "../ui/Button"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { VideoModal } from "./video-modal"
 
@@ -203,16 +205,16 @@ export default function ImageGallery() {
           <div className="relative z-10 grid gap-8 md:grid-cols-2 items-center">
             <div className="flex flex-col space-y-6 order-2 md:order-1">
               <div className="space-y-4">
-                <h2 className="text-3xl font-bold text-neutral-950 md:text-4xl lg:text-5xl">
+                <h2 className="text-3xl font-bold text-neutral-50 md:text-4xl lg:text-5xl">
                   2024 Tech Day Photos
                 </h2>
-                <p className="text-lg text-neutral-600 max-w-[40ch]">
+                <p className="text-lg text-neutral-300 max-w-[40ch]">
                   Our incredible tech community gathered for an amazing day of learning, sharing, and connecting!
                 </p>
               </div>
               <Button
                 onClick={() => setIsVideoModalOpen(true)}
-                variant="primary"
+                variant="secondary"
                 className="w-fit"
               >
                 <span className="relative top-px">Watch Video</span>
@@ -222,7 +224,7 @@ export default function ImageGallery() {
               <img
                 src={bannerImage.src || "/placeholder.svg"}
                 alt={bannerImage.alt}
-                className="h-full w-full object-contain"
+                className="h-full w-full object-contain invert"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
