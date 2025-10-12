@@ -10,7 +10,7 @@ export function ConferenceHero() {
       {/* Content Container */}
       <div className="relative z-10 flex h-full items-center justify-center">
         {/* Logo Container - Centered */}
-        <div className="w-full max-w-5xl">
+        <div className="w-full max-w-5xl -mt-24 md:mt-0">
           <img
             src="https://ampd-asset.s3.us-east-2.amazonaws.com/techday/LockUp_Red.svg"
             alt="Tech Day 2025 - Friday November 14th at Boeing Center at Tech Port, San Antonio"
