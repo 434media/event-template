@@ -122,7 +122,7 @@ export function NewsletterPopup() {
           alt="Get Notified"
           width={120}
           height={80}
-          className="h-24 md:h-24 w-auto"
+          className="h-20 md:h-24 w-auto"
         />
       </motion.button>
 

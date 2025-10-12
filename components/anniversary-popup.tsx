@@ -27,7 +27,7 @@ export function AnniversaryPopup() {
           alt="10 Years Tech Bloc"
           width={80}
           height={80}
-          className="h-28 w-28 md:h-24 md:w-24 lg:h-28 lg:w-28"
+          className="h-32 w-28 md:h-24 md:w-24 lg:h-28 lg:w-28"
         />
       </motion.button>
 
