@@ -1,15 +1,14 @@
-import ImageGallery from "../components/cta/image-gallery";
-import { Footer } from "../components/ui/Footer";
-import { Navbar } from "../components/ui/Navbar";
+import { AnniversaryPopup } from "@/components/anniversary-popup"
+import { ConferenceHero } from "../components/conference-hero"
+import { NewsletterPopup } from "../components/newsletter-popup"
 
 export default function Home() {
   return (
-		<>
-			<Navbar />
-				<main className="container mx-auto min-h-screen py-8">
-					<ImageGallery />
-				</main>
-			<Footer />
-		</>
+    <main className="min-h-screen">
+
+      <ConferenceHero />
+      <AnniversaryPopup />
+      <NewsletterPopup />
+    </main>
   )
 }
