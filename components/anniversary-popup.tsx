@@ -1,8 +1,9 @@
 "use client"
 import { useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
-import { X } from "lucide-react"
+import { ArrowRightIcon, X } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 export function AnniversaryPopup() {
   const [isOpen, setIsOpen] = useState(false)
@@ -76,7 +77,7 @@ export function AnniversaryPopup() {
                 {/* Content Section - 3/5 of height */}
                 <div className="h-[60%] p-6 flex flex-col">
                   <h2 className="mb-3 font-mono text-xl font-bold text-red-600 md:text-2xl flex-shrink-0">
-                    Celebrating 10 Years!
+                    10 Years of Tech Bloc!
                   </h2>
 
                   <p className="mb-4 text-sm leading-relaxed text-gray-700 flex-1 overflow-y-auto">
@@ -84,16 +85,12 @@ export function AnniversaryPopup() {
                     collaboration, and growth. Join us as we celebrate 10 years of building the future together.
                   </p>
 
-                  <motion.a
-                    href="https://techbloc.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                  <Link
+                    href="/anniversary"
                     className="flex w-full items-center justify-center rounded-md bg-red-600 px-6 py-3 font-mono text-sm font-semibold text-white transition-colors hover:bg-red-700 flex-shrink-0"
                   >
-                    Learn More About Tech Bloc
-                  </motion.a>
+                    Don't Be A Goober <ArrowRightIcon className="ml-2 h-4 w-4" />
+                  </Link>
                 </div>
               </div>
             </motion.div>

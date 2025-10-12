@@ -10,11 +10,11 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center transition-opacity hover:opacity-80">
           <Image
-            src="/images/tech-day-logo.png"
-            alt="Tech Day 2025"
+            src="https://ampd-asset.s3.us-east-2.amazonaws.com/techday/10Years_Red.svg"
+            alt="Tech Block"
             width={200}
             height={60}
-            className="h-auto w-40 md:w-48"
+            className="h-auto w-24"
             priority
           />
         </Link>
