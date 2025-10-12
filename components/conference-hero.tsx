@@ -4,11 +4,11 @@ import { WebGLBackground } from "./webgl-background"
 
 export function ConferenceHero() {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden">
+    <section className="relative h-screen w-full overflow-hidden">
       <WebGLBackground />
 
       {/* Content Container */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-12 md:px-8 lg:px-12">
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 py-12 md:px-8 lg:px-12">
         {/* Logo Container - Centered */}
         <div className="w-full max-w-5xl">
           <img

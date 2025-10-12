@@ -4,8 +4,7 @@ import { NewsletterPopup } from "../components/newsletter-popup"
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
-
+    <main className="h-screen overflow-hidden">
       <ConferenceHero />
       <AnniversaryPopup />
       <NewsletterPopup />
