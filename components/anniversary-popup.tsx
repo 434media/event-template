@@ -17,7 +17,7 @@ export function AnniversaryPopup() {
       {/* Floating Cube Button */}
       <motion.button
         onClick={handleClick}
-        className="fixed left-39 top-28 md:left-36 md:top-20 lg:top-10 z-40 overflow-visible transition-transform cursor-pointer"
+        className="fixed left-39 top-28 md:left-36 md:top-6 lg:top-10 z-40 overflow-visible transition-transform cursor-pointer"
         style={{
           filter: "drop-shadow(0 0 20px rgba(220, 38, 38, 0.6))",
         }}
