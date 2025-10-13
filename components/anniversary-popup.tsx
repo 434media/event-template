@@ -72,7 +72,7 @@ export function AnniversaryPopup() {
                 {/* Image Section - 2/5 of height */}
                 <div className="h-[40%] overflow-hidden flex-shrink-0">
                   <Image
-                    src="/images/design-mode/guber(4).png"
+                    src="https://ampd-asset.s3.us-east-2.amazonaws.com/techday/guber.png"
                     alt="Tech Bloc Anniversary"
                     width={400}
                     height={300}
