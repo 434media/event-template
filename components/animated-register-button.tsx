@@ -14,7 +14,9 @@ export function AnimatedRegisterButton() {
         className="h-full text-[clamp(1rem,3vw,2rem)]"
         ariaLabel="Register for Tech Day 2025"
       >
-        Register Now <ArrowRightCircle className="ml-3 h-6 w-6" />
+        <span className="flex items-center justify-center whitespace-nowrap">
+          Register Now <ArrowRightCircle className="ml-2 md:ml-3 h-5 w-5 md:h-6 md:w-6 flex-shrink-0" />
+        </span>
       </AnimatedButton>
     </div>
   )

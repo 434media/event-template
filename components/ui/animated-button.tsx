@@ -38,8 +38,8 @@ export function AnimatedButton({
 
   // Variant styles
   const variantStyles = {
-    primary: "bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600",
-    secondary: "bg-white text-red-600 border-2 border-red-600 hover:bg-red-50 focus-visible:outline-red-600",
+    primary: "bg-red-700 text-white hover:bg-red-750 focus-visible:outline-red-700",
+    secondary: "bg-white text-red-700 border-2 border-red-700 hover:bg-red-50 focus-visible:outline-red-700",
   }
 
   // Size styles
