@@ -20,11 +20,11 @@ import { Navbar } from "@/components/navbar"
   export const metadata: Metadata = {
     metadataBase: new URL("https://sanantoniotechday.com"),
     title: {
-      default: "San Antonio Tech Day 2025 | November 14th | Boeing Center at Tech Port",
-      template: "%s | San Antonio Tech Day 2025",
+      default: "San Antonio Tech Day | Celebrating 10 Years of Tech Bloc",
+      template: "%s | San Antonio Tech Day",
     },
     description:
-      "Join Tech Bloc at San Antonio Tech Day to define the next era of local innovation. This conference connects the city’s top talent, founders, and investors through focused panels and talks in three high-impact tracks: Emerging Industries, Founders & Investors, and the transformative power of AI",
+      "Join Tech Bloc at San Antonio Tech Day to define the next era of local innovation. This event connects the city’s top talent, founders, and investors through focused panels and talks in three high-impact tracks: Emerging Industries, Founders & Investors, and the transformative power of AI",
     keywords: [
       "San Antonio tech conference",
       "Tech Day 2025",
@@ -50,17 +50,17 @@ import { Navbar } from "@/components/navbar"
       locale: "en_US",
       url: "https://sanantoniotechday.com",
       siteName: "San Antonio Tech Day",
-      title: "San Antonio Tech Day 2025 | November 14th | Boeing Center at Tech Port",
+      title: "San Antonio Tech Day | Celebrating 10 Years of Tech Bloc",
       description:
-        "Join Tech Bloc at San Antonio Tech Day to define the next era of local innovation. This conference connects the city’s top talent, founders, and investors through focused panels and talks in three high-impact tracks: Emerging Industries, Founders & Investors, and the transformative power of AI",
+        "Join Tech Bloc at San Antonio Tech Day to define the next era of local innovation. This event connects the city’s top talent, founders, and investors through focused panels and talks in three high-impact tracks: Emerging Industries, Founders & Investors, and the transformative power of AI",
     },
     twitter: {
       card: "summary_large_image",
       site: "@SATechBloc",
       creator: "@SATechBloc",
-      title: "San Antonio Tech Day 2025 | November 14th | Boeing Center at Tech Port",
+      title: "San Antonio Tech Day | Celebrating 10 Years of Tech Bloc",
       description:
-        "Join Tech Bloc at San Antonio Tech Day to define the next era of local innovation. This conference connects the city’s top talent, founders, and investors through focused panels and talks in three high-impact tracks: Emerging Industries, Founders & Investors, and the transformative power of AI",
+        "Join Tech Bloc at San Antonio Tech Day to define the next era of local innovation. This event connects the city’s top talent, founders, and investors through focused panels and talks in three high-impact tracks: Emerging Industries, Founders & Investors, and the transformative power of AI",
     },
     robots: {
       index: true,
