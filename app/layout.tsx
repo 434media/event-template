@@ -130,7 +130,7 @@ import { Navbar } from "@/components/navbar"
             }}
           />
         </head>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Suspense fallback={<div>Loading...</div>}>
             <Navbar />
             {children}

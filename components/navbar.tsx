@@ -19,8 +19,8 @@ export function Navbar() {
   }
   return (
     <>
-      <nav className="fixed left-0 right-0 top-0 z-50 bg-transparent">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-center px-4 md:px-8 lg:px-12 mt-4">
+      <nav className="fixed left-0 right-0 top-0 z-50 bg-transparent backdrop-blur-xs py-4">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-center px-4 md:px-8 lg:px-12">
           <motion.button
             onClick={() => setIsDropdownOpen(true)}
             className="flex items-center transition-opacity cursor-pointer"
@@ -63,13 +63,13 @@ export function Navbar() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: -20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed left-1/2 -translate-x-1/2 top-24 z-50 w-[85vw] max-w-sm"
+              className="fixed left-1/2 -translate-x-1/2 top-24 z-50 w-[85vw] max-w-xl"
               style={{
                 aspectRatio: "4/5",
                 transformOrigin: "top center",
               }}
             >
-              <div className="rounded-lg bg-white shadow-2xl h-full flex flex-col overflow-hidden">
+              <div className="rounded-lg shadow-2xl h-full flex flex-col overflow-hidden">
                 {/* Close Button */}
                 <button
                   onClick={() => setIsDropdownOpen(false)}
@@ -131,21 +131,6 @@ export function Navbar() {
                       </motion.div>
                     </AnimatedButton>
                   </motion.div>
-                </div>
-
-                {/* Content Section - 3/5 of height */}
-                <div className="h-[60%] p-6 flex flex-col">
-                  <h2 className="mb-3 font-mono text-xl font-bold text-red-600 md:text-2xl flex-shrink-0">
-                    Celebrating 10 Years of Tech Bloc!
-                  </h2>
-
-                  <p className="text-sm leading-relaxed text-gray-700 flex-1 overflow-y-auto">
-                    For a decade, Tech Bloc has been the heart of San Antonio's tech community, fostering innovation,
-                    collaboration, and growth.{" "}
-                    <span className="block mt-2">
-                      Join us in December as we celebrate 10 years of building the future together.
-                    </span>
-                  </p>
                 </div>
               </div>
             </motion.div>

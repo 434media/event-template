@@ -8,7 +8,7 @@ import { VignetteShader } from "../lib/vignette-shaders"
 
 export function WebGLBackground() {
   return (
-    <div className="absolute inset-0 z-0">
+    <div className="fixed inset-0 z-0">
       <Canvas
         camera={{
           position: [1.26, 2.66, -1.82],
@@ -19,8 +19,8 @@ export function WebGLBackground() {
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
       >
-        <color attach="background" args={["#ffffff"]} />
-        <fog attach="fog" args={["#ffffff", 10, 30]} />
+        <color attach="background" args={["#000000"]} />
+        <fog attach="fog" args={["#000000", 10, 30]} />
 
         <ambientLight intensity={0.6} />
         <pointLight position={[10, 10, 10]} intensity={0.4} color="#dc2626" />
@@ -72,7 +72,7 @@ export function WebGLBackground() {
         </Effects>
       </Canvas>
 
-      <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-white/30 to-white/60 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/30 pointer-events-none" />
     </div>
   )
 }

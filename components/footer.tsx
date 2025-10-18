@@ -9,13 +9,13 @@ export function Footer() {
     <footer className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-white/5 backdrop-blur-md">
       <div className="mx-auto flex h-auto min-h-16 max-w-7xl flex-col items-center justify-between gap-3 px-4 py-3 md:h-16 md:flex-row md:gap-0 md:px-8 md:py-0 lg:px-12">
         {/* Left side - Copyright and Credits */}
-        <div className="flex flex-row items-center gap-2 text-sm text-foreground/70">
+        <div className="flex flex-row items-center gap-2 text-sm text-neutral-500/70">
           <span>© {new Date().getFullYear()}</span>
           <Link
             href="https://satechbloc.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-foreground/70 transition-colors hover:text-primary"
+            className="font-semibold text-neutral-500/70 transition-colors hover:text-primary"
           >
             Tech Bloc
           </Link>
@@ -24,7 +24,7 @@ export function Footer() {
             href="https://434media.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-foreground/70 transition-colors hover:text-primary"
+            className="font-semibold text-neutral-500/70 transition-colors hover:text-primary"
           >
             434 MEDIA
           </Link>
@@ -36,7 +36,7 @@ export function Footer() {
             href="https://www.instagram.com/techbloc/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground/70 transition-colors hover:text-primary"
+            className="text-neutral-500/70 transition-colors hover:text-primary"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Instagram"
@@ -50,7 +50,7 @@ export function Footer() {
             href="https://www.linkedin.com/company/sa-tech-bloc/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground/70 transition-colors hover:text-primary"
+            className="text-neutral-500/70 transition-colors hover:text-primary"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             aria-label="LinkedIn"
@@ -64,7 +64,7 @@ export function Footer() {
             href="https://twitter.com/SATechBloc"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground/70 transition-colors hover:text-primary"
+            className="text-neutral-500/70 transition-colors hover:text-primary"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             aria-label="X (Twitter)"

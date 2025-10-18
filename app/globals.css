@@ -135,7 +135,7 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Adding marquee animations to theme */
-  --animate-marquee: marquee 70s linear infinite;
+  --animate-marquee: marquee 100s linear infinite;
   --animate-marquee-slow: marquee-slow 100s linear infinite;
 }
 
@@ -200,7 +200,7 @@
 
   /* Updated animation durations to match theme values */
   .animate-marquee {
-    animation: marquee 70s linear infinite;
+    animation: marquee 100s linear infinite;
   }
 
   .animate-marquee-slow {

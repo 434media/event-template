@@ -184,6 +184,11 @@ const images = [
     height: 800,
     type: "gallery",
   },
+    {
+    src: "https://devsa-assets.s3.us-east-2.amazonaws.com/techday-pics/td5.jpg",
+    alt: "Tech Bloc attendees and speakers from the last 10 years",
+    aspectRatio: "portrait",
+  },
 ]
 
 
