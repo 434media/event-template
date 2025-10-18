@@ -63,13 +63,12 @@ export function Navbar() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: -20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed left-1/2 -translate-x-1/2 top-24 z-50 w-[85vw] max-w-xl"
+              className="fixed left-1/2 -translate-x-1/2 top-24 z-50 w-[85vw] md:w-[70vw] max-w-4xl"
               style={{
-                aspectRatio: "4/5",
                 transformOrigin: "top center",
               }}
             >
-              <div className="rounded-lg shadow-2xl h-full flex flex-col overflow-hidden">
+              <div className="rounded-lg shadow-2xl overflow-hidden bg-black">
                 {/* Close Button */}
                 <button
                   onClick={() => setIsDropdownOpen(false)}
@@ -80,7 +79,7 @@ export function Navbar() {
                 </button>
 
                 {/* Video Section - 2/5 of height */}
-                <div className="h-[40%] overflow-hidden flex-shrink-0 relative bg-black">
+                <div className="relative w-full aspect-[4/5] md:aspect-video">
                   <video
                     ref={videoRef}
                     className="h-full w-full object-cover"

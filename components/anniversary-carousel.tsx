@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { useRef } from "react"
-import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import { motion, useScroll, useTransform, useSpring } from "motion/react"
 
 interface CarouselImage {
   src: string
@@ -225,8 +225,8 @@ function ScrollImage({ image, index }: { image: CarouselImage; index: number }) 
         opacity,
         rotate,
       }}
-      className={`relative h-screen flex items-center ${
-        isLeft ? "justify-start pl-4 md:pl-12 lg:pl-24" : "justify-end pr-4 md:pr-12 lg:pr-24"
+      className={`relative py-8 md:py-12 flex items-center ${
+        isLeft ? "justify-start pl-16 md:pl-24 lg:pl-32" : "justify-end pr-4 md:pr-12 lg:pr-24"
       }`}
     >
       <div
@@ -259,7 +259,7 @@ export function AnniversaryCarousel() {
   return (
     <div ref={containerRef} className="relative w-full z-10">
       <motion.div
-        className="fixed left-4 md:left-8 top-24 bottom-8 w-1 bg-white/10 rounded-full z-40"
+        className="fixed left-6 md:left-12 top-24 bottom-8 w-1 bg-white/10 rounded-full z-40"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
@@ -270,7 +270,7 @@ export function AnniversaryCarousel() {
         />
       </motion.div>
 
-      <div className="h-screen flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-4 pl-16 md:pl-24">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -278,7 +278,7 @@ export function AnniversaryCarousel() {
           className="max-w-7xl mx-auto text-center"
         >
           <motion.h1
-            className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 font-mono"
+            className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 font-mono leading-tight"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
@@ -286,7 +286,7 @@ export function AnniversaryCarousel() {
             What is <span className="block md:inline">Tech Bloc?</span>
           </motion.h1>
           <motion.p
-            className="text-xl md:text-2xl lg:text-3xl text-white/80 font-light max-w-xl mx-auto"
+            className="text-xl md:text-2xl lg:text-3xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed tracking-tighter md:tracking-tight"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
@@ -305,13 +305,13 @@ export function AnniversaryCarousel() {
         </motion.div>
       </div>
 
-      <div className="relative">
+      <div className="relative space-y-12 md:space-y-16">
         {anniversaryImages.map((image, index) => (
           <ScrollImage key={index} image={image} index={index} />
         ))}
       </div>
 
-      <div className="h-screen flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-4 pl-16 md:pl-24">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -319,10 +319,10 @@ export function AnniversaryCarousel() {
           viewport={{ once: false, amount: 0.5 }}
           className="text-center max-w-5xl mx-auto"
         >
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-mono">
-            Thank you for being part of San Antonio's tech revolution
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-mono leading-tight">
+            Thank you for being part of San Antonio's <span className="">tech revolution</span>
           </h2>
-          <p className="text-lg md:text-xl lg:text-2xl text-white/80 font-light max-w-md mx-auto">
+          <p className="text-lg md:text-xl lg:text-2xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed tracking-tight">
             Join us in December as we celebrate 10 years of building the future together!
           </p>
         </motion.div>
