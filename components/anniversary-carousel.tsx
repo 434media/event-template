@@ -259,7 +259,7 @@ export function AnniversaryCarousel() {
   return (
     <div ref={containerRef} className="relative w-full z-10">
       <motion.div
-        className="fixed left-6 md:left-12 top-24 bottom-8 w-1 bg-white/10 rounded-full z-40"
+        className="fixed left-2 md:left-12 top-24 bottom-8 w-1 bg-white/10 rounded-full z-40"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
@@ -270,7 +270,7 @@ export function AnniversaryCarousel() {
         />
       </motion.div>
 
-      <div className="min-h-screen flex items-center justify-center px-4 pl-16 md:pl-24">
+      <div className="min-h-screen flex items-center justify-center px-4 pl-4 md:pl-24">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -311,7 +311,7 @@ export function AnniversaryCarousel() {
         ))}
       </div>
 
-      <div className="min-h-screen flex items-center justify-center px-4 pl-16 md:pl-24">
+      <div className="min-h-screen flex items-center justify-center px-4 pl-4 md:pl-24">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
