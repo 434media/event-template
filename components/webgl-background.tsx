@@ -64,7 +64,7 @@ export function WebGLBackground() {
           pointSize={6.0}
           opacity={0.6}
           planeScale={12.0}
-          color={new THREE.Color("#ffffff")} // White particles
+          color={new THREE.Color("#dc2626")} // red particles
         />
 
         <Effects disableGamma>
