@@ -12,13 +12,23 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY || ""
+  
   const diagnostics: Record<string, unknown> = {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
     envVars: {
       FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID ? `${process.env.FIREBASE_PROJECT_ID.substring(0, 5)}...` : "NOT SET",
       FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL ? `${process.env.FIREBASE_CLIENT_EMAIL.substring(0, 10)}...` : "NOT SET",
-      FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY ? `SET (length: ${process.env.FIREBASE_PRIVATE_KEY.length})` : "NOT SET",
+      FIREBASE_PRIVATE_KEY: privateKey ? `SET (length: ${privateKey.length})` : "NOT SET",
+      FIREBASE_PRIVATE_KEY_FORMAT: {
+        startsWithQuote: privateKey.startsWith('"') || privateKey.startsWith("'"),
+        hasLiteralBackslashN: privateKey.includes("\\n"),
+        hasActualNewlines: privateKey.includes("\n"),
+        startsWithBegin: privateKey.includes("-----BEGIN"),
+        endsWithEnd: privateKey.includes("-----END"),
+        first50Chars: privateKey.substring(0, 50).replace(/./g, (c) => c === "\n" ? "↵" : c === "\\" ? "\\\\" : "*"),
+      },
     },
     isFirebaseConfigured: isFirebaseConfigured(),
   }

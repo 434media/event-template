@@ -14,6 +14,30 @@ function isFirebaseConfigured(): boolean {
   )
 }
 
+// Parse the private key - handle multiple formats
+function parsePrivateKey(key: string): string {
+  // If the key is wrapped in quotes, remove them
+  let parsed = key.trim()
+  if ((parsed.startsWith('"') && parsed.endsWith('"')) || 
+      (parsed.startsWith("'") && parsed.endsWith("'"))) {
+    parsed = parsed.slice(1, -1)
+  }
+  
+  // Replace literal \n with actual newlines
+  // This handles both \\n and \n patterns
+  parsed = parsed.replace(/\\n/g, "\n")
+  
+  // If there are still no actual newlines and the key is long, 
+  // try splitting on the known PEM markers
+  if (!parsed.includes("\n") && parsed.length > 100) {
+    parsed = parsed
+      .replace(/-----BEGIN PRIVATE KEY-----/g, "-----BEGIN PRIVATE KEY-----\n")
+      .replace(/-----END PRIVATE KEY-----/g, "\n-----END PRIVATE KEY-----")
+  }
+  
+  return parsed
+}
+
 // Lazy initialization to prevent build-time errors
 let _adminApp: App | null = null
 let _adminDb: Firestore | null = null
@@ -31,11 +55,13 @@ function getAdminApp(): App {
   if (getApps().length > 0) {
     _adminApp = getApps()[0]
   } else {
+    const privateKey = parsePrivateKey(process.env.FIREBASE_PRIVATE_KEY!)
+    
     _adminApp = initializeApp({
       credential: cert({
         projectId: process.env.FIREBASE_PROJECT_ID!,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, "\n"),
+        privateKey: privateKey,
       }),
       projectId: process.env.FIREBASE_PROJECT_ID,
     })
