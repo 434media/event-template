@@ -120,8 +120,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, sponsor })
   } catch (error) {
-    console.error("Sponsor create error:", error)
-    return NextResponse.json({ error: "Failed to create sponsor" }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.error("Sponsor create error:", errorMessage)
+    console.error("Full error:", error)
+    return NextResponse.json({ 
+      error: "Failed to create sponsor", 
+      details: errorMessage,
+      isFirebaseConfigured: isFirebaseConfigured(),
+    }, { status: 500 })
   }
 }
 
