@@ -50,7 +50,12 @@ const adminDb = new Proxy({} as Firestore, {
     if (!_adminDb) {
       _adminDb = getFirestore(getAdminApp())
     }
-    return (_adminDb as Record<string | symbol, unknown>)[prop]
+    const value = (_adminDb as Record<string | symbol, unknown>)[prop]
+    // Bind methods to preserve `this` context
+    if (typeof value === "function") {
+      return value.bind(_adminDb)
+    }
+    return value
   },
 })
 
@@ -60,7 +65,12 @@ const adminAuth = new Proxy({} as Auth, {
     if (!_adminAuth) {
       _adminAuth = getAuth(getAdminApp())
     }
-    return (_adminAuth as Record<string | symbol, unknown>)[prop]
+    const value = (_adminAuth as Record<string | symbol, unknown>)[prop]
+    // Bind methods to preserve `this` context
+    if (typeof value === "function") {
+      return value.bind(_adminAuth)
+    }
+    return value
   },
 })
 
