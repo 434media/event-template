@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("pitches"))) {
+  if (!(await sessionHasPermission("pitches", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -66,7 +66,7 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("pitches"))) {
+  if (!(await sessionHasPermission("pitches", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 

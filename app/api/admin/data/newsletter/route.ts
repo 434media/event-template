@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("newsletter"))) {
+  if (!(await sessionHasPermission("newsletter", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 

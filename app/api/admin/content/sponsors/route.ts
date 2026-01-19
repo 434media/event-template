@@ -21,13 +21,33 @@ const DEFAULT_SPONSORS: Record<SponsorTier, SponsorContent[]> = {
   community: [],
 }
 
+// Helper to create a fresh copy of sponsors data
+function cloneSponsors(sponsors?: Record<SponsorTier, SponsorContent[]>): Record<SponsorTier, SponsorContent[]> {
+  if (!sponsors) {
+    return {
+      platinum: [],
+      gold: [],
+      silver: [],
+      bronze: [],
+      community: [],
+    }
+  }
+  return {
+    platinum: [...(sponsors.platinum || [])],
+    gold: [...(sponsors.gold || [])],
+    silver: [...(sponsors.silver || [])],
+    bronze: [...(sponsors.bronze || [])],
+    community: [...(sponsors.community || [])],
+  }
+}
+
 export async function GET() {
   const session = await verifyAdminSession()
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("sponsors"))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -60,7 +80,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("sponsors"))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -84,12 +104,11 @@ export async function POST(request: Request) {
       sponsor.id = `sponsor-${Date.now()}`
     }
 
-    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").get()
-    const currentSponsors = doc.exists ? doc.data()?.sponsors || DEFAULT_SPONSORS : DEFAULT_SPONSORS
+    // Ensure the sponsor has the correct tier property
+    sponsor.tier = tier
 
-    if (!currentSponsors[tier]) {
-      currentSponsors[tier] = []
-    }
+    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").get()
+    const currentSponsors = cloneSponsors(doc.exists ? doc.data()?.sponsors : undefined)
 
     currentSponsors[tier].push(sponsor)
 
@@ -112,7 +131,7 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("sponsors"))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -127,21 +146,19 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Sponsor ID is required" }, { status: 400 })
     }
 
+    // Ensure the sponsor has the correct tier property
+    sponsor.tier = tier
+
     const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").get()
-    const currentSponsors = doc.exists ? doc.data()?.sponsors || DEFAULT_SPONSORS : DEFAULT_SPONSORS
+    const currentSponsors = cloneSponsors(doc.exists ? doc.data()?.sponsors : undefined)
 
     // Remove from old tier if tier changed
     const tierToRemoveFrom = oldTier || tier
-    if (currentSponsors[tierToRemoveFrom]) {
-      currentSponsors[tierToRemoveFrom] = currentSponsors[tierToRemoveFrom].filter(
-        (s: SponsorContent) => s.id !== sponsor.id
-      )
-    }
+    currentSponsors[tierToRemoveFrom] = currentSponsors[tierToRemoveFrom].filter(
+      (s: SponsorContent) => s.id !== sponsor.id
+    )
 
     // Add to new tier
-    if (!currentSponsors[tier]) {
-      currentSponsors[tier] = []
-    }
     currentSponsors[tier].push(sponsor)
 
     await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").set({
@@ -163,7 +180,7 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("sponsors"))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -181,11 +198,7 @@ export async function DELETE(request: Request) {
     }
 
     const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").get()
-    const currentSponsors = doc.exists ? doc.data()?.sponsors || DEFAULT_SPONSORS : DEFAULT_SPONSORS
-
-    if (!currentSponsors[tier]) {
-      return NextResponse.json({ error: "Sponsor not found" }, { status: 404 })
-    }
+    const currentSponsors = cloneSponsors(doc.exists ? doc.data()?.sponsors : undefined)
 
     const originalLength = currentSponsors[tier].length
     currentSponsors[tier] = currentSponsors[tier].filter((s: SponsorContent) => s.id !== id)

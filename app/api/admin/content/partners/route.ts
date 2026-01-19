@@ -19,7 +19,7 @@ export async function GET() {
   }
 
   // Use sponsors permission for partners as well
-  if (!(await sessionHasPermission("sponsors"))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("sponsors"))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -100,7 +100,7 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("sponsors"))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -147,7 +147,7 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("sponsors"))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 

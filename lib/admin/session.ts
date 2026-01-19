@@ -70,8 +70,10 @@ export async function verifyAdminSession(): Promise<SessionUser | null> {
 }
 
 // Check if session has specific permission
-export async function sessionHasPermission(permission: AdminPermission): Promise<boolean> {
-  const session = await verifyAdminSession()
-  if (!session) return false
-  return checkPermission(session.email, permission)
+export async function sessionHasPermission(permission: AdminPermission): Promise<boolean>
+export async function sessionHasPermission(permission: AdminPermission, session: SessionUser | null): Promise<boolean>
+export async function sessionHasPermission(permission: AdminPermission, session?: SessionUser | null): Promise<boolean> {
+  const currentSession = session !== undefined ? session : await verifyAdminSession()
+  if (!currentSession) return false
+  return checkPermission(currentSession.email, permission)
 }
