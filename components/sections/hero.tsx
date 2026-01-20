@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion, useMotionValue, useTransform, useSpring } from "motion/react"
 import { useEffect, useState } from "react"
+import { ArrowRight, Zap } from "lucide-react"
 
 interface Sponsor {
   id: string
@@ -189,14 +190,7 @@ export function Hero() {
             className="group inline-flex items-center justify-center gap-2 bg-[#dc2626] text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 hover:bg-[#0a0a0a] hover:scale-105 shadow-lg hover:shadow-xl"
           >
             Register Now
-            <svg 
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
           
           <Link
@@ -204,14 +198,7 @@ export function Hero() {
             className="group inline-flex items-center justify-center gap-2 bg-[#0a0a0a] text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 hover:bg-[#dc2626] hover:scale-105 shadow-lg hover:shadow-xl"
           >
             Submit a Pitch
-            <svg 
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+            <Zap className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
       </div>
@@ -251,9 +238,10 @@ export function Hero() {
             </div>
             <Link 
               href="/sponsor" 
-              className="text-[#dc2626] text-xs font-semibold hover:underline underline-offset-2"
+              className="inline-flex items-center gap-1 text-[#dc2626] text-xs font-semibold hover:underline underline-offset-2"
             >
-              Become a Sponsor →
+              Become a Sponsor
+              <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
         </div>

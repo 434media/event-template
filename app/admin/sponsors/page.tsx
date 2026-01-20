@@ -39,6 +39,9 @@ export default function SponsorsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [editingSponsor, setEditingSponsor] = useState<Sponsor | null>(null)
   const [isCreating, setIsCreating] = useState(false)
+  const [draggedItem, setDraggedItem] = useState<{ tier: SponsorTier; index: number } | null>(null)
+  const [dragOverItem, setDragOverItem] = useState<{ tier: SponsorTier; index: number } | null>(null)
+  const [isSavingOrder, setIsSavingOrder] = useState(false)
 
   useEffect(() => {
     fetchSponsors()
@@ -108,6 +111,69 @@ export default function SponsorsPage() {
     }
   }
 
+  async function saveOrder(tier: SponsorTier, newSponsors: Sponsor[]) {
+    setIsSavingOrder(true)
+    try {
+      const response = await fetch("/api/admin/content/sponsors", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier, sponsors: newSponsors }),
+        credentials: "include",
+      })
+
+      if (!response.ok) {
+        console.error("Failed to save order")
+        fetchSponsors()
+      }
+    } catch (error) {
+      console.error("Failed to save order:", error)
+      fetchSponsors()
+    } finally {
+      setIsSavingOrder(false)
+    }
+  }
+
+  function handleDragStart(e: React.DragEvent, tier: SponsorTier, index: number) {
+    setDraggedItem({ tier, index })
+    e.dataTransfer.effectAllowed = "move"
+    e.dataTransfer.setData("text/plain", `${tier}:${index}`)
+  }
+
+  function handleDragOver(e: React.DragEvent, tier: SponsorTier, index: number) {
+    e.preventDefault()
+    if (draggedItem?.tier !== tier) return
+    e.dataTransfer.dropEffect = "move"
+    setDragOverItem({ tier, index })
+  }
+
+  function handleDragLeave() {
+    setDragOverItem(null)
+  }
+
+  function handleDrop(e: React.DragEvent, tier: SponsorTier, dropIndex: number) {
+    e.preventDefault()
+    if (!draggedItem || draggedItem.tier !== tier || draggedItem.index === dropIndex) {
+      setDraggedItem(null)
+      setDragOverItem(null)
+      return
+    }
+
+    const newTierSponsors = [...sponsors[tier]]
+    const [draggedSponsor] = newTierSponsors.splice(draggedItem.index, 1)
+    newTierSponsors.splice(dropIndex, 0, draggedSponsor)
+
+    setSponsors({ ...sponsors, [tier]: newTierSponsors })
+    saveOrder(tier, newTierSponsors)
+
+    setDraggedItem(null)
+    setDragOverItem(null)
+  }
+
+  function handleDragEnd() {
+    setDraggedItem(null)
+    setDragOverItem(null)
+  }
+
   const totalSponsors = Object.values(sponsors).flat().length
 
   return (
@@ -117,9 +183,12 @@ export default function SponsorsPage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-black mb-1">
             Sponsors
+            {isSavingOrder && (
+              <span className="ml-3 text-sm font-normal text-neutral-400">Saving order...</span>
+            )}
           </h1>
           <p className="text-sm text-neutral-500">
-            {totalSponsors} sponsors
+            {totalSponsors} sponsors • Drag cards to reorder within tiers
           </p>
         </div>
         <button
@@ -164,12 +233,29 @@ export default function SponsorsPage() {
                   {tier.label} ({tierSponsors.length})
                 </h2>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {tierSponsors.map((sponsor) => (
+                  {tierSponsors.map((sponsor, index) => (
                     <div
                       key={sponsor.id}
-                      className="bg-white border border-neutral-200 p-4"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, tier.value, index)}
+                      onDragOver={(e) => handleDragOver(e, tier.value, index)}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, tier.value, index)}
+                      onDragEnd={handleDragEnd}
+                      className={`bg-white border p-4 cursor-grab active:cursor-grabbing transition-all ${
+                        draggedItem?.tier === tier.value && draggedItem?.index === index
+                          ? "opacity-50 border-neutral-300 scale-[0.98]"
+                          : dragOverItem?.tier === tier.value && dragOverItem?.index === index
+                            ? "border-black border-2 bg-neutral-50"
+                            : "border-neutral-200 hover:border-neutral-300"
+                      }`}
                     >
                       <div className="flex items-center gap-4 mb-3">
+                        <div className="text-neutral-300 hover:text-neutral-500 transition-colors">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM8 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
+                          </svg>
+                        </div>
                         {sponsor.logoUrl ? (
                           <img
                             src={sponsor.logoUrl}

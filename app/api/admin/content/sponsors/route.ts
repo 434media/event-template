@@ -180,6 +180,51 @@ export async function PUT(request: Request) {
   }
 }
 
+export async function PATCH(request: Request) {
+  const session = await verifyAdminSession()
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  if (!(await sessionHasPermission("sponsors", session))) {
+    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
+  }
+
+  if (!isFirebaseConfigured()) {
+    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 })
+  }
+
+  try {
+    const { tier, sponsors: reorderedSponsors }: { tier: SponsorTier; sponsors: SponsorContent[] } = await request.json()
+
+    if (!tier || !reorderedSponsors || !Array.isArray(reorderedSponsors)) {
+      return NextResponse.json({ error: "Tier and sponsors array are required" }, { status: 400 })
+    }
+
+    const validTiers: SponsorTier[] = ["platinum", "gold", "silver", "bronze", "community"]
+    if (!validTiers.includes(tier)) {
+      return NextResponse.json({ error: "Invalid tier" }, { status: 400 })
+    }
+
+    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").get()
+    const currentSponsors = cloneSponsors(doc.exists ? doc.data()?.sponsors : undefined)
+
+    // Update the specific tier with reordered sponsors
+    currentSponsors[tier] = reorderedSponsors
+
+    await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").set({
+      sponsors: currentSponsors,
+      updatedAt: new Date(),
+      updatedBy: session.email,
+    })
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("Sponsor reorder error:", error)
+    return NextResponse.json({ error: "Failed to reorder sponsors" }, { status: 500 })
+  }
+}
+
 export async function DELETE(request: Request) {
   const session = await verifyAdminSession()
   if (!session) {
