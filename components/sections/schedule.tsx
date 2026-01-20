@@ -292,17 +292,17 @@ export function Schedule({ variant = "light" }: ScheduleProps) {
                                         <img
                                           src={speaker.imageUrl}
                                           alt={speaker.name}
-                                          className="w-8 h-8 rounded-full object-cover bg-muted"
+                                          className="w-8 h-8 rounded-md object-cover bg-muted grayscale"
                                         />
                                       ) : (
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${isDark ? "bg-white/10 text-white/70" : "bg-muted text-muted-foreground"}`}>
+                                        <div className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-medium ${isDark ? "bg-white/10 text-white/70" : "bg-muted text-muted-foreground"}`}>
                                           {speaker.name.charAt(0)}
                                         </div>
                                       )}
                                       <div>
                                         <p className={`text-sm font-medium ${isDark ? "text-white" : "text-foreground"}`}>{speaker.name}</p>
                                         <p className={`text-xs ${isDark ? "text-white/50" : "text-muted-foreground"}`}>
-                                          {speaker.title}{speaker.company && `, ${speaker.company}`}
+                                          {speaker.company}
                                         </p>
                                       </div>
                                     </div>
