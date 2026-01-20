@@ -107,7 +107,7 @@ export function Hero() {
             alt="Tech Bloc Blimp"
             width={300}
             height={150}
-            className="w-32 md:w-48 lg:w-56 h-auto mt-16 md:mt-20"
+            className="w-36 md:w-48 lg:w-56 h-auto mt-16 md:mt-20"
             style={{
               filter: "drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15))",
             }}

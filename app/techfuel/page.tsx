@@ -42,8 +42,6 @@ export default function TechFuelPage() {
       <section className="relative min-h-dvh flex items-center justify-center px-4 bg-white overflow-hidden">
         {/* Pixel Arrow - Top Right */}
         <PixelArrow position="top-right" size="xl" variant="light" type="anniversary" />
-        {/* Pixel Arrow - Bottom Left */}
-        <PixelArrow position="bottom-left" size="lg" variant="light" type="video" />
         
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <motion.div 

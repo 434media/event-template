@@ -171,7 +171,7 @@ export function InteractiveLanyard({ className = "" }: InteractiveLanyardProps) 
   return (
     <div 
       ref={containerRef}
-      className={`relative w-full max-w-sm mx-auto ${className}`}
+      className={`relative w-full max-w-sm mx-auto -mt-10 ${className}`}
       style={{ perspective: "1000px" }}
     >
       {/* Lanyard Strap - Flat fabric style */}
@@ -242,12 +242,11 @@ export function InteractiveLanyard({ className = "" }: InteractiveLanyardProps) 
       
       {/* 3D Card Container */}
       <motion.div
-        className="relative pt-8 cursor-grab active:cursor-grabbing select-none"
+        className="relative pt-8 cursor-grab active:cursor-grabbing select-none transform-3d [-webkit-transform-style:preserve-3d]"
         style={{
           rotateX: springRotateX,
           rotateY: springRotateY,
           rotateZ: springRotateZ,
-          transformStyle: "preserve-3d",
           transformOrigin: "top center"
         }}
         onMouseDown={handleMouseDown}
@@ -263,10 +262,10 @@ export function InteractiveLanyard({ className = "" }: InteractiveLanyardProps) 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative w-full"
+          className="relative w-full backface-hidden [-webkit-backface-visibility:hidden]"
           style={{
-            backfaceVisibility: "hidden",
-            transform: "rotateY(0deg)"
+            transform: "rotateY(0deg)",
+            transformStyle: "preserve-3d"
           }}
         >
           <div className="relative bg-foreground rounded-3xl shadow-2xl shadow-black/40 flex flex-col overflow-hidden border border-white/5">
@@ -364,10 +363,10 @@ export function InteractiveLanyard({ className = "" }: InteractiveLanyardProps) 
 
         {/* Back of Card */}
         <motion.div 
-          className="absolute inset-0 pt-8 w-full"
+          className="absolute inset-0 pt-8 w-full backface-hidden [-webkit-backface-visibility:hidden]"
           style={{
-            backfaceVisibility: "hidden",
-            transform: "rotateY(180deg)"
+            transform: "rotateY(180deg)",
+            transformStyle: "preserve-3d"
           }}
         >
           <div className="relative bg-foreground rounded-3xl shadow-2xl shadow-black/40 flex flex-col overflow-hidden border border-white/5 h-full min-h-120">

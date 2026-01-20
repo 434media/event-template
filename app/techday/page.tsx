@@ -33,8 +33,6 @@ export default function TechDayPage() {
       <section className="relative min-h-dvh flex items-center justify-center px-4 bg-foreground overflow-hidden">
         {/* Pixel Arrow - Top Right */}
         <PixelArrow position="top-right" size="xl" variant="dark" type="video" />
-        {/* Pixel Arrow - Bottom Left */}
-        <PixelArrow position="bottom-left" size="lg" variant="dark" type="anniversary" />
         
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <motion.div 
@@ -86,35 +84,6 @@ export default function TechDayPage() {
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* AI Track */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0 }}
-              className="relative p-8 md:p-10 bg-white/5 border border-white/10 rounded-xl overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-chart-4 to-primary" />
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight tracking-tight">AI</h3>
-              <p className="text-white/60 mb-8 leading-relaxed text-base">
-                Dive into the future of artificial intelligence. From LLMs to computer vision, discover how AI is reshaping industries.
-              </p>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
-                  <span className="w-2 h-2 bg-chart-4 rounded-full shrink-0" />
-                  Building with LLMs & Agents
-                </li>
-                <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
-                  <span className="w-2 h-2 bg-chart-4 rounded-full shrink-0" />
-                  AI Ethics & Governance
-                </li>
-                <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
-                  <span className="w-2 h-2 bg-chart-4 rounded-full shrink-0" />
-                  Enterprise AI Adoption
-                </li>
-              </ul>
-            </motion.div>
-
             {/* Emerging Industries Track */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -169,6 +138,34 @@ export default function TechDayPage() {
                 <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
                   <span className="w-2 h-2 bg-white rounded-full shrink-0" />
                   Investor Office Hours
+                </li>
+              </ul>
+            </motion.div>
+            {/* AI Track */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0 }}
+              className="relative p-8 md:p-10 bg-white/5 border border-white/10 rounded-xl overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-chart-4 to-primary" />
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight tracking-tight">AI</h3>
+              <p className="text-white/60 mb-8 leading-relaxed text-base">
+                Dive into the future of artificial intelligence. From LLMs to computer vision, discover how AI is reshaping industries.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
+                  <span className="w-2 h-2 bg-chart-4 rounded-full shrink-0" />
+                  Building with LLMs & Agents
+                </li>
+                <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
+                  <span className="w-2 h-2 bg-chart-4 rounded-full shrink-0" />
+                  AI Ethics & Governance
+                </li>
+                <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
+                  <span className="w-2 h-2 bg-chart-4 rounded-full shrink-0" />
+                  Enterprise AI Adoption
                 </li>
               </ul>
             </motion.div>
