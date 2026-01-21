@@ -11,6 +11,7 @@ import Link from "next/link"
 export default function TechDayPage() {
   const [speakers, setSpeakers] = useState<Speaker[]>([])
   const [isLoadingSpeakers, setIsLoadingSpeakers] = useState(true)
+  const [showAllSpeakers, setShowAllSpeakers] = useState(false)
 
   useEffect(() => {
     async function fetchSpeakers() {
@@ -220,10 +221,25 @@ export default function TechDayPage() {
           {!isLoadingSpeakers && speakers.length > 0 && (
             <>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-                {speakers.map((speaker, index) => (
+                {(showAllSpeakers ? speakers : speakers.slice(0, 8)).map((speaker, index) => (
                   <SpeakerCard key={speaker.id} speaker={speaker} index={index} />
                 ))}
               </div>
+              {speakers.length > 8 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="text-center mt-12"
+                >
+                  <button
+                    onClick={() => setShowAllSpeakers(!showAllSpeakers)}
+                    className="px-8 py-4 bg-transparent border-2 border-white/30 text-white font-semibold rounded-md hover:bg-white hover:text-foreground transition-all"
+                  >
+                    {showAllSpeakers ? "Show Less" : `View All ${speakers.length} Speakers`}
+                  </button>
+                </motion.div>
+              )}
             </>
           )}
         </div>
