@@ -1,132 +1,117 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { isApprovedAdmin, getPublicAdminByEmail, getSecurityQuestion, verifyCredentials } from "@/lib/admin/config"
-import crypto from "crypto"
+import { adminAuth, adminDb } from "@/lib/firebase/admin"
+import { COLLECTIONS, ROLE_PERMISSIONS, type AdminDocument, type AdminPermission } from "@/lib/firebase/collections"
 
 export const dynamic = "force-dynamic"
 
-// Simple session-based auth using signed cookies
-// Security Question + PIN authentication
+// Firebase Token-based authentication
+// Verifies Firebase ID tokens and checks against Firestore admins collection
 
-const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || "change-this-in-production"
 const SESSION_COOKIE_NAME = "admin_session"
 const SESSION_DURATION = 60 * 60 * 24 * 7 // 7 days in seconds
 
-// Create signed session token
-function createSessionToken(email: string): string {
-  console.log("[Auth] Creating token with SECRET length:", SESSION_SECRET.length, "starts with:", SESSION_SECRET.substring(0, 5))
-  const payload = {
-    email,
-    exp: Date.now() + SESSION_DURATION * 1000,
-  }
-  const data = JSON.stringify(payload)
-  const signature = crypto
-    .createHmac("sha256", SESSION_SECRET)
-    .update(data)
-    .digest("hex")
-  console.log("[Auth] Created signature:", signature.substring(0, 20))
-  return Buffer.from(`${data}.${signature}`).toString("base64")
-}
-
-// Verify session token
-function verifySessionToken(token: string): { email: string } | null {
+// Get admin from Firestore by email
+async function getAdminByEmail(email: string): Promise<AdminDocument | null> {
   try {
-    const decoded = Buffer.from(token, "base64").toString("utf-8")
-    const lastDotIndex = decoded.lastIndexOf(".")
-    if (lastDotIndex === -1) return null
-    const data = decoded.substring(0, lastDotIndex)
-    const signature = decoded.substring(lastDotIndex + 1)
+    const normalizedEmail = email.toLowerCase().trim()
+    const docRef = adminDb.collection(COLLECTIONS.ADMINS).doc(normalizedEmail)
+    const doc = await docRef.get()
     
-    const expectedSignature = crypto
-      .createHmac("sha256", SESSION_SECRET)
-      .update(data)
-      .digest("hex")
+    if (!doc.exists) return null
     
-    if (signature !== expectedSignature) {
-      return null
-    }
-    
-    const payload = JSON.parse(data)
-    if (payload.exp < Date.now()) {
-      return null
-    }
-    
-    return { email: payload.email }
-  } catch {
+    return doc.data() as AdminDocument
+  } catch (error) {
+    console.error("Error fetching admin:", error)
     return null
   }
 }
 
-// POST - Step 1: Get security question OR Step 2: Verify answer + PIN
+// Update admin's last login and UID
+async function updateAdminLogin(email: string, uid: string): Promise<void> {
+  try {
+    const normalizedEmail = email.toLowerCase().trim()
+    const docRef = adminDb.collection(COLLECTIONS.ADMINS).doc(normalizedEmail)
+    await docRef.update({
+      uid,
+      lastLoginAt: new Date(),
+      updatedAt: new Date(),
+    })
+  } catch (error) {
+    console.error("Error updating admin login:", error)
+  }
+}
+
+// POST - Verify Firebase ID token and create session
 export async function POST(request: Request) {
   try {
-    const data = await request.json()
-    const { email, answer, pin, action } = data
+    // Get the Authorization header
+    const authHeader = request.headers.get("Authorization")
+    if (!authHeader?.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { error: "Missing or invalid authorization header" },
+        { status: 401 }
+      )
+    }
 
+    const idToken = authHeader.substring(7) // Remove "Bearer "
+
+    // Verify the Firebase ID token
+    let decodedToken
+    try {
+      decodedToken = await adminAuth.verifyIdToken(idToken)
+    } catch (error) {
+      console.error("Token verification failed:", error)
+      return NextResponse.json(
+        { error: "Invalid or expired token" },
+        { status: 401 }
+      )
+    }
+
+    const email = decodedToken.email
     if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Email not found in token" },
+        { status: 401 }
+      )
     }
 
-    const normalizedEmail = email.toLowerCase().trim()
-
-    // Step 1: Request security question
-    if (action === "get-question") {
-      // Check if email is approved (but don't reveal if not)
-      if (!isApprovedAdmin(normalizedEmail)) {
-        // Return a generic response to not reveal valid emails
-        return NextResponse.json({
-          success: true,
-          question: "Security question not found for this email",
-          isValid: false,
-        })
-      }
-
-      const question = getSecurityQuestion(normalizedEmail)
-      return NextResponse.json({
-        success: true,
-        question,
-        isValid: true,
-      })
+    // Check if this email is an approved admin
+    const admin = await getAdminByEmail(email)
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Not authorized as admin" },
+        { status: 403 }
+      )
     }
 
-    // Step 2: Verify answer and PIN
-    if (action === "verify") {
-      if (!answer || !pin) {
-        return NextResponse.json(
-          { error: "Answer and PIN are required" },
-          { status: 400 }
-        )
-      }
+    // Update last login and UID
+    await updateAdminLogin(email, decodedToken.uid)
 
-      // Check if credentials are valid
-      if (!verifyCredentials(normalizedEmail, answer, pin)) {
-        return NextResponse.json(
-          { error: "Invalid credentials" },
-          { status: 401 }
-        )
-      }
+    // Create a session cookie for subsequent requests
+    const expiresIn = SESSION_DURATION * 1000 // Convert to milliseconds
+    const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn })
 
-      // Credentials valid - create session
-      const sessionToken = createSessionToken(normalizedEmail)
-      const admin = getPublicAdminByEmail(normalizedEmail)
+    // Set session cookie
+    const cookieStore = await cookies()
+    cookieStore.set(SESSION_COOKIE_NAME, sessionCookie, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: SESSION_DURATION,
+      path: "/",
+    })
 
-      // Set session cookie
-      const cookieStore = await cookies()
-      cookieStore.set(SESSION_COOKIE_NAME, sessionToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: SESSION_DURATION,
-        path: "/",
-      })
-
-      return NextResponse.json({
-        success: true,
-        user: admin,
-      })
-    }
-
-    return NextResponse.json({ error: "Invalid action" }, { status: 400 })
+    // Return public admin info
+    return NextResponse.json({
+      success: true,
+      user: {
+        email: admin.email,
+        name: admin.name,
+        role: admin.role,
+        permissions: admin.permissions || ROLE_PERMISSIONS[admin.role],
+      },
+    })
   } catch (error) {
     console.error("Auth error:", error)
     return NextResponse.json(
@@ -140,25 +125,39 @@ export async function POST(request: Request) {
 export async function GET() {
   try {
     const cookieStore = await cookies()
-    const sessionToken = cookieStore.get(SESSION_COOKIE_NAME)?.value
+    const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value
 
-    if (!sessionToken) {
+    if (!sessionCookie) {
       return NextResponse.json({ authenticated: false })
     }
 
-    const session = verifySessionToken(sessionToken)
-    if (!session) {
+    // Verify the session cookie
+    let decodedClaims
+    try {
+      decodedClaims = await adminAuth.verifySessionCookie(sessionCookie, true)
+    } catch {
       return NextResponse.json({ authenticated: false })
     }
 
-    const admin = getPublicAdminByEmail(session.email)
+    const email = decodedClaims.email
+    if (!email) {
+      return NextResponse.json({ authenticated: false })
+    }
+
+    // Get admin from Firestore
+    const admin = await getAdminByEmail(email)
     if (!admin) {
       return NextResponse.json({ authenticated: false })
     }
 
     return NextResponse.json({
       authenticated: true,
-      user: admin,
+      user: {
+        email: admin.email,
+        name: admin.name,
+        role: admin.role,
+        permissions: admin.permissions || ROLE_PERMISSIONS[admin.role],
+      },
     })
   } catch (error) {
     console.error("Session check error:", error)
@@ -166,10 +165,23 @@ export async function GET() {
   }
 }
 
-// DELETE - Logout
+// DELETE - Logout / Revoke session
 export async function DELETE() {
   try {
     const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value
+
+    if (sessionCookie) {
+      // Optionally revoke refresh tokens for extra security
+      try {
+        const decodedClaims = await adminAuth.verifySessionCookie(sessionCookie)
+        await adminAuth.revokeRefreshTokens(decodedClaims.sub)
+      } catch {
+        // Ignore verification errors during logout
+      }
+    }
+
+    // Clear the session cookie
     cookieStore.delete(SESSION_COOKIE_NAME)
     
     return NextResponse.json({ success: true })

@@ -70,11 +70,11 @@ function getAdminApp(): App {
   return _adminApp
 }
 
-// Getter for Admin Firestore
+// Getter for Admin Firestore - using "techday" database
 const adminDb = new Proxy({} as Firestore, {
   get(_, prop) {
     if (!_adminDb) {
-      _adminDb = getFirestore(getAdminApp())
+      _adminDb = getFirestore(getAdminApp(), "techday")
     }
     const value = (_adminDb as Record<string | symbol, unknown>)[prop]
     // Bind methods to preserve `this` context

@@ -1,25 +1,20 @@
 import { NextResponse } from "next/server"
 import { put } from "@vercel/blob"
-import { verifyAdminSession } from "@/lib/admin/session"
-import { hasPermission } from "@/lib/admin/config"
+import { verifyAdminSession, sessionHasPermission } from "@/lib/admin/session"
 
 export const dynamic = "force-dynamic"
 
 export async function POST(request: Request) {
-  console.log("[Upload] Starting upload request...")
-  
   const session = await verifyAdminSession()
-  console.log("[Upload] Session result:", session ? `Found: ${session.email}` : "No session found")
   
   if (!session) {
-    console.log("[Upload] Returning 401 - No valid session")
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
   // Check for any content permission (speakers, sponsors, or schedule)
-  const hasSpeakersPermission = hasPermission(session.email, "speakers")
-  const hasSponsorsPermission = hasPermission(session.email, "sponsors")
-  const hasSchedulePermission = hasPermission(session.email, "schedule")
+  const hasSpeakersPermission = await sessionHasPermission("speakers", session)
+  const hasSponsorsPermission = await sessionHasPermission("sponsors", session)
+  const hasSchedulePermission = await sessionHasPermission("schedule", session)
   
   if (!hasSpeakersPermission && !hasSponsorsPermission && !hasSchedulePermission) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })

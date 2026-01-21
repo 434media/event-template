@@ -1,70 +1,63 @@
 import { cookies } from "next/headers"
-import { isApprovedAdmin, getAdminByEmail, hasPermission as checkPermission, type AdminPermission } from "@/lib/admin/config"
-import crypto from "crypto"
-
-const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || "change-this-in-production"
+import { adminAuth, adminDb } from "@/lib/firebase/admin"
+import { COLLECTIONS, ROLE_PERMISSIONS, type AdminDocument, type AdminPermission } from "@/lib/firebase/collections"
 
 export interface SessionUser {
   email: string
   name: string
-  role: string
+  role: AdminDocument["role"]
+  permissions: AdminPermission[]
+  uid: string
 }
 
-// Verify admin session from cookies
+// Get admin from Firestore by email
+async function getAdminByEmail(email: string): Promise<AdminDocument | null> {
+  try {
+    const normalizedEmail = email.toLowerCase().trim()
+    const docRef = adminDb.collection(COLLECTIONS.ADMINS).doc(normalizedEmail)
+    const doc = await docRef.get()
+    
+    if (!doc.exists) return null
+    
+    return doc.data() as AdminDocument
+  } catch (error) {
+    console.error("Error fetching admin:", error)
+    return null
+  }
+}
+
+// Verify admin session from Firebase session cookie
 export async function verifyAdminSession(): Promise<SessionUser | null> {
   try {
     const cookieStore = await cookies()
-    const sessionToken = cookieStore.get("admin_session")?.value
+    const sessionCookie = cookieStore.get("admin_session")?.value
     
-    console.log("[Session] Cookie present:", !!sessionToken)
-    console.log("[Session] SECRET length:", SESSION_SECRET.length, "starts with:", SESSION_SECRET.substring(0, 5))
+    if (!sessionCookie) return null
     
-    if (!sessionToken) return null
-    
-    const decoded = Buffer.from(sessionToken, "base64").toString("utf-8")
-    const lastDotIndex = decoded.lastIndexOf(".")
-    if (lastDotIndex === -1) {
-      console.log("[Session] No dot separator found")
-      return null
-    }
-    const data = decoded.substring(0, lastDotIndex)
-    const signature = decoded.substring(lastDotIndex + 1)
-    
-    console.log("[Session] Token data:", data.substring(0, 50))
-    
-    const expectedSignature = crypto
-      .createHmac("sha256", SESSION_SECRET)
-      .update(data)
-      .digest("hex")
-    
-    console.log("[Session] Expected sig:", expectedSignature.substring(0, 20))
-    console.log("[Session] Received sig:", signature?.substring(0, 20))
-    
-    if (signature !== expectedSignature) {
-      console.log("[Session] Signature mismatch")
+    // Verify the session cookie with Firebase
+    let decodedClaims
+    try {
+      decodedClaims = await adminAuth.verifySessionCookie(sessionCookie, true)
+    } catch {
       return null
     }
     
-    const payload = JSON.parse(data)
-    if (payload.exp < Date.now()) {
-      console.log("[Session] Token expired")
-      return null
-    }
+    const email = decodedClaims.email
+    if (!email) return null
     
-    const admin = getAdminByEmail(payload.email)
-    if (!admin) {
-      console.log("[Session] Admin not found for:", payload.email)
-      return null
-    }
+    // Get admin from Firestore
+    const admin = await getAdminByEmail(email)
+    if (!admin) return null
     
-    console.log("[Session] Valid session for:", admin.email)
     return {
       email: admin.email,
       name: admin.name,
       role: admin.role,
+      permissions: admin.permissions || ROLE_PERMISSIONS[admin.role],
+      uid: decodedClaims.uid,
     }
   } catch (error) {
-    console.log("[Session] Error:", error)
+    console.error("[Session] Error:", error)
     return null
   }
 }
@@ -75,5 +68,18 @@ export async function sessionHasPermission(permission: AdminPermission, session:
 export async function sessionHasPermission(permission: AdminPermission, session?: SessionUser | null): Promise<boolean> {
   const currentSession = session !== undefined ? session : await verifyAdminSession()
   if (!currentSession) return false
-  return checkPermission(currentSession.email, permission)
+  if (currentSession.role === "superadmin") return true
+  return currentSession.permissions.includes(permission)
+}
+
+// Check if session has role or higher
+export async function sessionHasRole(requiredRole: AdminDocument["role"]): Promise<boolean> {
+  const session = await verifyAdminSession()
+  if (!session) return false
+  
+  const roleHierarchy = ["viewer", "editor", "admin", "superadmin"]
+  const userRoleIndex = roleHierarchy.indexOf(session.role)
+  const requiredRoleIndex = roleHierarchy.indexOf(requiredRole)
+  
+  return userRoleIndex >= requiredRoleIndex
 }
