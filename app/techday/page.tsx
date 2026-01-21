@@ -236,7 +236,7 @@ export default function TechDayPage() {
                     onClick={() => setShowAllSpeakers(!showAllSpeakers)}
                     className="px-8 py-4 bg-transparent border-2 border-white/30 text-white font-semibold rounded-md hover:bg-white hover:text-foreground transition-all"
                   >
-                    {showAllSpeakers ? "Show Less" : `View All ${speakers.length} Speakers`}
+                    {showAllSpeakers ? "Show Less" : `View All Speakers`}
                   </button>
                 </motion.div>
               )}
