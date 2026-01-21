@@ -10,7 +10,6 @@ const navItems = [
   { href: "/", label: "Home" },
   { href: "/techday", label: "Tech Day" },
   { href: "/techfuel", label: "Tech Fuel" },
-  { href: "/register", label: "Register" },
 ]
 
 export function Navbar() {
