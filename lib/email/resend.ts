@@ -1,0 +1,295 @@
+import { Resend } from "resend"
+
+// Initialize Resend with API key
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+// Email configuration
+const FROM_EMAIL = "San Antonio Tech Day <noreply@send.devsa.community>"
+const REPLY_TO = "jesse@devsanantonio.com"
+
+// Down arrow SVG for email styling (base64 encoded for email compatibility)
+const DOWN_ARROW_SVG = `<svg width="48" height="48" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="opacity: 0.15;">
+  <rect x="45" y="5" width="10" height="10" fill="#c73030"/>
+  <rect x="45" y="15" width="10" height="10" fill="#c73030"/>
+  <rect x="45" y="25" width="10" height="10" fill="#c73030"/>
+  <rect x="45" y="35" width="10" height="10" fill="#c73030"/>
+  <rect x="45" y="45" width="10" height="10" fill="#c73030"/>
+  <rect x="45" y="55" width="10" height="10" fill="#c73030"/>
+  <rect x="45" y="65" width="10" height="10" fill="#c73030"/>
+  <rect x="35" y="65" width="10" height="10" fill="#c73030"/>
+  <rect x="25" y="55" width="10" height="10" fill="#c73030"/>
+  <rect x="55" y="65" width="10" height="10" fill="#c73030"/>
+  <rect x="65" y="55" width="10" height="10" fill="#c73030"/>
+  <rect x="45" y="75" width="10" height="10" fill="#c73030"/>
+</svg>`
+
+// Base email template with Tech Day branding
+function getEmailTemplate(content: string, footerText: string = "") {
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Day 2026</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #fafafa; font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #fafafa;">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          
+          <!-- Header with Down Arrow -->
+          <tr>
+            <td style="background-color: #0a0a0a; padding: 40px 40px 30px; text-align: center; position: relative;">
+              <!-- Down Arrow Decoration -->
+              <div style="position: absolute; top: 20px; right: 20px; opacity: 0.15;">
+                ${DOWN_ARROW_SVG}
+              </div>
+              <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                TECH DAY <span style="color: #c73030;">2026</span>
+              </h1>
+              <p style="margin: 10px 0 0; color: rgba(255,255,255,0.7); font-size: 14px; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; text-transform: uppercase;">
+                April 10, 2026 • Tech Port
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px;">
+              ${content}
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #0a0a0a; padding: 30px 40px; text-align: center;">
+              ${footerText ? `<p style="margin: 0 0 15px; color: rgba(255,255,255,0.7); font-size: 13px;">${footerText}</p>` : ""}
+              <p style="margin: 0; color: rgba(255,255,255,0.5); font-size: 12px;">
+                © 2026 Tech Bloc & 434 MEDIA • San Antonio, TX
+              </p>
+              <p style="margin: 10px 0 0; color: rgba(255,255,255,0.4); font-size: 11px;">
+                <a href="https://sanantoniotechday.com" style="color: #c73030; text-decoration: none;">techday.devsa.community</a>
+              </p>
+            </td>
+          </tr>
+          
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+}
+
+// Registration confirmation email
+export async function sendRegistrationConfirmation(
+  email: string,
+  firstName: string,
+  lastName: string,
+  ticketId: string,
+  category: string
+) {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: #0a0a0a; font-size: 24px; font-weight: 600;">
+      You're In, ${firstName}! 🎉
+    </h2>
+    
+    <p style="margin: 0 0 20px; color: #525252; font-size: 16px; line-height: 1.6;">
+      Your registration for <strong>Tech Day 2026</strong> is confirmed. We can't wait to see you at Tech Port on April 10th!
+    </p>
+    
+    <!-- Ticket Card -->
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin: 30px 0;">
+      <tr>
+        <td style="background-color: #0a0a0a; border-radius: 8px; padding: 30px; position: relative; overflow: hidden;">
+          <!-- Decorative Arrow -->
+          <div style="position: absolute; top: -10px; right: -10px; opacity: 0.1; transform: rotate(45deg);">
+            ${DOWN_ARROW_SVG}
+          </div>
+          
+          <p style="margin: 0 0 5px; color: #c73030; font-size: 11px; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; text-transform: uppercase;">
+            Your Ticket ID
+          </p>
+          <p style="margin: 0 0 20px; color: #ffffff; font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px;">
+            ${ticketId}
+          </p>
+          
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" style="vertical-align: top;">
+                <p style="margin: 0 0 3px; color: rgba(255,255,255,0.5); font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Attendee</p>
+                <p style="margin: 0; color: #ffffff; font-size: 15px; font-weight: 500;">${firstName} ${lastName}</p>
+              </td>
+              <td width="50%" style="vertical-align: top;">
+                <p style="margin: 0 0 3px; color: rgba(255,255,255,0.5); font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Category</p>
+                <p style="margin: 0; color: #ffffff; font-size: 15px; font-weight: 500; text-transform: capitalize;">${category}</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+    <h3 style="margin: 30px 0 15px; color: #0a0a0a; font-size: 18px; font-weight: 600;">
+      What's Next?
+    </h3>
+    
+    <ul style="margin: 0; padding: 0 0 0 20px; color: #525252; font-size: 15px; line-height: 1.8;">
+      <li>Save the date: <strong>April 10, 2026</strong></li>
+      <li>Location: <strong>Tech Port</strong>, San Antonio</li>
+      <li>Bring this email or your ticket ID for check-in</li>
+      <li>Check the schedule at <a href="https://techday.devsa.community/techday" style="color: #c73030; text-decoration: none;">techday.devsa.community</a></li>
+    </ul>
+    
+    <p style="margin: 30px 0 0; color: #a3a3a3; font-size: 14px; line-height: 1.6;">
+      Questions? Reply to this email or reach out on social media.
+    </p>
+  `
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: `You're registered for Tech Day 2026! 🎟️ ${ticketId}`,
+      html: getEmailTemplate(content, "Keep this email - you'll need your ticket ID for check-in"),
+    })
+
+    console.log(`Registration confirmation sent to ${email}:`, result)
+    return { success: true, data: result }
+  } catch (error) {
+    console.error(`Failed to send registration confirmation to ${email}:`, error)
+    return { success: false, error }
+  }
+}
+
+// Pitch submission confirmation email
+export async function sendPitchConfirmation(
+  email: string,
+  founderName: string,
+  companyName: string,
+  submissionId: string
+) {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: #0a0a0a; font-size: 24px; font-weight: 600;">
+      Pitch Received! 🚀
+    </h2>
+    
+    <p style="margin: 0 0 20px; color: #525252; font-size: 16px; line-height: 1.6;">
+      Hey ${founderName}, thanks for submitting <strong>${companyName}</strong> to Tech Fuel! Your pitch is now in our review queue.
+    </p>
+    
+    <!-- Status Card -->
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin: 30px 0;">
+      <tr>
+        <td style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); border-radius: 8px; padding: 30px; position: relative; overflow: hidden;">
+          <!-- Decorative Arrow -->
+          <div style="position: absolute; bottom: -15px; left: -15px; opacity: 0.08; transform: rotate(-45deg);">
+            ${DOWN_ARROW_SVG}
+          </div>
+          
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <p style="margin: 0 0 5px; color: #c73030; font-size: 11px; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; text-transform: uppercase;">
+                  Submission ID
+                </p>
+                <p style="margin: 0 0 20px; color: #ffffff; font-size: 18px; font-weight: 600; font-family: 'JetBrains Mono', monospace;">
+                  ${submissionId.slice(0, 12)}...
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table role="presentation" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td style="background-color: rgba(199, 48, 48, 0.2); border-radius: 20px; padding: 8px 16px;">
+                      <span style="color: #c73030; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                        ⏳ Under Review
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+    <h3 style="margin: 30px 0 15px; color: #0a0a0a; font-size: 18px; font-weight: 600;">
+      What Happens Next?
+    </h3>
+    
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e5e5e5;">
+          <table role="presentation" cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="width: 40px; vertical-align: top;">
+                <span style="display: inline-block; width: 28px; height: 28px; background-color: #c73030; border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-size: 14px; font-weight: 600;">1</span>
+              </td>
+              <td style="vertical-align: top;">
+                <p style="margin: 0; color: #0a0a0a; font-size: 15px; font-weight: 500;">Review Period</p>
+                <p style="margin: 5px 0 0; color: #737373; font-size: 14px;">Our team will review your pitch within 2 weeks</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e5e5e5;">
+          <table role="presentation" cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="width: 40px; vertical-align: top;">
+                <span style="display: inline-block; width: 28px; height: 28px; background-color: #c73030; border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-size: 14px; font-weight: 600;">2</span>
+              </td>
+              <td style="vertical-align: top;">
+                <p style="margin: 0; color: #0a0a0a; font-size: 15px; font-weight: 500;">Selection Notification</p>
+                <p style="margin: 5px 0 0; color: #737373; font-size: 14px;">Selected founders will receive pitch slot details</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 15px 0;">
+          <table role="presentation" cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="width: 40px; vertical-align: top;">
+                <span style="display: inline-block; width: 28px; height: 28px; background-color: #c73030; border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-size: 14px; font-weight: 600;">3</span>
+              </td>
+              <td style="vertical-align: top;">
+                <p style="margin: 0; color: #0a0a0a; font-size: 15px; font-weight: 500;">Pitch Day</p>
+                <p style="margin: 5px 0 0; color: #737373; font-size: 14px;">Present to investors & industry leaders at Tech Day 2026</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+    <p style="margin: 30px 0 0; color: #a3a3a3; font-size: 14px; line-height: 1.6;">
+      While you wait, make sure to <a href="https://techday.devsa.community/register" style="color: #c73030; text-decoration: none;">register for Tech Day</a> if you haven't already!
+    </p>
+  `
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: `Pitch received: ${companyName} 🚀`,
+      html: getEmailTemplate(content, "We'll be in touch within 2 weeks with next steps"),
+    })
+
+    console.log(`Pitch confirmation sent to ${email}:`, result)
+    return { success: true, data: result }
+  } catch (error) {
+    console.error(`Failed to send pitch confirmation to ${email}:`, error)
+    return { success: false, error }
+  }
+}

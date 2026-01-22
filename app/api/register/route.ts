@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { checkBotId } from "botid/server"
 import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
 import { COLLECTIONS, type RegistrationDocument } from "@/lib/firebase/collections"
+import { sendRegistrationConfirmation } from "@/lib/email/resend"
 import crypto from "crypto"
 
 export async function POST(request: Request) {
@@ -84,6 +85,19 @@ export async function POST(request: Request) {
       .add(registration)
 
     console.log(`New registration created: ${docRef.id} - ${ticketId}`)
+
+    // Send confirmation email
+    const emailResult = await sendRegistrationConfirmation(
+      registration.email,
+      registration.firstName,
+      registration.lastName,
+      ticketId,
+      registration.category
+    )
+
+    if (!emailResult.success) {
+      console.warn(`Registration saved but email failed for ${registration.email}`)
+    }
 
     return NextResponse.json({
       success: true,

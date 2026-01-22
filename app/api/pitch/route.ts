@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { checkBotId } from "botid/server"
 import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
 import { COLLECTIONS, type PitchSubmissionDocument } from "@/lib/firebase/collections"
+import { sendPitchConfirmation } from "@/lib/email/resend"
 
 export async function POST(request: Request) {
   try {
@@ -102,6 +103,18 @@ export async function POST(request: Request) {
       .add(pitchSubmission)
 
     console.log(`New pitch submission created: ${docRef.id} - ${data.companyName}`)
+
+    // Send confirmation email
+    const emailResult = await sendPitchConfirmation(
+      pitchSubmission.email,
+      pitchSubmission.founderName,
+      pitchSubmission.companyName,
+      docRef.id
+    )
+
+    if (!emailResult.success) {
+      console.warn(`Pitch saved but email failed for ${pitchSubmission.email}`)
+    }
 
     return NextResponse.json({
       success: true,
