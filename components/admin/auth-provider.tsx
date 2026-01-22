@@ -1,14 +1,31 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react"
-import type { PublicAdminUser, AdminPermission } from "@/lib/admin/config"
+import { 
+  signInWithGoogle, 
+  signInWithEmail, 
+  signOut as firebaseSignOut, 
+  onAuthChange,
+  type User as FirebaseUser
+} from "@/lib/firebase/client"
+import type { AdminPermission } from "@/lib/firebase/collections"
+
+// Public admin info sent to client
+export interface AdminUser {
+  email: string
+  name: string
+  role: "admin"
+  permissions: AdminPermission[]
+  photoURL?: string
+}
 
 interface AuthContextType {
-  user: PublicAdminUser | null
+  user: AdminUser | null
+  firebaseUser: FirebaseUser | null
   isLoading: boolean
   isAuthenticated: boolean
-  getQuestion: (email: string) => Promise<{ success: boolean; question?: string; isValid?: boolean }>
-  verify: (email: string, answer: string, pin: string) => Promise<{ success: boolean; error?: string }>
+  signInWithGoogle: () => Promise<{ success: boolean; error?: string }>
+  signInWithEmail: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
   logout: () => Promise<void>
   hasPermission: (permission: AdminPermission) => boolean
 }
@@ -16,89 +33,132 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<PublicAdminUser | null>(null)
+  const [user, setUser] = useState<AdminUser | null>(null)
+  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const checkSession = useCallback(async () => {
+  // Verify the Firebase user against our admin database
+  const verifyAdminAccess = useCallback(async (fbUser: FirebaseUser): Promise<AdminUser | null> => {
     try {
-      const response = await fetch("/api/admin/auth", {
-        credentials: "include",
-        cache: "no-store",
-      })
-      const data = await response.json()
+      const idToken = await fbUser.getIdToken()
       
-      if (data.authenticated && data.user) {
-        setUser(data.user)
-      } else {
-        setUser(null)
-      }
-    } catch {
-      setUser(null)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    checkSession()
-  }, [checkSession])
-
-  const getQuestion = async (email: string) => {
-    try {
       const response = await fetch("/api/admin/auth", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, action: "get-question" }),
-        credentials: "include",
-      })
-      
-      const data = await response.json()
-      return { 
-        success: true, 
-        question: data.question,
-        isValid: data.isValid,
-      }
-    } catch {
-      return { success: false }
-    }
-  }
-
-  const verify = async (email: string, answer: string, pin: string) => {
-    try {
-      const response = await fetch("/api/admin/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, answer, pin, action: "verify" }),
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`
+        },
         credentials: "include",
       })
       
       const data = await response.json()
       
       if (data.success && data.user) {
-        setUser(data.user)
-        return { success: true }
+        return {
+          ...data.user,
+          photoURL: fbUser.photoURL || undefined,
+        }
       }
       
-      return { success: false, error: data.error || "Verification failed" }
-    } catch {
-      return { success: false, error: "Verification failed" }
+      return null
+    } catch (error) {
+      console.error("Failed to verify admin access:", error)
+      return null
+    }
+  }, [])
+
+  // Listen to Firebase auth state changes
+  useEffect(() => {
+    const unsubscribe = onAuthChange(async (fbUser) => {
+      setIsLoading(true)
+      setFirebaseUser(fbUser)
+      
+      if (fbUser) {
+        // Verify this Firebase user is an approved admin
+        const adminUser = await verifyAdminAccess(fbUser)
+        setUser(adminUser)
+        
+        if (!adminUser) {
+          // User is authenticated with Firebase but not an approved admin
+          // Sign them out
+          console.log("User not approved as admin, signing out")
+          await firebaseSignOut()
+        }
+      } else {
+        setUser(null)
+      }
+      
+      setIsLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [verifyAdminAccess])
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true)
+      const fbUser = await signInWithGoogle()
+      const adminUser = await verifyAdminAccess(fbUser)
+      
+      if (!adminUser) {
+        await firebaseSignOut()
+        return { success: false, error: "This email is not authorized for admin access." }
+      }
+      
+      setUser(adminUser)
+      return { success: true }
+    } catch (error) {
+      console.error("Google sign-in error:", error)
+      return { success: false, error: "Sign-in failed. Please try again." }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleEmailSignIn = async (email: string, password: string) => {
+    try {
+      setIsLoading(true)
+      const fbUser = await signInWithEmail(email, password)
+      const adminUser = await verifyAdminAccess(fbUser)
+      
+      if (!adminUser) {
+        await firebaseSignOut()
+        return { success: false, error: "This email is not authorized for admin access." }
+      }
+      
+      setUser(adminUser)
+      return { success: true }
+    } catch (error: unknown) {
+      console.error("Email sign-in error:", error)
+      const firebaseError = error as { code?: string }
+      if (firebaseError.code === "auth/user-not-found" || firebaseError.code === "auth/wrong-password") {
+        return { success: false, error: "Invalid email or password." }
+      }
+      return { success: false, error: "Sign-in failed. Please try again." }
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const logout = async () => {
     try {
+      // Clear server session
       await fetch("/api/admin/auth", { 
         method: "DELETE",
         credentials: "include",
       })
+    } catch (error) {
+      console.error("Logout error:", error)
     } finally {
+      await firebaseSignOut()
       setUser(null)
+      setFirebaseUser(null)
     }
   }
 
   const hasPermission = (permission: AdminPermission): boolean => {
     if (!user) return false
-    if (user.role === "superadmin") return true
+    // All authenticated Firebase users have full admin access
     return user.permissions.includes(permission)
   }
 
@@ -106,10 +166,11 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
+        firebaseUser,
         isLoading,
         isAuthenticated: !!user,
-        getQuestion,
-        verify,
+        signInWithGoogle: handleGoogleSignIn,
+        signInWithEmail: handleEmailSignIn,
         logout,
         hasPermission,
       }}

@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAdminAuth } from "./auth-provider"
-import type { AdminPermission } from "@/lib/admin/config"
+import type { AdminPermission } from "@/lib/firebase/collections"
 
 interface NavItem {
   label: string

@@ -7,6 +7,7 @@ export const COLLECTIONS = {
   NEWSLETTER: "newsletter",
   PITCH_SUBMISSIONS: "pitchSubmissions",
   CONTENT: "content",
+  // Note: Admin users are managed through Firebase Authentication, not Firestore
 } as const
 
 // User roles for admin access
@@ -125,4 +126,46 @@ export interface ContentDocument {
   }
   updatedAt: Date
   updatedBy: string
+}
+
+// Admin document structure (stored in Firestore, not env vars)
+// Note: This is kept for reference but admin users are now managed through Firebase Auth
+// Google sign-in: Only @434.media workspace accounts
+// Email/Password: Users created in Firebase Authentication
+export type AdminRole = "admin" // Simplified - all Firebase Auth users are admins
+export type AdminPermission = 
+  | "registrations"
+  | "newsletter"
+  | "pitches"
+  | "speakers"
+  | "schedule"
+  | "sponsors"
+  | "users"
+
+// AdminDocument type kept for backwards compatibility but not used for auth
+export interface AdminDocument {
+  email: string
+  uid?: string
+  name: string
+  role: AdminRole
+  permissions: AdminPermission[]
+  createdAt: Date
+  updatedAt: Date
+  lastLoginAt?: Date
+}
+
+// Simplified - all authenticated users get full permissions
+export const ROLE_PERMISSIONS: Record<AdminRole, AdminPermission[]> = {
+  admin: ["registrations", "newsletter", "pitches", "speakers", "schedule", "sponsors", "users"],
+}
+
+// Permission labels for UI
+export const PERMISSION_LABELS: Record<AdminPermission, string> = {
+  registrations: "Event Registrations",
+  newsletter: "Newsletter Subscribers",
+  pitches: "Pitch Submissions",
+  speakers: "Speaker Management",
+  schedule: "Schedule Management",
+  sponsors: "Sponsor Management",
+  users: "User Management",
 }
