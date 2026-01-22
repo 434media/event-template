@@ -11,6 +11,7 @@ import Link from "next/link"
 export default function TechDayPage() {
   const [speakers, setSpeakers] = useState<Speaker[]>([])
   const [isLoadingSpeakers, setIsLoadingSpeakers] = useState(true)
+  const [showAllSpeakers, setShowAllSpeakers] = useState(false)
 
   useEffect(() => {
     async function fetchSpeakers() {
@@ -100,15 +101,15 @@ export default function TechDayPage() {
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
                   <span className="w-2 h-2 bg-emerald-500 rounded-full shrink-0" />
-                  Healthcare Innovation
+                  Cyber & Tech
                 </li>
                 <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
                   <span className="w-2 h-2 bg-emerald-500 rounded-full shrink-0" />
-                  Cybersecurity: The New Frontier
+                  Bio & Life Science
                 </li>
                 <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
                   <span className="w-2 h-2 bg-emerald-500 rounded-full shrink-0" />
-                  Space Tech & Aerospace
+                  Aerospace & Advanced Manufacturing
                 </li>
               </ul>
             </motion.div>
@@ -173,6 +174,11 @@ export default function TechDayPage() {
         </div>
       </section>
 
+      {/* Schedule Section */}
+      <div id="schedule" className="bg-foreground">
+        <Schedule variant="dark" />
+      </div>
+
       {/* Speakers Section - Dark Theme */}
       <section className="py-24 md:py-32 bg-foreground/95">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -215,19 +221,29 @@ export default function TechDayPage() {
           {!isLoadingSpeakers && speakers.length > 0 && (
             <>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-                {speakers.map((speaker, index) => (
+                {(showAllSpeakers ? speakers : speakers.slice(0, 8)).map((speaker, index) => (
                   <SpeakerCard key={speaker.id} speaker={speaker} index={index} />
                 ))}
               </div>
+              {speakers.length > 8 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="text-center mt-12"
+                >
+                  <button
+                    onClick={() => setShowAllSpeakers(!showAllSpeakers)}
+                    className="px-8 py-4 bg-transparent border-2 border-white/30 text-white font-semibold rounded-md hover:bg-white hover:text-foreground transition-all"
+                  >
+                    {showAllSpeakers ? "Show Less" : `View All Speakers`}
+                  </button>
+                </motion.div>
+              )}
             </>
           )}
         </div>
       </section>
-
-      {/* Schedule Section */}
-      <div id="schedule" className="bg-foreground">
-        <Schedule variant="dark" />
-      </div>
 
       {/* Sponsors */}
       <Sponsors variant="dark" />
