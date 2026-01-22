@@ -5,6 +5,7 @@ import { SpeakerCard, type Speaker } from "@/components/sections/speaker-card"
 import { Schedule } from "@/components/sections/schedule"
 import { Sponsors } from "@/components/sections/sponsors"
 import { PixelArrow } from "@/components/pixel-arrow"
+import { Editable } from "@/components/editable"
 import { motion } from "motion/react"
 import Link from "next/link"
 
@@ -41,16 +42,27 @@ export default function TechDayPage() {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <p className="font-mono text-sm text-primary mb-6 tracking-widest uppercase">
+            <Editable 
+              id="techday.hero.subtitle" 
+              as="p" 
+              className="font-mono text-sm text-primary mb-6 tracking-widest uppercase"
+              page="techday"
+              section="hero"
+            >
               April 10, 2026 • Tech Port
-            </p>
+            </Editable>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-[0.95] tracking-tight">
               TECH DAY <span className="text-primary">2026</span>
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed font-normal">
-              A full day celebrating San Antonio&apos;s tech community with three tracks of inspiring sessions, and
-              networking opportunities.
-            </p>
+            <Editable 
+              id="techday.hero.description" 
+              as="p" 
+              className="text-lg sm:text-xl md:text-2xl text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed font-normal"
+              page="techday"
+              section="hero"
+            >
+              A full day celebrating San Antonio's tech community with three tracks of inspiring sessions, and networking opportunities.
+            </Editable>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/register"
@@ -78,10 +90,24 @@ export default function TechDayPage() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">Three Tracks</p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-[0.95] tracking-tight">
+            <Editable 
+              id="techday.tracks.label" 
+              as="p" 
+              className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+              page="techday"
+              section="tracks"
+            >
+              Three Tracks
+            </Editable>
+            <Editable 
+              id="techday.tracks.title" 
+              as="h2" 
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-[0.95] tracking-tight"
+              page="techday"
+              section="tracks"
+            >
               Choose Your Path
-            </h2>
+            </Editable>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -94,10 +120,24 @@ export default function TechDayPage() {
               className="relative p-8 md:p-10 bg-white/5 border border-white/10 rounded-xl overflow-hidden group hover:border-emerald-500/30 transition-colors"
             >
               <div className="absolute top-0 left-0 right-0 h-1 bg-emerald-500" />
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight tracking-tight">Emerging Industries</h3>
-              <p className="text-white/60 mb-8 leading-relaxed text-base">
+              <Editable 
+                id="techday.track.emerging.title" 
+                as="h3" 
+                className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight tracking-tight"
+                page="techday"
+                section="tracks"
+              >
+                Emerging Industries
+              </Editable>
+              <Editable 
+                id="techday.track.emerging.description" 
+                as="p" 
+                className="text-white/60 mb-8 leading-relaxed text-base"
+                page="techday"
+                section="tracks"
+              >
                 Explore cutting-edge technologies transforming San Antonio: cybersecurity, healthcare innovation, aerospace, and clean energy.
-              </p>
+              </Editable>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
                   <span className="w-2 h-2 bg-emerald-500 rounded-full shrink-0" />
@@ -123,10 +163,24 @@ export default function TechDayPage() {
               className="relative p-8 md:p-10 bg-white/5 border border-white/10 rounded-xl overflow-hidden group hover:border-violet-500/30 transition-colors"
             >
               <div className="absolute top-0 left-0 right-0 h-1 bg-violet-500" />
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight tracking-tight">Founders & Investors</h3>
-              <p className="text-white/60 mb-8 leading-relaxed text-base">
+              <Editable 
+                id="techday.track.founders.title" 
+                as="h3" 
+                className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight tracking-tight"
+                page="techday"
+                section="tracks"
+              >
+                Founders & Investors
+              </Editable>
+              <Editable 
+                id="techday.track.founders.description" 
+                as="p" 
+                className="text-white/60 mb-8 leading-relaxed text-base"
+                page="techday"
+                section="tracks"
+              >
                 Learn from successful founders and connect with investors. Fundraising strategies, building in public, and scaling your startup.
-              </p>
+              </Editable>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
                   <span className="w-2 h-2 bg-violet-500 rounded-full shrink-0" />
@@ -151,10 +205,24 @@ export default function TechDayPage() {
               className="relative p-8 md:p-10 bg-white/5 border border-white/10 rounded-xl overflow-hidden group hover:border-blue-500/30 transition-colors"
             >
               <div className="absolute top-0 left-0 right-0 h-1 bg-blue-500" />
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight tracking-tight">AI</h3>
-              <p className="text-white/60 mb-8 leading-relaxed text-base">
+              <Editable 
+                id="techday.track.ai.title" 
+                as="h3" 
+                className="text-2xl md:text-3xl font-bold text-white mb-5 leading-tight tracking-tight"
+                page="techday"
+                section="tracks"
+              >
+                AI
+              </Editable>
+              <Editable 
+                id="techday.track.ai.description" 
+                as="p" 
+                className="text-white/60 mb-8 leading-relaxed text-base"
+                page="techday"
+                section="tracks"
+              >
                 Dive into the future of artificial intelligence. From LLMs to computer vision, discover how AI is reshaping industries.
-              </p>
+              </Editable>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-white/80 text-sm font-medium">
                   <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0" />
@@ -188,13 +256,33 @@ export default function TechDayPage() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">Meet the Speakers</p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-[0.95] tracking-tight">
+            <Editable 
+              id="techday.speakers.label" 
+              as="p" 
+              className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+              page="techday"
+              section="speakers"
+            >
+              Meet the Speakers
+            </Editable>
+            <Editable 
+              id="techday.speakers.title" 
+              as="h2" 
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-[0.95] tracking-tight"
+              page="techday"
+              section="speakers"
+            >
               Industry Leaders & Innovators
-            </h2>
-            <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-              Learn from the best minds in San Antonio&apos;s tech ecosystem and beyond.
-            </p>
+            </Editable>
+            <Editable 
+              id="techday.speakers.description" 
+              as="p" 
+              className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed"
+              page="techday"
+              section="speakers"
+            >
+              Learn from the best minds in San Antonio's tech ecosystem and beyond.
+            </Editable>
           </motion.div>
 
           {/* Loading State */}

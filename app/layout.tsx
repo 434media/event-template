@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { BotIdClient } from "botid/client"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { Providers } from "@/components/providers"
 import "./globals.css"
 
 const protectedRoutes = [
@@ -63,9 +64,11 @@ export default function RootLayout({
         <BotIdClient protect={protectedRoutes} />
       </head>
       <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} ${bebasNeue.variable} font-sans antialiased`}>
-        <Navbar />
-        {children}
-        <Footer />
+        <Providers>
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
         <Analytics />
       </body>
     </html>

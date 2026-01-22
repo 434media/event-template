@@ -7,6 +7,8 @@ export const COLLECTIONS = {
   NEWSLETTER: "newsletter",
   PITCH_SUBMISSIONS: "pitchSubmissions",
   CONTENT: "content",
+  SITE_TEXT: "siteText",  // Inline editable text blocks
+  SITE_TEXT_HISTORY: "siteTextHistory",  // Version history for text blocks
   // Note: Admin users are managed through Firebase Authentication, not Firestore
 } as const
 
@@ -168,4 +170,27 @@ export const PERMISSION_LABELS: Record<AdminPermission, string> = {
   schedule: "Schedule Management",
   sponsors: "Sponsor Management",
   users: "User Management",
+}
+
+// Site Text Content for inline editing
+export interface TextBlockContent {
+  id: string                    // Unique identifier like "hero.title" or "about.description"
+  content: string               // The actual text content
+  element: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "li" | "label" | "rich"
+  page: string                  // Which page it belongs to (e.g., "home", "sponsor", "techday")
+  section: string               // Which section (e.g., "hero", "about", "cta")
+  updatedAt: Date
+  updatedBy: string
+  version?: number              // Current version number
+}
+
+// Version History for text blocks
+export interface TextBlockVersion {
+  id: string                    // Auto-generated version ID
+  textBlockId: string           // Reference to the TextBlockContent id
+  content: string               // The content at this version
+  version: number               // Version number (1, 2, 3, ...)
+  createdAt: Date               // When this version was created
+  createdBy: string             // Who made this edit (email)
+  changeType: "create" | "update" | "restore"  // What kind of change
 }

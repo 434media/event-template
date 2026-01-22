@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
+import { Editable } from "@/components/editable"
 
 interface Speaker {
   id: string
@@ -139,13 +140,33 @@ export function Schedule({ variant = "light" }: ScheduleProps) {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">April 10, 2026</p>
-          <h2 className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[0.95] tracking-tight ${isDark ? "text-white" : "text-foreground"}`}>
+          <Editable 
+            id="schedule.label" 
+            as="p" 
+            className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+            page="techday"
+            section="schedule"
+          >
+            April 10, 2026
+          </Editable>
+          <Editable 
+            id="schedule.title" 
+            as="h2" 
+            className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[0.95] tracking-tight ${isDark ? "text-white" : "text-foreground"}`}
+            page="techday"
+            section="schedule"
+          >
             Event Schedule
-          </h2>
-          <p className={`text-lg md:text-xl max-w-2xl mx-auto leading-relaxed ${isDark ? "text-white/60" : "text-muted-foreground"}`}>
+          </Editable>
+          <Editable 
+            id="schedule.description" 
+            as="p" 
+            className={`text-lg md:text-xl max-w-2xl mx-auto leading-relaxed ${isDark ? "text-white/60" : "text-muted-foreground"}`}
+            page="techday"
+            section="schedule"
+          >
             A full day of panels, keynotes, networking, and the Tech Fuel pitch competition.
-          </p>
+          </Editable>
         </motion.div>
 
         {/* Loading State */}

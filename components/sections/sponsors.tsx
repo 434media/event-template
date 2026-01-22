@@ -5,6 +5,7 @@ import { useInView } from "motion/react"
 import { useRef, useEffect, useState } from "react"
 import Link from "next/link"
 import { PixelArrow } from "@/components/pixel-arrow"
+import { Editable } from "@/components/editable"
 
 interface Sponsor {
   id: string
@@ -74,14 +75,33 @@ export function Sponsors({ variant = "light" }: SponsorsProps) {
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
-          <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">Our Partners</p>
-          <h2 className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[0.95] tracking-tight ${isDark ? "text-white" : "text-foreground"}`}>
+          <Editable 
+            id="sponsors.label" 
+            as="p" 
+            className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+            page="global"
+            section="sponsors"
+          >
+            Our Partners
+          </Editable>
+          <Editable 
+            id="sponsors.title" 
+            as="h2" 
+            className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[0.95] tracking-tight ${isDark ? "text-white" : "text-foreground"}`}
+            page="global"
+            section="sponsors"
+          >
             Sponsors
-          </h2>
-          <p className={`text-lg md:text-xl max-w-2xl mx-auto leading-relaxed ${isDark ? "text-white/60" : "text-muted-foreground"}`}>
-            Tech Day is made possible by the generous support of our sponsors who believe in San Antonio&apos;s tech
-            future.
-          </p>
+          </Editable>
+          <Editable 
+            id="sponsors.description" 
+            as="p" 
+            className={`text-lg md:text-xl max-w-2xl mx-auto leading-relaxed ${isDark ? "text-white/60" : "text-muted-foreground"}`}
+            page="global"
+            section="sponsors"
+          >
+            Tech Day is made possible by the generous support of our sponsors who believe in San Antonio's tech future.
+          </Editable>
         </motion.div>
 
         {/* Loading State */}
@@ -307,7 +327,15 @@ export function Sponsors({ variant = "light" }: SponsorsProps) {
           className={`relative rounded-2xl overflow-hidden shadow-xl ${isDark ? "bg-white/5 border-2 border-white/10" : "bg-white border-2 border-primary/20"}`}
         >
           <div className="bg-linear-to-r from-primary to-primary/80 px-6 py-4">
-            <p className="font-mono text-xs text-white/80 tracking-widest uppercase">Partnership Opportunity</p>
+            <Editable 
+              id="sponsors.cta.label" 
+              as="p" 
+              className="font-mono text-xs text-white/80 tracking-widest uppercase"
+              page="global"
+              section="sponsors"
+            >
+              Partnership Opportunity
+            </Editable>
           </div>
           
           <div className="absolute top-16 left-0 right-0 flex items-center justify-between">
@@ -317,13 +345,24 @@ export function Sponsors({ variant = "light" }: SponsorsProps) {
           </div>
           
           <div className="p-8 md:p-10 pt-14 text-center">
-            <h3 className={`text-2xl md:text-3xl font-bold mb-4 leading-tight tracking-tight ${isDark ? "text-white" : "text-foreground"}`}>
+            <Editable 
+              id="sponsors.cta.title" 
+              as="h3" 
+              className={`text-2xl md:text-3xl font-bold mb-4 leading-tight tracking-tight ${isDark ? "text-white" : "text-foreground"}`}
+              page="global"
+              section="sponsors"
+            >
               Become a Sponsor
-            </h3>
-            <p className={`mb-8 max-w-lg mx-auto leading-relaxed text-base md:text-lg ${isDark ? "text-white/60" : "text-muted-foreground"}`}>
-              Join San Antonio&apos;s top companies in supporting the local tech ecosystem. Multiple sponsorship tiers
-              available with exclusive benefits.
-            </p>
+            </Editable>
+            <Editable 
+              id="sponsors.cta.description" 
+              as="p" 
+              className={`mb-8 max-w-lg mx-auto leading-relaxed text-base md:text-lg ${isDark ? "text-white/60" : "text-muted-foreground"}`}
+              page="global"
+              section="sponsors"
+            >
+              Join San Antonio's top companies in supporting the local tech ecosystem. Multiple sponsorship tiers available with exclusive benefits.
+            </Editable>
             <Link
               href="mailto:sponsors@techday.sa"
               className="inline-flex px-10 py-5 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl text-lg"

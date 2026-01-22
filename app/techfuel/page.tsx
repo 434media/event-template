@@ -4,6 +4,7 @@ import { useState } from "react"
 import { PitchSubmissionForm } from "@/components/forms/pitch-submission-form"
 import { Sponsors } from "@/components/sections/sponsors"
 import { PixelArrow } from "@/components/pixel-arrow"
+import { Editable } from "@/components/editable"
 import { motion, AnimatePresence } from "motion/react"
 import Link from "next/link"
 
@@ -125,9 +126,15 @@ function QualificationsAccordion() {
                 }`}>
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <span className="text-base font-semibold text-foreground tracking-tight text-left">
+                <Editable
+                  id={`techfuel.qualifications.item.${index}.title`}
+                  as="span"
+                  className="text-base font-semibold text-foreground tracking-tight text-left"
+                  page="techfuel"
+                  section="qualifications"
+                >
                   {item.title}
-                </span>
+                </Editable>
               </div>
               <motion.div
                 animate={{ rotate: openIndex === index ? 45 : 0 }}
@@ -154,9 +161,15 @@ function QualificationsAccordion() {
                 className="overflow-hidden"
               >
                 <div className="px-5 py-4 ml-9">
-                  <p className="text-muted-foreground leading-relaxed text-base">
+                  <Editable
+                    id={`techfuel.qualifications.item.${index}.description`}
+                    as="p"
+                    className="text-muted-foreground leading-relaxed text-base"
+                    page="techfuel"
+                    section="qualifications"
+                  >
                     {item.description}
-                  </p>
+                  </Editable>
                 </div>
               </motion.div>
             )}
@@ -195,9 +208,15 @@ function ScreeningAccordion() {
                 }`}>
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <span className="text-base font-semibold text-foreground tracking-tight text-left">
+                <Editable
+                  id={`techfuel.screening.item.${index}.title`}
+                  as="span"
+                  className="text-base font-semibold text-foreground tracking-tight text-left"
+                  page="techfuel"
+                  section="screening"
+                >
                   {item.title}
-                </span>
+                </Editable>
               </div>
               <motion.div
                 animate={{ rotate: openIndex === index ? 45 : 0 }}
@@ -224,9 +243,15 @@ function ScreeningAccordion() {
                 className="overflow-hidden"
               >
                 <div className="px-5 py-4 ml-9">
-                  <p className="text-muted-foreground leading-relaxed text-base">
+                  <Editable
+                    id={`techfuel.screening.item.${index}.description`}
+                    as="p"
+                    className="text-muted-foreground leading-relaxed text-base"
+                    page="techfuel"
+                    section="screening"
+                  >
                     {item.description}
-                  </p>
+                  </Editable>
                 </div>
               </motion.div>
             )}
@@ -251,19 +276,36 @@ export default function TechFuelPage() {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <p className="font-mono text-sm text-primary mb-6 tracking-widest uppercase">
+            <Editable 
+              id="techfuel.hero.subtitle" 
+              as="p" 
+              className="font-mono text-sm text-primary mb-6 tracking-widest uppercase"
+              page="techfuel"
+              section="hero"
+            >
               April 9, 2026 • Stable Hall
-            </p>
+            </Editable>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground mb-4 leading-[0.95] tracking-tight">
               TECH FUEL <span className="text-primary">2026</span>
             </h1>
-            <p className="font-mono text-xl sm:text-2xl md:text-3xl text-primary font-bold mb-8 tracking-tight">
+            <Editable 
+              id="techfuel.hero.prize" 
+              as="p" 
+              className="font-mono text-xl sm:text-2xl md:text-3xl text-primary font-bold mb-8 tracking-tight"
+              page="techfuel"
+              section="hero"
+            >
               $100K Pitch Competition
-            </p>
-            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed font-normal">
-              Greater San Antonio&apos;s largest cash prize pitch competition with $100,000 in non-dilutive 
-              cash prizes along with resources and support, sponsored by Bexar County.
-            </p>
+            </Editable>
+            <Editable 
+              id="techfuel.hero.description" 
+              as="p" 
+              className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed font-normal"
+              page="techfuel"
+              section="hero"
+            >
+              Greater San Antonio's largest cash prize pitch competition with $100,000 in non-dilutive cash prizes along with resources and support, sponsored by Bexar County.
+            </Editable>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="#submit"
@@ -287,15 +329,33 @@ export default function TechFuelPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">About Tech Fuel</p>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-8 leading-[0.95] tracking-tight">
+              <Editable 
+                id="techfuel.about.label" 
+                as="p" 
+                className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+                page="techfuel"
+                section="about"
+              >
+                About Tech Fuel
+              </Editable>
+              <Editable 
+                id="techfuel.about.title" 
+                as="h2" 
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-8 leading-[0.95] tracking-tight"
+                page="techfuel"
+                section="about"
+              >
                 Fuel Your Growth
-              </h2>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed">
-                TechFuel is greater San Antonio&apos;s largest cash prize pitch competition. With $100,000 available 
-                in non-dilutive cash prize money along with resources and support, this is your opportunity to 
-                showcase innovation to investors, gain exposure, and accelerate your startup&apos;s journey.
-              </p>
+              </Editable>
+              <Editable 
+                id="techfuel.about.description" 
+                as="p" 
+                className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed"
+                page="techfuel"
+                section="about"
+              >
+                TechFuel is greater San Antonio's largest cash prize pitch competition. With $100,000 available in non-dilutive cash prize money along with resources and support, this is your opportunity to showcase innovation to investors, gain exposure, and accelerate your startup's journey.
+              </Editable>
               <ul className="space-y-5">
                 <li className="flex items-start gap-4">
                   <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -360,13 +420,33 @@ export default function TechFuelPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">How It Works</p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight">
+            <Editable
+              id="techfuel.qualifications.label"
+              as="p"
+              className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+              page="techfuel"
+              section="qualifications"
+            >
+              How It Works
+            </Editable>
+            <Editable
+              id="techfuel.qualifications.title"
+              as="h2"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight"
+              page="techfuel"
+              section="qualifications"
+            >
               Qualifications
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            </Editable>
+            <Editable
+              id="techfuel.qualifications.description"
+              as="p"
+              className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+              page="techfuel"
+              section="qualifications"
+            >
               Prospective startups should have a well-defined startup with innovative potential, showcasing the capacity to disrupt and reshape the tech landscape.
-            </p>
+            </Editable>
           </motion.div>
 
           <QualificationsAccordion />
@@ -382,13 +462,33 @@ export default function TechFuelPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">Selection Criteria</p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight">
+            <Editable
+              id="techfuel.screening.label"
+              as="p"
+              className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+              page="techfuel"
+              section="screening"
+            >
+              Selection Criteria
+            </Editable>
+            <Editable
+              id="techfuel.screening.title"
+              as="h2"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight"
+              page="techfuel"
+              section="screening"
+            >
               How We Evaluate
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            </Editable>
+            <Editable
+              id="techfuel.screening.description"
+              as="p"
+              className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+              page="techfuel"
+              section="screening"
+            >
               The screening committee determines which applicants advance to the semi-final round based on these criteria.
-            </p>
+            </Editable>
           </motion.div>
 
           <ScreeningAccordion />
@@ -404,13 +504,33 @@ export default function TechFuelPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">The Journey</p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight">
+            <Editable
+              id="techfuel.process.label"
+              as="p"
+              className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+              page="techfuel"
+              section="process"
+            >
+              The Journey
+            </Editable>
+            <Editable
+              id="techfuel.process.title"
+              as="h2"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight"
+              page="techfuel"
+              section="process"
+            >
               Qualification Process
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            </Editable>
+            <Editable
+              id="techfuel.process.description"
+              as="p"
+              className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+              page="techfuel"
+              section="process"
+            >
               From application to the final stage, here&apos;s how the competition unfolds.
-            </p>
+            </Editable>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -424,9 +544,33 @@ export default function TechFuelPage() {
                 className="relative"
               >
                 <div className="p-8 bg-muted border border-border rounded-xl h-full">
-                  <span className="font-mono text-5xl font-bold text-primary/20 mb-4 block leading-none">{step.step}</span>
-                  <h3 className="text-xl font-bold text-foreground mb-3 leading-tight tracking-tight">{step.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">{step.description}</p>
+                  <Editable
+                    id={`techfuel.process.step.${index}.number`}
+                    as="span"
+                    className="font-mono text-5xl font-bold text-primary/20 mb-4 block leading-none"
+                    page="techfuel"
+                    section="process"
+                  >
+                    {step.step}
+                  </Editable>
+                  <Editable
+                    id={`techfuel.process.step.${index}.title`}
+                    as="h3"
+                    className="text-xl font-bold text-foreground mb-3 leading-tight tracking-tight"
+                    page="techfuel"
+                    section="process"
+                  >
+                    {step.title}
+                  </Editable>
+                  <Editable
+                    id={`techfuel.process.step.${index}.description`}
+                    as="p"
+                    className="text-muted-foreground leading-relaxed text-sm"
+                    page="techfuel"
+                    section="process"
+                  >
+                    {step.description}
+                  </Editable>
                 </div>
                 {index < processSteps.length - 1 && (
                   <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-primary/20" />
@@ -446,16 +590,33 @@ export default function TechFuelPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">Our Track Record</p>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-8 leading-[0.95] tracking-tight">
+              <Editable
+                id="techfuel.impact.label"
+                as="p"
+                className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+                page="techfuel"
+                section="impact"
+              >
+                Our Track Record
+              </Editable>
+              <Editable
+                id="techfuel.impact.title"
+                as="h2"
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-8 leading-[0.95] tracking-tight"
+                page="techfuel"
+                section="impact"
+              >
                 The Impact Throughout the Years
-              </h2>
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
-                In its 6 years of existence, through strategic investments totaling over $550K, Tech Fuel has 
-                propelled the growth and success of 28 diverse startups across the state. This financial backing 
-                not only signifies a commitment from Bexar County to innovation but also underscores Tech Bloc&apos;s 
-                role in fostering economic development and job creation.
-              </p>
+              </Editable>
+              <Editable
+                id="techfuel.impact.description"
+                as="p"
+                className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8"
+                page="techfuel"
+                section="impact"
+              >
+                In its 6 years of existence, through strategic investments totaling over $550K, Tech Fuel has propelled the growth and success of 28 diverse startups across the state. This financial backing not only signifies a commitment from Bexar County to innovation but also underscores Tech Bloc&apos;s role in fostering economic development and job creation.
+              </Editable>
             </motion.div>
 
             <motion.div
@@ -469,12 +630,24 @@ export default function TechFuelPage() {
                   key={stat.label}
                   className="p-8 bg-white border border-border rounded-xl text-center"
                 >
-                  <span className="block font-mono text-4xl md:text-5xl font-bold text-primary mb-2 leading-none">
+                  <Editable
+                    id={`techfuel.impact.stat.${index}.value`}
+                    as="span"
+                    className="block font-mono text-4xl md:text-5xl font-bold text-primary mb-2 leading-none"
+                    page="techfuel"
+                    section="impact"
+                  >
                     {stat.value}
-                  </span>
-                  <span className="text-muted-foreground text-sm font-medium uppercase tracking-wide">
+                  </Editable>
+                  <Editable
+                    id={`techfuel.impact.stat.${index}.label`}
+                    as="span"
+                    className="text-muted-foreground text-sm font-medium uppercase tracking-wide"
+                    page="techfuel"
+                    section="impact"
+                  >
                     {stat.label}
-                  </span>
+                  </Editable>
                 </div>
               ))}
             </motion.div>
@@ -491,13 +664,33 @@ export default function TechFuelPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">Apply Now</p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight">
+            <Editable
+              id="techfuel.submit.label"
+              as="p"
+              className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+              page="techfuel"
+              section="submit"
+            >
+              Apply Now
+            </Editable>
+            <Editable
+              id="techfuel.submit.title"
+              as="h2"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight"
+              page="techfuel"
+              section="submit"
+            >
               Submit Your Pitch
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+            </Editable>
+            <Editable
+              id="techfuel.submit.description"
+              as="p"
+              className="text-lg md:text-xl text-muted-foreground leading-relaxed"
+              page="techfuel"
+              section="submit"
+            >
               Applications close March 1, 2026. Finalists will be notified by March 7.
-            </p>
+            </Editable>
           </motion.div>
 
           <motion.div
@@ -520,13 +713,33 @@ export default function TechFuelPage() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">Success Stories</p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight">
+            <Editable
+              id="techfuel.featured.label"
+              as="p"
+              className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
+              page="techfuel"
+              section="featured"
+            >
+              Success Stories
+            </Editable>
+            <Editable
+              id="techfuel.featured.title"
+              as="h2"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 leading-[0.95] tracking-tight"
+              page="techfuel"
+              section="featured"
+            >
               Featured Companies
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            </Editable>
+            <Editable
+              id="techfuel.featured.description"
+              as="p"
+              className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+              page="techfuel"
+              section="featured"
+            >
               Past Tech Fuel participants who&apos;ve gone on to raise funding, scale their teams, and make an impact.
-            </p>
+            </Editable>
           </motion.div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">

@@ -5,6 +5,7 @@ import Link from "next/link"
 import { motion, useMotionValue, useTransform, useSpring } from "motion/react"
 import { useEffect, useState } from "react"
 import { ArrowRight, Zap } from "lucide-react"
+import { Editable } from "@/components/editable"
 
 interface Sponsor {
   id: string
@@ -147,14 +148,22 @@ export function Hero() {
         </motion.div>
 
         {/* Tagline */}
-        <motion.p
+        <motion.div
           className="mt-3 md:mt-4 text-[#0a0a0a]/70 text-base sm:text-lg md:text-xl font-medium tracking-wide text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <span className="text-[#dc2626] font-semibold">Hecho en San Antonio</span>
-        </motion.p>
+          <Editable 
+            id="hero.tagline" 
+            as="span" 
+            className="text-[#dc2626] font-semibold"
+            page="home"
+            section="hero"
+          >
+            Hecho en San Antonio
+          </Editable>
+        </motion.div>
 
         {/* Date & Location - Compact */}
         <motion.div
@@ -165,16 +174,48 @@ export function Hero() {
         >
           <div className="text-center">
             <p className="text-[#0a0a0a]/50 text-[10px] sm:text-xs font-mono uppercase tracking-widest">Tech Fuel</p>
-            <p className="text-[#0a0a0a] text-lg sm:text-xl font-semibold leading-tight">April 9</p>
-            <p className="text-[#0a0a0a]/60 text-xs sm:text-sm">Stable Hall</p>
+            <Editable 
+              id="hero.techfuel.date" 
+              as="p" 
+              className="text-[#0a0a0a] text-lg sm:text-xl font-semibold leading-tight"
+              page="home"
+              section="hero"
+            >
+              April 9
+            </Editable>
+            <Editable 
+              id="hero.techfuel.venue" 
+              as="p" 
+              className="text-[#0a0a0a]/60 text-xs sm:text-sm"
+              page="home"
+              section="hero"
+            >
+              Stable Hall
+            </Editable>
           </div>
           
           <div className="w-px h-12 bg-[#0a0a0a]/15" />
           
           <div className="text-center">
             <p className="text-[#0a0a0a]/50 text-[10px] sm:text-xs font-mono uppercase tracking-widest">Tech Day</p>
-            <p className="text-[#0a0a0a] text-lg sm:text-xl font-semibold leading-tight">April 10</p>
-            <p className="text-[#0a0a0a]/60 text-xs sm:text-sm">Tech Port</p>
+            <Editable 
+              id="hero.techday.date" 
+              as="p" 
+              className="text-[#0a0a0a] text-lg sm:text-xl font-semibold leading-tight"
+              page="home"
+              section="hero"
+            >
+              April 10
+            </Editable>
+            <Editable 
+              id="hero.techday.venue" 
+              as="p" 
+              className="text-[#0a0a0a]/60 text-xs sm:text-sm"
+              page="home"
+              section="hero"
+            >
+              Tech Port
+            </Editable>
           </div>
         </motion.div>
 

@@ -47,10 +47,10 @@ function getEmailTemplate(content: string, footerText: string = "") {
                 ${DOWN_ARROW_SVG}
               </div>
               <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
-                TECH DAY <span style="color: #c73030;">2026</span>
+                TECH FUEL • TECH DAY <span style="color: #c73030;">2026</span>
               </h1>
               <p style="margin: 10px 0 0; color: rgba(255,255,255,0.7); font-size: 14px; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; text-transform: uppercase;">
-                April 10, 2026 • Tech Port
+                April 9-10, 2026 • Stable Hall • Tech Port
               </p>
             </td>
           </tr>

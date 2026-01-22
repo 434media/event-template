@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
+import { Editable } from "@/components/editable"
 
 export function Footer() {
   return (
@@ -21,9 +22,15 @@ export function Footer() {
                 <span className="font-bold text-foreground group-hover:text-primary transition-colors leading-tight">TECH DAY</span>
               </div>
             </div>
-            <p className="text-muted-foreground leading-relaxed">
-              The technology conference focused on founders, startups and the future of San Antonio&apos;s tech ecosystem.
-            </p>
+            <Editable 
+              id="footer.tagline" 
+              as="p" 
+              className="text-muted-foreground leading-relaxed"
+              page="global"
+              section="footer"
+            >
+              The technology conference focused on founders, startups and the future of San Antonio's tech ecosystem.
+            </Editable>
           </div>
 
           {/* Events */}
