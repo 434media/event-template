@@ -2,9 +2,16 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { Space_Grotesk, JetBrains_Mono, Syne, Bebas_Neue } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { BotIdClient } from "botid/client"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import "./globals.css"
+
+const protectedRoutes = [
+  { path: "/api/register", method: "POST" },
+  { path: "/api/pitch", method: "POST" },
+  { path: "/api/newsletter", method: "POST" },
+]
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -52,6 +59,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <BotIdClient protect={protectedRoutes} />
+      </head>
       <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} ${bebasNeue.variable} font-sans antialiased`}>
         <Navbar />
         {children}
