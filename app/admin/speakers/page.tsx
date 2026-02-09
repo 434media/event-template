@@ -34,6 +34,7 @@ export default function SpeakersPage() {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const [isSavingOrder, setIsSavingOrder] = useState(false)
+  const [isDeletingAll, setIsDeletingAll] = useState(false)
 
   useEffect(() => {
     fetchSpeakers()
@@ -90,6 +91,27 @@ export default function SpeakersPage() {
       }
     } catch (error) {
       console.error("Failed to delete speaker:", error)
+    }
+  }
+
+  async function deleteAllSpeakers() {
+    if (!confirm("Are you sure you want to delete ALL speakers? This action cannot be undone.")) return
+    if (!confirm("This will permanently remove all speaker data. Are you absolutely sure?")) return
+
+    setIsDeletingAll(true)
+    try {
+      const response = await fetch("/api/admin/content/speakers?id=all", {
+        method: "DELETE",
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        fetchSpeakers()
+      }
+    } catch (error) {
+      console.error("Failed to delete all speakers:", error)
+    } finally {
+      setIsDeletingAll(false)
     }
   }
 
@@ -170,15 +192,26 @@ export default function SpeakersPage() {
             Manage conference speakers • Drag cards to reorder
           </p>
         </div>
-        <button
-          onClick={() => {
-            setIsCreating(true)
-            setEditingSpeaker({ ...EMPTY_SPEAKER })
-          }}
-          className="px-4 py-2 text-sm font-medium bg-black text-white hover:bg-neutral-800 transition-colors"
-        >
-          Add Speaker
-        </button>
+        <div className="flex items-center gap-3">
+          {speakers.length > 0 && (
+            <button
+              onClick={deleteAllSpeakers}
+              disabled={isDeletingAll}
+              className="px-4 py-2 text-sm font-medium border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 disabled:opacity-50 transition-colors"
+            >
+              {isDeletingAll ? "Deleting..." : "Delete All"}
+            </button>
+          )}
+          <button
+            onClick={() => {
+              setIsCreating(true)
+              setEditingSpeaker({ ...EMPTY_SPEAKER })
+            }}
+            className="px-4 py-2 text-sm font-medium bg-black text-white hover:bg-neutral-800 transition-colors"
+          >
+            Add Speaker
+          </button>
+        </div>
       </div>
 
       {/* Grid */}

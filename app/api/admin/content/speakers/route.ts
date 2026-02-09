@@ -190,6 +190,16 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Speaker ID is required" }, { status: 400 })
     }
 
+    // Bulk delete all speakers
+    if (id === "all") {
+      await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").set({
+        speakers: [],
+        updatedAt: new Date(),
+        updatedBy: session.email,
+      })
+      return NextResponse.json({ success: true, message: "All speakers deleted" })
+    }
+
     // Get current speakers
     const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").get()
     const currentSpeakers: SpeakerContent[] = doc.exists ? doc.data()?.speakers || [] : []

@@ -147,7 +147,7 @@ export function Schedule({ variant = "light" }: ScheduleProps) {
             page="techday"
             section="schedule"
           >
-            April 10, 2026
+            April 20, 2026
           </Editable>
           <Editable 
             id="schedule.title" 

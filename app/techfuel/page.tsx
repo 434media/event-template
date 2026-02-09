@@ -95,7 +95,7 @@ const timeline = [
   { date: "Mar 7", event: "Semi-Finalists Announced" },
   { date: "Mar 14", event: "Semi-Final Pitch Sessions" },
   { date: "Mar 21", event: "Finalists Announced" },
-  { date: "Apr 9", event: "Final Competition @ Stable Hall" },
+  { date: "Apr 21", event: "Final Competition @ UTSA SP1" },
 ]
 
 function QualificationsAccordion() {
@@ -283,7 +283,7 @@ export default function TechFuelPage() {
               page="techfuel"
               section="hero"
             >
-              April 9, 2026 • Stable Hall
+              April 21, 2026 • UTSA SP1
             </Editable>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground mb-4 leading-[0.95] tracking-tight">
               <Editable 

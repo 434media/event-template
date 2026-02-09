@@ -59,6 +59,7 @@ export default function SchedulePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [editingSession, setEditingSession] = useState<Session | null>(null)
   const [isCreating, setIsCreating] = useState(false)
+  const [isDeletingAll, setIsDeletingAll] = useState(false)
 
   useEffect(() => {
     fetchSessions()
@@ -131,6 +132,27 @@ export default function SchedulePage() {
     }
   }
 
+  async function deleteAllSessions() {
+    if (!confirm("Are you sure you want to delete ALL sessions? This action cannot be undone.")) return
+    if (!confirm("This will permanently remove all session data. Are you absolutely sure?")) return
+
+    setIsDeletingAll(true)
+    try {
+      const response = await fetch("/api/admin/content/schedule?id=all", {
+        method: "DELETE",
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        fetchSessions()
+      }
+    } catch (error) {
+      console.error("Failed to delete all sessions:", error)
+    } finally {
+      setIsDeletingAll(false)
+    }
+  }
+
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(":")
     const hour = parseInt(hours)
@@ -151,15 +173,26 @@ export default function SchedulePage() {
             Manage conference sessions
           </p>
         </div>
-        <button
-          onClick={() => {
-            setIsCreating(true)
-            setEditingSession({ ...EMPTY_SESSION })
-          }}
-          className="px-4 py-2 text-sm font-medium bg-black text-white hover:bg-neutral-800 transition-colors"
-        >
-          Add Session
-        </button>
+        <div className="flex items-center gap-3">
+          {sessions.length > 0 && (
+            <button
+              onClick={deleteAllSessions}
+              disabled={isDeletingAll}
+              className="px-4 py-2 text-sm font-medium border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 disabled:opacity-50 transition-colors"
+            >
+              {isDeletingAll ? "Deleting..." : "Delete All"}
+            </button>
+          )}
+          <button
+            onClick={() => {
+              setIsCreating(true)
+              setEditingSession({ ...EMPTY_SESSION })
+            }}
+            className="px-4 py-2 text-sm font-medium bg-black text-white hover:bg-neutral-800 transition-colors"
+          >
+            Add Session
+          </button>
+        </div>
       </div>
 
       {/* Timeline */}

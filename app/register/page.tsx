@@ -40,7 +40,7 @@ export default function RegisterPage() {
                 page="register"
                 section="hero"
               >
-                Join us in San Antonio on April 9–10, 2026 for two days of innovation, networking, and inspiration. Register now to attend Tech Day and witness the thrilling Tech Fuel startup pitch competition finals.
+                Join us in San Antonio on April 20–21, 2026 for two days of innovation, networking, and inspiration. Register now to attend Tech Day and witness the thrilling Tech Fuel startup pitch competition finals.
               </Editable>
               <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start text-sm">
                 <div className="inline-flex items-center gap-2 text-muted-foreground bg-muted/50 px-4 py-2 rounded-full">
@@ -48,13 +48,13 @@ export default function RegisterPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span className="font-medium">Stable Hall &amp; Tech Port</span>
+                  <span className="font-medium">Tech Port &amp; UTSA SP1</span>
                 </div>
                 <div className="inline-flex items-center gap-2 text-muted-foreground bg-muted/50 px-4 py-2 rounded-full">
                   <svg className="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  <span className="font-medium">April 9–10, 2026</span>
+                  <span className="font-medium">April 20–21, 2026</span>
                 </div>
               </div>
             </motion.div>
@@ -85,7 +85,7 @@ export default function RegisterPage() {
               <div>
                 <p className="font-mono text-xs text-primary tracking-widest font-semibold uppercase mb-1">Free Event</p>
                 <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">Registration Form</h2>
-                <p className="text-sm text-muted-foreground mt-1 font-medium">April 9–10, 2026 • San Antonio, TX</p>
+                <p className="text-sm text-muted-foreground mt-1 font-medium">April 20–21, 2026 • San Antonio, TX</p>
               </div>
               <Image
                 src="https://ampd-asset.s3.us-east-2.amazonaws.com/techday/10Years_Red.svg"
@@ -146,12 +146,12 @@ export default function RegisterPage() {
               {
                 id: "faq-2",
                 q: "When and where are the events?",
-                a: "Tech Day is on April 9, 2026 at Tech Port in San Antonio. Tech Fuel, our startup pitch competition finals, is on April 10, 2026 at Stable Hall. Full address and parking details will be sent in your confirmation email.",
+                a: "Tech Day is on April 20, 2026 at Tech Port in San Antonio. Tech Fuel, our startup pitch competition finals, is on April 21, 2026 at UTSA SP1. Full address and parking details will be sent in your confirmation email.",
               },
               {
                 id: "faq-3",
                 q: "Can I attend both Tech Day and Tech Fuel?",
-                a: "Absolutely! Your registration covers both days. Tech Day features our conference tracks on April 9th, and Tech Fuel showcases the startup pitch competition finals on April 10th.",
+                a: "Absolutely! Your registration covers both days. Tech Day features our conference tracks on April 20th, and Tech Fuel showcases the startup pitch competition finals on April 21st.",
               },
               {
                 id: "faq-4",

@@ -153,6 +153,16 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Session ID is required" }, { status: 400 })
     }
 
+    // Bulk delete all sessions
+    if (id === "all") {
+      await adminDb.collection(COLLECTIONS.CONTENT).doc("schedule").set({
+        sessions: [],
+        updatedAt: new Date(),
+        updatedBy: session.email,
+      })
+      return NextResponse.json({ success: true, message: "All sessions deleted" })
+    }
+
     const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("schedule").get()
     const currentSessions: SessionContent[] = doc.exists ? doc.data()?.sessions || [] : []
 
