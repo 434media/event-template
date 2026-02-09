@@ -78,3 +78,57 @@ export async function GET(request: Request) {
     )
   }
 }
+
+export async function DELETE(request: Request) {
+  const session = await verifyAdminSession()
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  if (!(await sessionHasPermission("registrations", session))) {
+    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
+  }
+
+  if (!isFirebaseConfigured()) {
+    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 })
+  }
+
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json({ error: "Registration ID is required" }, { status: 400 })
+    }
+
+    if (id === "all") {
+      // Bulk delete all registrations
+      const snapshot = await adminDb.collection(COLLECTIONS.REGISTRATIONS).get()
+      const batch = adminDb.batch()
+      let count = 0
+
+      for (const doc of snapshot.docs) {
+        batch.delete(doc.ref)
+        count++
+
+        // Firestore batches have a limit of 500 operations
+        if (count % 500 === 0) {
+          await batch.commit()
+        }
+      }
+
+      if (count % 500 !== 0) {
+        await batch.commit()
+      }
+
+      return NextResponse.json({ success: true, message: `Deleted ${count} registrations` })
+    }
+
+    // Delete individual registration
+    await adminDb.collection(COLLECTIONS.REGISTRATIONS).doc(id).delete()
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("Registration delete error:", error)
+    return NextResponse.json({ error: "Failed to delete registration" }, { status: 500 })
+  }
+}

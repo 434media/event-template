@@ -15,6 +15,7 @@ export default function NewsletterPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [status, setStatus] = useState("active")
+  const [isDeletingAll, setIsDeletingAll] = useState(false)
 
   useEffect(() => {
     fetchSubscribers()
@@ -73,6 +74,44 @@ export default function NewsletterPage() {
     window.URL.revokeObjectURL(url)
   }
 
+  async function deleteSubscriber(id: string) {
+    if (!confirm("Are you sure you want to delete this subscriber?")) return
+
+    try {
+      const response = await fetch(`/api/admin/data/newsletter?id=${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        fetchSubscribers()
+      }
+    } catch (error) {
+      console.error("Failed to delete subscriber:", error)
+    }
+  }
+
+  async function deleteAllSubscribers() {
+    if (!confirm("Are you sure you want to delete ALL newsletter subscribers? This action cannot be undone.")) return
+    if (!confirm("This will permanently remove all subscriber data. Are you absolutely sure?")) return
+
+    setIsDeletingAll(true)
+    try {
+      const response = await fetch("/api/admin/data/newsletter?id=all", {
+        method: "DELETE",
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        fetchSubscribers()
+      }
+    } catch (error) {
+      console.error("Failed to delete all subscribers:", error)
+    } finally {
+      setIsDeletingAll(false)
+    }
+  }
+
   return (
     <div className="p-8 lg:p-12">
       {/* Header */}
@@ -85,16 +124,30 @@ export default function NewsletterPage() {
             {filteredSubscribers.length} subscribers
           </p>
         </div>
-        <button
-          onClick={exportToCSV}
-          disabled={filteredSubscribers.length === 0}
-          className="px-4 py-2 text-sm font-medium bg-black text-white hover:bg-neutral-800 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          Export CSV
-        </button>
+        <div className="flex items-center gap-3">
+          {subscribers.length > 0 && (
+            <button
+              onClick={deleteAllSubscribers}
+              disabled={isDeletingAll}
+              className="px-4 py-2 text-sm font-medium border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 disabled:opacity-50 transition-colors flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              {isDeletingAll ? "Deleting..." : "Delete All"}
+            </button>
+          )}
+          <button
+            onClick={exportToCSV}
+            disabled={filteredSubscribers.length === 0}
+            className="px-4 py-2 text-sm font-medium bg-black text-white hover:bg-neutral-800 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Export CSV
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -157,6 +210,9 @@ export default function NewsletterPage() {
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-400">
                     Subscribed
                   </th>
+                  <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-neutral-400">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
@@ -183,6 +239,17 @@ export default function NewsletterPage() {
                       {sub.subscribedAt
                         ? new Date(sub.subscribedAt).toLocaleDateString()
                         : "—"}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        onClick={() => deleteSubscriber(sub.id)}
+                        className="p-1.5 text-neutral-400 hover:text-red-600 transition-colors"
+                        title="Delete subscriber"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
                     </td>
                   </tr>
                 ))}

@@ -103,3 +103,54 @@ export async function PATCH(request: Request) {
     )
   }
 }
+
+export async function DELETE(request: Request) {
+  const session = await verifyAdminSession()
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  if (!(await sessionHasPermission("pitches", session))) {
+    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
+  }
+
+  if (!isFirebaseConfigured()) {
+    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 })
+  }
+
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json({ error: "Pitch ID is required" }, { status: 400 })
+    }
+
+    if (id === "all") {
+      const snapshot = await adminDb.collection(COLLECTIONS.PITCH_SUBMISSIONS).get()
+      const batch = adminDb.batch()
+      let count = 0
+
+      for (const doc of snapshot.docs) {
+        batch.delete(doc.ref)
+        count++
+
+        if (count % 500 === 0) {
+          await batch.commit()
+        }
+      }
+
+      if (count % 500 !== 0) {
+        await batch.commit()
+      }
+
+      return NextResponse.json({ success: true, message: `Deleted ${count} pitches` })
+    }
+
+    await adminDb.collection(COLLECTIONS.PITCH_SUBMISSIONS).doc(id).delete()
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("Pitch delete error:", error)
+    return NextResponse.json({ error: "Failed to delete pitch" }, { status: 500 })
+  }
+}

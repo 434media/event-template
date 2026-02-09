@@ -6,6 +6,7 @@ export const COLLECTIONS = {
   REGISTRATIONS: "registrations",
   NEWSLETTER: "newsletter",
   PITCH_SUBMISSIONS: "pitchSubmissions",
+  SPONSOR_CONTACTS: "sponsorContacts",  // Sponsor inquiry form submissions
   CONTENT: "content",
   SITE_TEXT: "siteText",  // Inline editable text blocks
   SITE_TEXT_HISTORY: "siteTextHistory",  // Version history for text blocks
@@ -79,6 +80,19 @@ export interface PitchSubmissionDocument {
   reviewedAt?: Date
   reviewedBy?: string
   reviewNotes?: string
+}
+
+// Sponsor contact/inquiry document structure
+export interface SponsorContactDocument {
+  id?: string
+  firstName: string
+  lastName: string
+  company: string
+  workEmail: string
+  phone: string
+  message: string
+  status: "new" | "contacted" | "closed"
+  submittedAt: Date
 }
 
 // Content document structures for CMS

@@ -11,48 +11,48 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("newsletter", session))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
   if (!isFirebaseConfigured()) {
-    return NextResponse.json({ 
-      subscribers: [], 
+    return NextResponse.json({
+      contacts: [],
       total: 0,
-      message: "Firebase not configured" 
+      message: "Firebase not configured",
     })
   }
 
   try {
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get("status") || "active"
+    const status = searchParams.get("status")
     const limit = parseInt(searchParams.get("limit") || "100")
 
     let query = adminDb
-      .collection(COLLECTIONS.NEWSLETTER)
-      .orderBy("subscribedAt", "desc")
+      .collection(COLLECTIONS.SPONSOR_CONTACTS)
+      .orderBy("submittedAt", "desc")
       .limit(limit)
 
-    if (status !== "all") {
+    if (status) {
       query = query.where("status", "==", status) as typeof query
     }
 
     const snapshot = await query.get()
 
-    const subscribers = snapshot.docs.map((doc) => ({
+    const contacts = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-      subscribedAt: doc.data().subscribedAt?.toDate?.()?.toISOString() || null,
+      submittedAt: doc.data().submittedAt?.toDate?.()?.toISOString() || null,
     }))
 
     return NextResponse.json({
-      subscribers,
-      total: subscribers.length,
+      contacts,
+      total: contacts.length,
     })
   } catch (error) {
-    console.error("Newsletter fetch error:", error)
+    console.error("Sponsor contacts fetch error:", error)
     return NextResponse.json(
-      { error: "Failed to fetch subscribers" },
+      { error: "Failed to fetch sponsor contacts" },
       { status: 500 }
     )
   }
@@ -64,7 +64,7 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (!(await sessionHasPermission("newsletter", session))) {
+  if (!(await sessionHasPermission("sponsors", session))) {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 })
   }
 
@@ -77,11 +77,22 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id")
 
     if (!id) {
-      return NextResponse.json({ error: "Subscriber ID is required" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Contact ID is required" },
+        { status: 400 }
+      )
     }
 
     if (id === "all") {
-      const snapshot = await adminDb.collection(COLLECTIONS.NEWSLETTER).get()
+      // Bulk delete all sponsor contacts
+      const snapshot = await adminDb
+        .collection(COLLECTIONS.SPONSOR_CONTACTS)
+        .get()
+
+      if (snapshot.empty) {
+        return NextResponse.json({ success: true, deleted: 0 })
+      }
+
       const batch = adminDb.batch()
       let count = 0
 
@@ -89,22 +100,29 @@ export async function DELETE(request: Request) {
         batch.delete(doc.ref)
         count++
 
+        // Firestore batch limit is 500
         if (count % 500 === 0) {
           await batch.commit()
         }
       }
 
-      if (count % 500 !== 0) {
-        await batch.commit()
-      }
+      await batch.commit()
 
-      return NextResponse.json({ success: true, message: `Deleted ${count} subscribers` })
+      return NextResponse.json({ success: true, deleted: count })
     }
 
-    await adminDb.collection(COLLECTIONS.NEWSLETTER).doc(id).delete()
+    // Delete individual contact
+    await adminDb
+      .collection(COLLECTIONS.SPONSOR_CONTACTS)
+      .doc(id)
+      .delete()
+
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Newsletter delete error:", error)
-    return NextResponse.json({ error: "Failed to delete subscriber" }, { status: 500 })
+    console.error("Sponsor contact delete error:", error)
+    return NextResponse.json(
+      { error: "Failed to delete sponsor contact" },
+      { status: 500 }
+    )
   }
 }

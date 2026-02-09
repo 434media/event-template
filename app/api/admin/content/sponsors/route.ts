@@ -244,8 +244,22 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id")
     const tier = searchParams.get("tier") as SponsorTier
 
-    if (!id || !tier) {
-      return NextResponse.json({ error: "Sponsor ID and tier are required" }, { status: 400 })
+    if (!id) {
+      return NextResponse.json({ error: "Sponsor ID is required" }, { status: 400 })
+    }
+
+    // Bulk delete all sponsors
+    if (id === "all") {
+      await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").set({
+        sponsors: { platinum: [], gold: [], silver: [], bronze: [], community: [] },
+        updatedAt: new Date(),
+        updatedBy: session.email,
+      })
+      return NextResponse.json({ success: true, message: "All sponsors deleted" })
+    }
+
+    if (!tier) {
+      return NextResponse.json({ error: "Tier is required for individual delete" }, { status: 400 })
     }
 
     const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("sponsors").get()

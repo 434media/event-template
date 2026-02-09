@@ -427,7 +427,7 @@ export async function sendPitchConfirmation(
     </table>
     
     <p style="margin: 30px 0 0; color: #a3a3a3; font-size: 14px; line-height: 1.6;">
-      While you wait, make sure to <a href="https://techday.devsa.community/register" style="color: #c73030; text-decoration: none;">register for Tech Day</a> if you haven't already!
+      While you wait, make sure to <a href="https://sanantoniotechday.com/register" style="color: #c73030; text-decoration: none;">register for Tech Day</a> if you haven't already!
     </p>
   `
 
@@ -444,6 +444,140 @@ export async function sendPitchConfirmation(
     return { success: true, data: result }
   } catch (error) {
     console.error(`Failed to send pitch confirmation to ${email}:`, error)
+    return { success: false, error }
+  }
+}
+
+// Sponsor inquiry confirmation email
+export async function sendSponsorInquiryConfirmation(
+  email: string,
+  firstName: string,
+  lastName: string,
+  company: string
+) {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: #0a0a0a; font-size: 24px; font-weight: 600;">
+      Thanks for Reaching Out, ${firstName}! 🤝
+    </h2>
+    
+    <p style="margin: 0 0 20px; color: #525252; font-size: 16px; line-height: 1.6;">
+      We've received your sponsorship inquiry from <strong>${company}</strong> and our partnerships team is excited to connect with you.
+    </p>
+    
+    <p style="margin: 0 0 25px; color: #525252; font-size: 16px; line-height: 1.6;">
+      Tech Day is San Antonio's premier technology conference — and sponsors like you help us bring the community together, fuel innovation, and make it all possible.
+    </p>
+    
+    <!-- Sponsorship Info Card -->
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin: 30px 0;">
+      <tr>
+        <td style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); border-radius: 8px; padding: 30px; position: relative; overflow: hidden;">
+          <!-- Decorative Arrow -->
+          <div style="position: absolute; bottom: -15px; right: -15px; opacity: 0.08; transform: rotate(-45deg);">
+            ${DOWN_ARROW_SVG}
+          </div>
+          
+          <p style="margin: 0 0 5px; color: #c73030; font-size: 11px; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; text-transform: uppercase;">
+            Sponsorship Inquiry
+          </p>
+          <p style="margin: 0 0 20px; color: #ffffff; font-size: 20px; font-weight: 600;">
+            ${company}
+          </p>
+          
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" style="vertical-align: top;">
+                <p style="margin: 0 0 3px; color: rgba(255,255,255,0.5); font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Contact</p>
+                <p style="margin: 0; color: #ffffff; font-size: 15px; font-weight: 500;">${firstName} ${lastName}</p>
+              </td>
+              <td width="50%" style="vertical-align: top;">
+                <p style="margin: 0 0 3px; color: rgba(255,255,255,0.5); font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Status</p>
+                <table role="presentation" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td style="background-color: rgba(199, 48, 48, 0.2); border-radius: 20px; padding: 4px 12px;">
+                      <span style="color: #c73030; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                        Received
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+    <h3 style="margin: 30px 0 15px; color: #0a0a0a; font-size: 18px; font-weight: 600;">
+      What Happens Next?
+    </h3>
+    
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e5e5e5;">
+          <table role="presentation" cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="width: 40px; vertical-align: top;">
+                <span style="display: inline-block; width: 28px; height: 28px; background-color: #c73030; border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-size: 14px; font-weight: 600;">1</span>
+              </td>
+              <td style="vertical-align: top;">
+                <p style="margin: 0; color: #0a0a0a; font-size: 15px; font-weight: 500;">Inquiry Received</p>
+                <p style="margin: 5px 0 0; color: #737373; font-size: 14px;">Our partnerships team has your details and message</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e5e5e5;">
+          <table role="presentation" cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="width: 40px; vertical-align: top;">
+                <span style="display: inline-block; width: 28px; height: 28px; background-color: #c73030; border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-size: 14px; font-weight: 600;">2</span>
+              </td>
+              <td style="vertical-align: top;">
+                <p style="margin: 0; color: #0a0a0a; font-size: 15px; font-weight: 500;">Personal Follow-Up</p>
+                <p style="margin: 5px 0 0; color: #737373; font-size: 14px;">A team member will reach out to discuss sponsorship tiers and benefits</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 15px 0;">
+          <table role="presentation" cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="width: 40px; vertical-align: top;">
+                <span style="display: inline-block; width: 28px; height: 28px; background-color: #c73030; border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-size: 14px; font-weight: 600;">3</span>
+              </td>
+              <td style="vertical-align: top;">
+                <p style="margin: 0; color: #0a0a0a; font-size: 15px; font-weight: 500;">Partnership Finalized</p>
+                <p style="margin: 5px 0 0; color: #737373; font-size: 14px;">Get your brand in front of 500+ technologists at Tech Day 2026</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+    <p style="margin: 30px 0 0; color: #a3a3a3; font-size: 14px; line-height: 1.6;">
+      In the meantime, check out <a href="https://sanantoniotechday.com" style="color: #c73030; text-decoration: none;">techday.devsa.community</a> to learn more about what we're building in San Antonio.
+    </p>
+  `
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: `Sponsorship inquiry received — ${company} 🤝`,
+      html: getEmailTemplate(content, "Our partnerships team will be in touch soon"),
+    })
+
+    console.log(`Sponsor inquiry confirmation sent to ${email}:`, result)
+    return { success: true, data: result }
+  } catch (error) {
+    console.error(`Failed to send sponsor inquiry confirmation to ${email}:`, error)
     return { success: false, error }
   }
 }

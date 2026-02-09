@@ -2,108 +2,79 @@
 
 import { useEffect, useState } from "react"
 
-interface Registration {
+interface SponsorContact {
   id: string
-  ticketId: string
   firstName: string
   lastName: string
-  email: string
-  category: string
   company: string
-  title: string
-  events: string[]
+  workEmail: string
+  phone: string
+  message: string
   status: string
-  createdAt: string
+  submittedAt: string
 }
-
-const CATEGORIES = [
-  { value: "", label: "All Categories" },
-  { value: "founder", label: "Founder" },
-  { value: "investor", label: "Investor" },
-  { value: "attendee", label: "Attendee" },
-  { value: "student", label: "Student" },
-  { value: "government", label: "Government" },
-]
 
 const STATUSES = [
   { value: "", label: "All Statuses" },
-  { value: "confirmed", label: "Confirmed" },
-  { value: "pending", label: "Pending" },
-  { value: "checked-in", label: "Checked In" },
-  { value: "cancelled", label: "Cancelled" },
+  { value: "new", label: "New" },
+  { value: "contacted", label: "Contacted" },
+  { value: "closed", label: "Closed" },
 ]
 
-export default function RegistrationsPage() {
-  const [registrations, setRegistrations] = useState<Registration[]>([])
+export default function SponsorContactsPage() {
+  const [contacts, setContacts] = useState<SponsorContact[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
-  const [category, setCategory] = useState("")
-  const [status, setStatus] = useState("")
-  const [selectedRegistration, setSelectedRegistration] = useState<Registration | null>(null)
+  const [statusFilter, setStatusFilter] = useState("")
+  const [selectedContact, setSelectedContact] = useState<SponsorContact | null>(null)
   const [isDeletingAll, setIsDeletingAll] = useState(false)
 
   useEffect(() => {
-    fetchRegistrations()
-  }, [category, status])
+    fetchContacts()
+  }, [statusFilter])
 
-  async function fetchRegistrations() {
+  async function fetchContacts() {
     setIsLoading(true)
     try {
       const params = new URLSearchParams()
-      if (category) params.set("category", category)
-      if (status) params.set("status", status)
+      if (statusFilter) params.set("status", statusFilter)
 
-      const response = await fetch(`/api/admin/data/registrations?${params}`, {
+      const response = await fetch(`/api/admin/data/sponsor-contacts?${params}`, {
         credentials: "include",
       })
       const data = await response.json()
-      setRegistrations(data.registrations || [])
+      setContacts(data.contacts || [])
     } catch (error) {
-      console.error("Failed to fetch registrations:", error)
+      console.error("Failed to fetch sponsor contacts:", error)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const filteredRegistrations = registrations.filter((reg) => {
+  const filteredContacts = contacts.filter((c) => {
     if (!search) return true
-    const searchLower = search.toLowerCase()
+    const s = search.toLowerCase()
     return (
-      reg.firstName?.toLowerCase().includes(searchLower) ||
-      reg.lastName?.toLowerCase().includes(searchLower) ||
-      reg.email?.toLowerCase().includes(searchLower) ||
-      reg.company?.toLowerCase().includes(searchLower) ||
-      reg.ticketId?.toLowerCase().includes(searchLower)
+      c.firstName?.toLowerCase().includes(s) ||
+      c.lastName?.toLowerCase().includes(s) ||
+      c.workEmail?.toLowerCase().includes(s) ||
+      c.company?.toLowerCase().includes(s)
     )
   })
 
   const exportToCSV = () => {
-    const headers = [
-      "Ticket ID",
-      "First Name",
-      "Last Name",
-      "Email",
-      "Category",
-      "Company",
-      "Title",
-      "Events",
-      "Status",
-      "Registration Date",
-    ]
-    const rows = filteredRegistrations.map((reg) => [
-      reg.ticketId || "",
-      reg.firstName || "",
-      reg.lastName || "",
-      reg.email || "",
-      reg.category || "",
-      reg.company || "",
-      reg.title || "",
-      reg.events?.join("; ") || "",
-      reg.status || "",
-      reg.createdAt ? new Date(reg.createdAt).toLocaleDateString() : "",
+    const headers = ["First Name", "Last Name", "Company", "Email", "Phone", "Message", "Status", "Date"]
+    const rows = filteredContacts.map((c) => [
+      c.firstName || "",
+      c.lastName || "",
+      c.company || "",
+      c.workEmail || "",
+      c.phone || "",
+      c.message || "",
+      c.status || "",
+      c.submittedAt ? new Date(c.submittedAt).toLocaleDateString() : "",
     ])
 
-    // Escape CSV values that contain commas, quotes, or newlines
     const escapeCSV = (value: string) => {
       if (value.includes(",") || value.includes('"') || value.includes("\n")) {
         return `"${value.replace(/"/g, '""')}"`
@@ -111,52 +82,49 @@ export default function RegistrationsPage() {
       return value
     }
 
-    const csv = [headers, ...rows]
-      .map((row) => row.map(escapeCSV).join(","))
-      .join("\n")
-
+    const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n")
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `registrations-${new Date().toISOString().split("T")[0]}.csv`
+    a.download = `sponsor-contacts-${new Date().toISOString().split("T")[0]}.csv`
     a.click()
     window.URL.revokeObjectURL(url)
   }
 
-  async function deleteRegistration(id: string) {
-    if (!confirm("Are you sure you want to delete this registration?")) return
+  async function deleteContact(id: string) {
+    if (!confirm("Are you sure you want to delete this sponsor inquiry?")) return
 
     try {
-      const response = await fetch(`/api/admin/data/registrations?id=${id}`, {
+      const response = await fetch(`/api/admin/data/sponsor-contacts?id=${id}`, {
         method: "DELETE",
         credentials: "include",
       })
 
       if (response.ok) {
-        fetchRegistrations()
+        fetchContacts()
       }
     } catch (error) {
-      console.error("Failed to delete registration:", error)
+      console.error("Failed to delete contact:", error)
     }
   }
 
-  async function deleteAllRegistrations() {
-    if (!confirm("Are you sure you want to delete ALL registrations? This action cannot be undone.")) return
-    if (!confirm("This will permanently remove all registration data. Are you absolutely sure?")) return
+  async function deleteAllContacts() {
+    if (!confirm("Are you sure you want to delete ALL sponsor inquiries? This action cannot be undone.")) return
+    if (!confirm("This will permanently remove all sponsor contact data. Are you absolutely sure?")) return
 
     setIsDeletingAll(true)
     try {
-      const response = await fetch("/api/admin/data/registrations?id=all", {
+      const response = await fetch("/api/admin/data/sponsor-contacts?id=all", {
         method: "DELETE",
         credentials: "include",
       })
 
       if (response.ok) {
-        fetchRegistrations()
+        fetchContacts()
       }
     } catch (error) {
-      console.error("Failed to delete all registrations:", error)
+      console.error("Failed to delete all contacts:", error)
     } finally {
       setIsDeletingAll(false)
     }
@@ -168,16 +136,16 @@ export default function RegistrationsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-black mb-1">
-            Registrations
+            Sponsor Inquiries
           </h1>
           <p className="text-sm text-neutral-500">
-            {filteredRegistrations.length} registrations found
+            {filteredContacts.length} inquiries found
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {registrations.length > 0 && (
+          {contacts.length > 0 && (
             <button
-              onClick={deleteAllRegistrations}
+              onClick={deleteAllContacts}
               disabled={isDeletingAll}
               className="px-4 py-2 text-sm font-medium border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 disabled:opacity-50 transition-colors flex items-center gap-2"
             >
@@ -189,7 +157,7 @@ export default function RegistrationsPage() {
           )}
           <button
             onClick={exportToCSV}
-            disabled={filteredRegistrations.length === 0}
+            disabled={filteredContacts.length === 0}
             className="px-4 py-2 text-sm font-medium bg-black text-white hover:bg-neutral-800 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,33 +179,17 @@ export default function RegistrationsPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Name, email, company, ticket..."
+              placeholder="Name, email, company..."
               className="w-full px-3 py-2 bg-white border border-neutral-200 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:border-black"
             />
-          </div>
-          <div className="w-40">
-            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-400 mb-2">
-              Category
-            </label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-3 py-2 bg-white border border-neutral-200 text-sm text-black focus:outline-none focus:border-black"
-            >
-              {CATEGORIES.map((cat) => (
-                <option key={cat.value} value={cat.value}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
           </div>
           <div className="w-40">
             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-400 mb-2">
               Status
             </label>
             <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-neutral-200 text-sm text-black focus:outline-none focus:border-black"
             >
               {STATUSES.map((s) => (
@@ -255,11 +207,11 @@ export default function RegistrationsPage() {
         {isLoading ? (
           <div className="p-12 text-center">
             <div className="w-6 h-6 border-2 border-neutral-200 border-t-black rounded-full animate-spin mx-auto mb-3" />
-            <p className="text-sm text-neutral-500">Loading registrations...</p>
+            <p className="text-sm text-neutral-500">Loading sponsor inquiries...</p>
           </div>
-        ) : filteredRegistrations.length === 0 ? (
+        ) : filteredContacts.length === 0 ? (
           <div className="p-12 text-center">
-            <p className="text-sm text-neutral-500">No registrations found</p>
+            <p className="text-sm text-neutral-500">No sponsor inquiries found</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -267,19 +219,16 @@ export default function RegistrationsPage() {
               <thead>
                 <tr className="border-b border-neutral-200">
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-400">
-                    Ticket
+                    Name
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-400">
-                    Name
+                    Company
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-400">
                     Email
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-400">
-                    Category
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-400">
-                    Company
+                    Phone
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-400">
                     Status
@@ -293,40 +242,57 @@ export default function RegistrationsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
-                {filteredRegistrations.map((reg) => (
+                {filteredContacts.map((contact) => (
                   <tr
-                    key={reg.id}
+                    key={contact.id}
                     className="hover:bg-neutral-50 transition-colors"
                   >
-                    <td className="px-4 py-3 text-sm font-mono text-black cursor-pointer" onClick={() => setSelectedRegistration(reg)}>
-                      {reg.ticketId}
+                    <td
+                      className="px-4 py-3 text-sm font-medium text-black cursor-pointer"
+                      onClick={() => setSelectedContact(contact)}
+                    >
+                      {contact.firstName} {contact.lastName}
                     </td>
-                    <td className="px-4 py-3 text-sm font-medium text-black cursor-pointer" onClick={() => setSelectedRegistration(reg)}>
-                      {reg.firstName} {reg.lastName}
+                    <td
+                      className="px-4 py-3 text-sm text-neutral-600 cursor-pointer"
+                      onClick={() => setSelectedContact(contact)}
+                    >
+                      {contact.company}
                     </td>
-                    <td className="px-4 py-3 text-sm text-neutral-600 cursor-pointer" onClick={() => setSelectedRegistration(reg)}>
-                      {reg.email}
+                    <td
+                      className="px-4 py-3 text-sm text-neutral-600 cursor-pointer"
+                      onClick={() => setSelectedContact(contact)}
+                    >
+                      {contact.workEmail}
                     </td>
-                    <td className="px-4 py-3 text-sm text-neutral-600 capitalize cursor-pointer" onClick={() => setSelectedRegistration(reg)}>
-                      {reg.category}
+                    <td
+                      className="px-4 py-3 text-sm text-neutral-600 cursor-pointer"
+                      onClick={() => setSelectedContact(contact)}
+                    >
+                      {contact.phone || "—"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-neutral-600 cursor-pointer" onClick={() => setSelectedRegistration(reg)}>
-                      {reg.company || "—"}
+                    <td
+                      className="px-4 py-3 cursor-pointer"
+                      onClick={() => setSelectedContact(contact)}
+                    >
+                      <StatusBadge status={contact.status} />
                     </td>
-                    <td className="px-4 py-3 cursor-pointer" onClick={() => setSelectedRegistration(reg)}>
-                      <StatusBadge status={reg.status} />
-                    </td>
-                    <td className="px-4 py-3 text-sm text-neutral-500 cursor-pointer" onClick={() => setSelectedRegistration(reg)}>
-                      {reg.createdAt ? new Date(reg.createdAt).toLocaleDateString() : "—"}
+                    <td
+                      className="px-4 py-3 text-sm text-neutral-500 cursor-pointer"
+                      onClick={() => setSelectedContact(contact)}
+                    >
+                      {contact.submittedAt
+                        ? new Date(contact.submittedAt).toLocaleDateString()
+                        : "—"}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
-                          deleteRegistration(reg.id)
+                          deleteContact(contact.id)
                         }}
                         className="p-1.5 text-neutral-400 hover:text-red-600 transition-colors"
-                        title="Delete registration"
+                        title="Delete inquiry"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -342,10 +308,10 @@ export default function RegistrationsPage() {
       </div>
 
       {/* Detail Modal */}
-      {selectedRegistration && (
-        <RegistrationDetailModal
-          registration={selectedRegistration}
-          onClose={() => setSelectedRegistration(null)}
+      {selectedContact && (
+        <ContactDetailModal
+          contact={selectedContact}
+          onClose={() => setSelectedContact(null)}
         />
       )}
     </div>
@@ -354,16 +320,15 @@ export default function RegistrationsPage() {
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    confirmed: "bg-black text-white",
-    pending: "bg-neutral-200 text-neutral-600",
-    "checked-in": "bg-neutral-800 text-white",
-    cancelled: "bg-neutral-100 text-neutral-400",
+    new: "bg-red-600 text-white",
+    contacted: "bg-neutral-800 text-white",
+    closed: "bg-neutral-200 text-neutral-500",
   }
 
   return (
     <span
       className={`inline-block px-2 py-0.5 text-xs font-medium uppercase tracking-wider ${
-        styles[status] || styles.pending
+        styles[status] || styles.new
       }`}
     >
       {status}
@@ -371,11 +336,11 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
-function RegistrationDetailModal({
-  registration,
+function ContactDetailModal({
+  contact,
   onClose,
 }: {
-  registration: Registration
+  contact: SponsorContact
   onClose: () => void
 }) {
   return (
@@ -384,10 +349,10 @@ function RegistrationDetailModal({
         <div className="p-6 border-b border-neutral-200 flex items-center justify-between">
           <div>
             <p className="text-xs font-medium uppercase tracking-wider text-neutral-400 mb-1">
-              Registration Details
+              Sponsor Inquiry
             </p>
             <h2 className="text-lg font-semibold text-black">
-              {registration.firstName} {registration.lastName}
+              {contact.firstName} {contact.lastName}
             </h2>
           </div>
           <button
@@ -400,17 +365,24 @@ function RegistrationDetailModal({
           </button>
         </div>
         <div className="p-6 space-y-4">
-          <DetailRow label="Ticket ID" value={registration.ticketId} mono />
-          <DetailRow label="Email" value={registration.email} />
-          <DetailRow label="Category" value={registration.category} capitalize />
-          <DetailRow label="Company" value={registration.company || "—"} />
-          <DetailRow label="Title" value={registration.title || "—"} />
-          <DetailRow label="Events" value={registration.events?.join(", ") || "—"} />
-          <DetailRow label="Status" value={registration.status} capitalize />
+          <DetailRow label="Company" value={contact.company} />
+          <DetailRow label="Email" value={contact.workEmail} />
+          <DetailRow label="Phone" value={contact.phone || "—"} />
+          <DetailRow label="Status" value={contact.status} capitalize />
           <DetailRow
-            label="Registered"
-            value={registration.createdAt ? new Date(registration.createdAt).toLocaleString() : "—"}
+            label="Submitted"
+            value={
+              contact.submittedAt
+                ? new Date(contact.submittedAt).toLocaleString()
+                : "—"
+            }
           />
+          <div>
+            <dt className="text-sm text-neutral-500 mb-2">Message</dt>
+            <dd className="text-sm text-black bg-neutral-50 p-4 rounded-lg whitespace-pre-wrap leading-relaxed">
+              {contact.message}
+            </dd>
+          </div>
         </div>
         <div className="p-6 border-t border-neutral-200">
           <button
@@ -428,21 +400,17 @@ function RegistrationDetailModal({
 function DetailRow({
   label,
   value,
-  mono,
   capitalize,
 }: {
   label: string
   value: string
-  mono?: boolean
   capitalize?: boolean
 }) {
   return (
     <div className="flex justify-between items-start gap-4">
       <dt className="text-sm text-neutral-500 shrink-0">{label}</dt>
       <dd
-        className={`text-sm text-black text-right ${mono ? "font-mono" : ""} ${
-          capitalize ? "capitalize" : ""
-        }`}
+        className={`text-sm text-black text-right ${capitalize ? "capitalize" : ""}`}
       >
         {value}
       </dd>
