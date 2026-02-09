@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server"
+import { checkBotId } from "botid/server"
 import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
 import { COLLECTIONS, type SponsorContactDocument } from "@/lib/firebase/collections"
 import { sendSponsorInquiryConfirmation } from "@/lib/email/resend"
 
 export async function POST(request: Request) {
   try {
+    // Verify the request is not from a bot using BotID
+    // Can be disabled via DISABLE_BOT_PROTECTION=true env var for debugging
+    if (process.env.DISABLE_BOT_PROTECTION !== "true") {
+      const verification = await checkBotId()
+      if (verification.isBot) {
+        return NextResponse.json({ error: "Access denied" }, { status: 403 })
+      }
+    }
+
     if (!isFirebaseConfigured()) {
       return NextResponse.json(
         { error: "Firebase is not configured. Please contact the administrator." },
