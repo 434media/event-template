@@ -146,12 +146,12 @@ export default function RegisterPage() {
               {
                 id: "faq-2",
                 q: "When and where are the events?",
-                a: "Tech Day is on April 20, 2026 at Tech Port in San Antonio. Tech Fuel, our startup pitch competition finals, is on April 21, 2026 at UTSA SP1. Full address and parking details will be sent in your confirmation email.",
+                a: "Tech Fuel is on April 20, 2026 at UTSA SP1 in San Antonio. Tech Day, our conference, is on April 21, 2026 at Tech Port. Full address and parking details will be sent in your confirmation email.",
               },
               {
                 id: "faq-3",
                 q: "Can I attend both Tech Day and Tech Fuel?",
-                a: "Absolutely! Your registration covers both days. Tech Day features our conference tracks on April 20th, and Tech Fuel showcases the startup pitch competition finals on April 21st.",
+                a: "Absolutely! Your registration covers both days. Tech Fuel showcases the startup pitch competition finals on April 20th, and Tech Day features our conference tracks on April 21st.",
               },
               {
                 id: "faq-4",

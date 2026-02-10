@@ -49,7 +49,7 @@ export default function TechDayPage() {
               page="techday"
               section="hero"
             >
-              April 20, 2026 • Tech Port
+              April 21, 2026 • Tech Port
             </Editable>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-[0.95] tracking-tight">
               <Editable 

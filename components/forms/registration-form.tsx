@@ -26,8 +26,8 @@ const categories = [
 ]
 
 const events = [
-  { id: "techfuel", label: "Tech Fuel Pitch Competition", date: "April 21", price: "Free" },
-  { id: "techday", label: "Tech Day Conference", date: "April 20", price: "Free" },
+  { id: "techfuel", label: "Tech Fuel Pitch Competition", date: "April 20", price: "Free" },
+  { id: "techday", label: "Tech Day Conference", date: "April 21", price: "Free" },
   { id: "2day", label: "2-Day Registration", date: "April 20-21", price: "Free" },
 ]
 

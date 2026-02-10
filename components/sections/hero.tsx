@@ -173,7 +173,7 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.15 }}
         >
           <div className="text-center">
-            <p className="text-[#0a0a0a]/50 text-[10px] sm:text-xs font-mono uppercase tracking-widest">Tech Day</p>
+            <p className="text-[#0a0a0a]/50 text-[10px] sm:text-xs font-mono uppercase tracking-widest">Tech Fuel</p>
             <Editable 
               id="hero.techfuel.date" 
               as="p" 
@@ -190,14 +190,14 @@ export function Hero() {
               page="home"
               section="hero"
             >
-              Tech Port
+              UTSA SP1
             </Editable>
           </div>
           
           <div className="w-px h-12 bg-[#0a0a0a]/15" />
           
           <div className="text-center">
-            <p className="text-[#0a0a0a]/50 text-[10px] sm:text-xs font-mono uppercase tracking-widest">Tech Fuel</p>
+            <p className="text-[#0a0a0a]/50 text-[10px] sm:text-xs font-mono uppercase tracking-widest">Tech Day</p>
             <Editable 
               id="hero.techday.date" 
               as="p" 
@@ -214,7 +214,7 @@ export function Hero() {
               page="home"
               section="hero"
             >
-              UTSA SP1
+              Tech Port
             </Editable>
           </div>
         </motion.div>

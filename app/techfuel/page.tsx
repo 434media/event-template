@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { PitchSubmissionForm } from "@/components/forms/pitch-submission-form"
+import { useState, useEffect } from "react"
 import { Sponsors } from "@/components/sections/sponsors"
 import { PixelArrow } from "@/components/pixel-arrow"
 import { Editable } from "@/components/editable"
@@ -90,13 +89,134 @@ const impactStats = [
 ]
 
 const timeline = [
-  { date: "Feb 1", event: "Applications Open" },
+  { date: "Feb 16", event: "Applications Open" },
   { date: "Mar 1", event: "Applications Close" },
   { date: "Mar 7", event: "Semi-Finalists Announced" },
   { date: "Mar 14", event: "Semi-Final Pitch Sessions" },
   { date: "Mar 21", event: "Finalists Announced" },
-  { date: "Apr 21", event: "Final Competition @ UTSA SP1" },
+  { date: "Apr 20", event: "Final Competition @ UTSA SP1" },
 ]
+
+function PitchCountdown({ targetDate }: { targetDate: string }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    const target = new Date(targetDate).getTime()
+
+    function update() {
+      const now = Date.now()
+      const diff = target - now
+
+      if (diff <= 0) {
+        setIsOpen(true)
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+        return
+      }
+
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      })
+    }
+
+    update()
+    const interval = setInterval(update, 1000)
+    return () => clearInterval(interval)
+  }, [targetDate])
+
+  if (isOpen) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center p-8 sm:p-12 bg-white border border-primary/30 rounded-2xl shadow-lg"
+      >
+        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/20 flex items-center justify-center">
+          <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <h3 className="text-2xl font-bold text-foreground mb-3">Applications Are Open!</h3>
+        <p className="text-muted-foreground mb-6">Submit your pitch now. Applications close March 1, 2026.</p>
+        <Link
+          href="/techfuel#submit"
+          className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-all text-lg"
+        >
+          Apply Now
+        </Link>
+      </motion.div>
+    )
+  }
+
+  const units = [
+    { label: "Days", value: timeLeft.days },
+    { label: "Hours", value: timeLeft.hours },
+    { label: "Minutes", value: timeLeft.minutes },
+    { label: "Seconds", value: timeLeft.seconds },
+  ]
+
+  return (
+    <div className="space-y-8">
+      {/* Countdown Grid */}
+      <div className="grid grid-cols-4 gap-3 sm:gap-4 max-w-lg mx-auto">
+        {units.map((unit) => (
+          <motion.div
+            key={unit.label}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className="bg-white border border-border rounded-xl p-4 sm:p-6 text-center shadow-sm">
+              <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tabular-nums leading-none">
+                {String(unit.value).padStart(2, "0")}
+              </span>
+              <p className="font-mono text-[10px] sm:text-xs text-muted-foreground tracking-widest uppercase mt-2">
+                {unit.label}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Red Arrow Divider */}
+      <div className="flex items-center justify-center gap-4">
+        <div className="flex-1 h-px bg-border" />
+        <div className="relative w-8 h-8">
+          <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-primary animate-bounce">
+            <path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <div className="flex-1 h-px bg-border" />
+      </div>
+
+      {/* Info Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="bg-white border border-border rounded-2xl p-6 sm:p-8 text-center shadow-sm"
+      >
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full font-mono text-xs tracking-wider uppercase mb-4">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+          </span>
+          February 16, 2026
+        </div>
+        <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2 tracking-tight">
+          Applications Open Soon
+        </h3>
+        <p className="text-muted-foreground leading-relaxed max-w-md mx-auto">
+          Pitch registration opens on February 16th. Prepare your 5-minute pitch deck and get ready to compete for $100K in non-dilutive cash prizes.
+        </p>
+      </motion.div>
+    </div>
+  )
+}
 
 function QualificationsAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -283,7 +403,7 @@ export default function TechFuelPage() {
               page="techfuel"
               section="hero"
             >
-              April 21, 2026 • UTSA SP1
+              April 20, 2026 • UTSA SP1
             </Editable>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground mb-4 leading-[0.95] tracking-tight">
               <Editable 
@@ -712,14 +832,19 @@ export default function TechFuelPage() {
         </div>
       </section>
 
-      {/* Pitch Submission Form - Light Theme */}
-      <section id="submit" className="py-24 md:py-32 bg-muted">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Pitch Submission - Coming Soon with Countdown */}
+      <section id="submit" className="py-24 md:py-32 bg-muted relative overflow-hidden">
+        {/* Pixel Arrow Background */}
+        <div className="absolute top-8 right-8 md:top-12 md:right-12 opacity-[0.06] pointer-events-none">
+          <PixelArrow position="top-right" size="xl" variant="light" type="static" interactive={false} />
+        </div>
+
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
             <Editable
               id="techfuel.submit.label"
@@ -728,7 +853,7 @@ export default function TechFuelPage() {
               page="techfuel"
               section="submit"
             >
-              Apply Now
+              Coming Soon
             </Editable>
             <Editable
               id="techfuel.submit.title"
@@ -746,7 +871,7 @@ export default function TechFuelPage() {
               page="techfuel"
               section="submit"
             >
-              Applications close March 1, 2026. Finalists will be notified by March 7.
+              Applications open February 16, 2026. Get ready to pitch your startup.
             </Editable>
           </motion.div>
 
@@ -756,7 +881,7 @@ export default function TechFuelPage() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <PitchSubmissionForm />
+            <PitchCountdown targetDate="2026-02-16T00:00:00" />
           </motion.div>
         </div>
       </section>

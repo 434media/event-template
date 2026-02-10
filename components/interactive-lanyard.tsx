@@ -328,9 +328,9 @@ export function InteractiveLanyard({ className = "" }: InteractiveLanyardProps) 
 
               {/* Main headline */}
               <h1 className="text-white text-[2.75rem] px-2 pt-4 font-bold tracking-[-2.5px] leading-none">
-                Tech Day
+                Tech Fuel
                 <br />
-                <span className="text-primary">&</span> Tech Fuel
+                <span className="text-primary">&</span> Tech Day
               </h1>
 
               {/* Subtitle */}
@@ -367,14 +367,14 @@ export function InteractiveLanyard({ className = "" }: InteractiveLanyardProps) 
               <div className="mt-6 pt-4 border-t border-white/10">
                 <div className="grid grid-cols-2 gap-4 text-xs">
                   <div>
-                    <p className="text-white/40 font-mono tracking-wider uppercase mb-1">Tech Day</p>
+                    <p className="text-white/40 font-mono tracking-wider uppercase mb-1">Tech Fuel</p>
                     <p className="text-white font-semibold leading-relaxed">April 20th</p>
-                    <p className="text-white/60 leading-relaxed">Tech Port</p>
+                    <p className="text-white/60 leading-relaxed">UTSA SP1</p>
                   </div>
                   <div>
-                    <p className="text-white/40 font-mono tracking-wider uppercase mb-1">Tech Fuel</p>
+                    <p className="text-white/40 font-mono tracking-wider uppercase mb-1">Tech Day</p>
                     <p className="text-white font-semibold leading-relaxed">April 21st</p>
-                    <p className="text-white/60 leading-relaxed">UTSA SP1</p>
+                    <p className="text-white/60 leading-relaxed">Tech Port</p>
                   </div>
                 </div>
               </div>
