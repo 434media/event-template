@@ -90,11 +90,12 @@ const impactStats = [
 
 const timeline = [
   { date: "Feb 16", event: "Applications Open" },
-  { date: "Mar 1", event: "Applications Close" },
-  { date: "Mar 7", event: "Semi-Finalists Announced" },
-  { date: "Mar 14", event: "Semi-Final Pitch Sessions" },
-  { date: "Mar 21", event: "Finalists Announced" },
-  { date: "Apr 20", event: "Final Competition @ UTSA SP1" },
+  { date: "Mar 22", event: "Applications Close" },
+  { date: "Mar 27", event: "Semi-Finalists Announced" },
+  { date: "Apr 2-3", event: "Semi-Finals Judging" },
+  { date: "Apr 3", event: "Finalists Announced" },
+  { date: "Apr 10-12", event: "Geekdom 3-Day Bootcamp" },
+  { date: "Apr 20", event: "Tech Fuel Event @ UTSA SP1" },
 ]
 
 function PitchCountdown({ targetDate }: { targetDate: string }) {
