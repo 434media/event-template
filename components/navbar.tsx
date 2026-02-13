@@ -17,7 +17,7 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-border">
+    <nav style={{ top: 'var(--demo-banner-h, 0px)' }} className="fixed left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-border transition-[top] duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}

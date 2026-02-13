@@ -1,28 +1,16 @@
 import { NextResponse } from "next/server"
-import { checkBotId } from "botid/server"
-import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
-import { COLLECTIONS, type PitchSubmissionDocument } from "@/lib/firebase/collections"
-import { sendPitchConfirmation } from "@/lib/email/resend"
+import crypto from "crypto"
+
+// DEMO MODE: Firebase, Resend, and BotID imports removed.
+// In production, this route:
+//   1. Verifies bot protection via BotID
+//   2. Validates all pitch fields
+//   3. Checks for duplicate submissions in Firestore
+//   4. Saves pitch document to Firestore
+//   5. Sends branded confirmation email via Resend
 
 export async function POST(request: Request) {
   try {
-    // Verify the request is not from a bot using BotID
-    // Can be disabled via DISABLE_BOT_PROTECTION=true env var for debugging
-    if (process.env.DISABLE_BOT_PROTECTION !== "true") {
-      const verification = await checkBotId()
-      if (verification.isBot) {
-        return NextResponse.json({ error: "Access denied" }, { status: 403 })
-      }
-    }
-
-    // Check if Firebase is configured
-    if (!isFirebaseConfigured()) {
-      return NextResponse.json(
-        { error: "Firebase is not configured. Please contact the administrator." },
-        { status: 503 }
-      )
-    }
-
     const data = await request.json()
 
     // Validate required fields
@@ -46,7 +34,6 @@ export async function POST(request: Request) {
       }
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(data.email)) {
       return NextResponse.json(
@@ -55,7 +42,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Validate pitch length (should be a good elevator pitch)
     if (data.pitch.length < 50) {
       return NextResponse.json(
         { error: "Pitch description is too short. Please provide at least 50 characters." },
@@ -63,63 +49,16 @@ export async function POST(request: Request) {
       )
     }
 
-    // Check for existing submission from same company/email
-    const existingSubmission = await adminDb
-      .collection(COLLECTIONS.PITCH_SUBMISSIONS)
-      .where("email", "==", data.email.toLowerCase())
-      .get()
+    // DEMO: Simulate processing delay
+    await new Promise((resolve) => setTimeout(resolve, 800))
 
-    if (!existingSubmission.empty) {
-      return NextResponse.json(
-        { error: "You have already submitted a pitch application" },
-        { status: 409 }
-      )
-    }
-
-    // Create pitch submission document
-    const pitchSubmission: PitchSubmissionDocument = {
-      companyName: data.companyName.trim(),
-      founderName: data.founderName.trim(),
-      email: data.email.toLowerCase().trim(),
-      phone: data.phone?.trim() || "",
-      website: data.website?.trim() || "",
-      stage: data.stage,
-      industry: data.industry,
-      pitch: data.pitch.trim(),
-      problem: data.problem.trim(),
-      solution: data.solution.trim(),
-      traction: data.traction?.trim() || "",
-      teamSize: data.teamSize?.trim() || "",
-      fundingRaised: data.fundingRaised?.trim() || "",
-      fundingGoal: data.fundingGoal?.trim() || "",
-      deckUrl: data.deckUrl?.trim() || "",
-      status: "pending",
-      submittedAt: new Date(),
-    }
-
-    // Save to Firestore
-    const docRef = await adminDb
-      .collection(COLLECTIONS.PITCH_SUBMISSIONS)
-      .add(pitchSubmission)
-
-    console.log(`New pitch submission created: ${docRef.id} - ${data.companyName}`)
-
-    // Send confirmation email
-    const emailResult = await sendPitchConfirmation(
-      pitchSubmission.email,
-      pitchSubmission.founderName,
-      pitchSubmission.companyName,
-      docRef.id
-    )
-
-    if (!emailResult.success) {
-      console.warn(`Pitch saved but email failed for ${pitchSubmission.email}`)
-    }
+    const submissionId = `PITCH-${crypto.randomBytes(4).toString("hex").toUpperCase()}`
+    console.log(`[DEMO] Pitch submission simulated: ${submissionId} - ${data.companyName}`)
 
     return NextResponse.json({
       success: true,
-      submissionId: docRef.id,
-      message: "Pitch application submitted successfully",
+      submissionId,
+      message: "Pitch application submitted successfully (demo mode)",
     })
   } catch (error) {
     console.error("Pitch submission error:", error)
@@ -131,33 +70,14 @@ export async function POST(request: Request) {
 }
 
 // GET endpoint for admin to retrieve pitch submissions
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get("status")
-
-    let query = adminDb.collection(COLLECTIONS.PITCH_SUBMISSIONS)
-
-    if (status) {
-      query = query.where("status", "==", status) as typeof query
-    }
-
-    // Order by submission date, newest first
-    query = query.orderBy("submittedAt", "desc") as typeof query
-
-    const snapshot = await query.get()
-
-    const submissions = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      submittedAt: doc.data().submittedAt?.toDate?.()?.toISOString() || null,
-      reviewedAt: doc.data().reviewedAt?.toDate?.()?.toISOString() || null,
-    }))
+    const { DEMO_PITCHES } = await import("@/lib/demo-data")
 
     return NextResponse.json({
       success: true,
-      count: submissions.length,
-      submissions,
+      count: DEMO_PITCHES.length,
+      submissions: DEMO_PITCHES,
     })
   } catch (error) {
     console.error("Pitch submissions fetch error:", error)

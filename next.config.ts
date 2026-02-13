@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
-import { withBotId } from 'botid/next/config';
+
+// DEMO MODE: BotID wrapper removed for demo deployment.
+// In production, this wraps the config with: import { withBotId } from 'botid/next/config'
+// export default withBotId(nextConfig)
 
 const nextConfig: NextConfig = {
   typescript: {
@@ -19,8 +22,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.public.blob.vercel-storage.com",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+      },
     ],
   },
 };
 
-export default withBotId(nextConfig);
+export default nextConfig;

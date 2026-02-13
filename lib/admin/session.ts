@@ -1,14 +1,13 @@
-import { cookies } from "next/headers"
-import { adminAuth } from "@/lib/firebase/admin"
+// DEMO MODE: Firebase session cookie verification removed.
+// In production, this module verifies Firebase session cookies using httpOnly cookies
+// and enforces domain restrictions (e.g., only @434media.com Google accounts).
+
 import type { AdminPermission } from "@/lib/firebase/collections"
 
-// Allowed email domain for Google Sign-in
-const ALLOWED_DOMAIN = "434media.com"
-
-// Default permissions for authenticated admins
+// Default permissions for the demo admin
 const DEFAULT_PERMISSIONS: AdminPermission[] = [
   "registrations",
-  "newsletter", 
+  "newsletter",
   "pitches",
   "speakers",
   "schedule",
@@ -24,46 +23,15 @@ export interface SessionUser {
   uid: string
 }
 
-// Verify admin session from Firebase session cookie
-// Uses Firebase Auth as the source of truth - no Firestore admins collection
+// DEMO: Always returns a valid admin session
+// In production, this verifies Firebase session cookies set via httpOnly cookies
 export async function verifyAdminSession(): Promise<SessionUser | null> {
-  try {
-    const cookieStore = await cookies()
-    const sessionCookie = cookieStore.get("admin_session")?.value
-    
-    if (!sessionCookie) return null
-    
-    // Verify the session cookie with Firebase
-    let decodedClaims
-    try {
-      decodedClaims = await adminAuth.verifySessionCookie(sessionCookie, true)
-    } catch {
-      return null
-    }
-    
-    const email = decodedClaims.email
-    if (!email) return null
-    
-    // For Google sign-in, verify domain is @434.media
-    const signInProvider = decodedClaims.firebase?.sign_in_provider
-    if (signInProvider === "google.com") {
-      const emailDomain = email.split("@")[1]
-      if (emailDomain !== ALLOWED_DOMAIN) {
-        return null
-      }
-    }
-    
-    // All authenticated Firebase users are admins
-    return {
-      email,
-      name: decodedClaims.name || email.split("@")[0],
-      role: "admin",
-      permissions: DEFAULT_PERMISSIONS,
-      uid: decodedClaims.uid,
-    }
-  } catch (error) {
-    console.error("[Session] Error:", error)
-    return null
+  return {
+    email: "demo@techday.sa",
+    name: "Demo Admin",
+    role: "admin",
+    permissions: DEFAULT_PERMISSIONS,
+    uid: "demo-uid-001",
   }
 }
 
@@ -73,11 +41,8 @@ export async function sessionHasPermission(permission: AdminPermission, session:
 export async function sessionHasPermission(permission: AdminPermission, session?: SessionUser | null): Promise<boolean> {
   const currentSession = session !== undefined ? session : await verifyAdminSession()
   if (!currentSession) return false
-  // All authenticated users have all permissions
   return currentSession.permissions.includes(permission)
 }
-
-// Check if session has role or higher (simplified - all users are admins)
 export async function sessionHasRole(requiredRole: "admin" | "viewer" | "editor" | "superadmin"): Promise<boolean> {
   const session = await verifyAdminSession()
   if (!session) return false

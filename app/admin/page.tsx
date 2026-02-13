@@ -99,7 +99,29 @@ export default function AdminOverviewPage() {
         </div>
       </div>
 
-      {/* Recent Activity Placeholder */}
+      {/* Demo Mode Info */}
+      <div className="mb-12">
+        <h2 className="text-xs font-medium uppercase tracking-wider text-neutral-400 mb-4">
+          Demo Mode
+        </h2>
+        <div className="bg-amber-50 border border-amber-200 p-6 space-y-3">
+          <p className="text-sm font-semibold text-amber-800">
+            This is a self-contained demo — no external services required.
+          </p>
+          <ul className="text-xs text-amber-700 space-y-1.5 list-disc list-inside">
+            <li>All data is mock data served from memory (no Firestore)</li>
+            <li>Authentication is simulated (no Firebase Auth)</li>
+            <li>Form submissions succeed but are not persisted</li>
+            <li>Email notifications are simulated (no Resend API)</li>
+            <li>File uploads return placeholder URLs (no Vercel Blob)</li>
+          </ul>
+          <p className="text-xs text-amber-600 pt-1">
+            In production, this dashboard is protected by Firebase Auth session cookies, role-based access control, and server-side token verification on every request.
+          </p>
+        </div>
+      </div>
+
+      {/* System Info */}
       <div>
         <h2 className="text-xs font-medium uppercase tracking-wider text-neutral-400 mb-4">
           System Info

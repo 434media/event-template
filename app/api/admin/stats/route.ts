@@ -1,46 +1,14 @@
 import { NextResponse } from "next/server"
-import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
-import { COLLECTIONS } from "@/lib/firebase/collections"
-import { verifyAdminSession } from "@/lib/admin/session"
+import { DEMO_REGISTRATIONS, DEMO_NEWSLETTER, DEMO_PITCHES } from "@/lib/demo-data"
 
 export const dynamic = "force-dynamic"
 
-// Combined stats endpoint to reduce cold starts and API calls
+// DEMO MODE: Returns counts from mock data.
+// In production, fetches counts from Firestore in parallel for performance.
 export async function GET() {
-  const session = await verifyAdminSession()
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
-
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({
-      registrations: 0,
-      newsletter: 0,
-      pitches: 0,
-      message: "Firebase not configured",
-    })
-  }
-
-  try {
-    // Fetch all counts in parallel for better performance
-    const [registrationsSnapshot, newsletterSnapshot, pitchesSnapshot] = await Promise.all([
-      adminDb.collection(COLLECTIONS.REGISTRATIONS).count().get(),
-      adminDb.collection(COLLECTIONS.NEWSLETTER).where("status", "==", "active").count().get(),
-      adminDb.collection(COLLECTIONS.PITCH_SUBMISSIONS).count().get(),
-    ])
-
-    return NextResponse.json({
-      registrations: registrationsSnapshot.data().count,
-      newsletter: newsletterSnapshot.data().count,
-      pitches: pitchesSnapshot.data().count,
-    })
-  } catch (error) {
-    console.error("Stats fetch error:", error)
-    return NextResponse.json({
-      registrations: 0,
-      newsletter: 0,
-      pitches: 0,
-      error: "Failed to fetch stats",
-    })
-  }
+  return NextResponse.json({
+    registrations: DEMO_REGISTRATIONS.length,
+    newsletter: DEMO_NEWSLETTER.filter((s) => s.status === "active").length,
+    pitches: DEMO_PITCHES.length,
+  })
 }

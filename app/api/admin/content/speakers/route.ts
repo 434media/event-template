@@ -1,226 +1,54 @@
 import { NextResponse } from "next/server"
-import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
-import { COLLECTIONS, type SpeakerContent } from "@/lib/firebase/collections"
-import { verifyAdminSession, sessionHasPermission } from "@/lib/admin/session"
+import { DEMO_SPEAKERS } from "@/lib/demo-data"
+import type { SpeakerContent } from "@/lib/firebase/collections"
 
 export const dynamic = "force-dynamic"
 
+// DEMO MODE: Returns mock speaker data. CRUD operations simulate success.
+// In production, all operations persist to Firestore with session verification.
+
 export async function GET() {
-  const session = await verifyAdminSession()
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
-
-  if (!(await sessionHasPermission("speakers", session))) {
-    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
-  }
-
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ speakers: [], message: "Firebase not configured" })
-  }
-
-  try {
-    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").get()
-    
-    if (!doc.exists) {
-      return NextResponse.json({ speakers: [] })
-    }
-
-    const data = doc.data()
-    return NextResponse.json({
-      speakers: data?.speakers || [],
-      updatedAt: data?.updatedAt?.toDate?.()?.toISOString() || null,
-      updatedBy: data?.updatedBy || null,
-    })
-  } catch (error) {
-    console.error("Speakers fetch error:", error)
-    return NextResponse.json({ error: "Failed to fetch speakers" }, { status: 500 })
-  }
+  return NextResponse.json({
+    speakers: DEMO_SPEAKERS,
+    updatedAt: new Date().toISOString(),
+    updatedBy: "demo@techday.sa",
+  })
 }
 
 export async function POST(request: Request) {
-  const session = await verifyAdminSession()
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const speaker: SpeakerContent = await request.json()
+  if (!speaker.name || !speaker.title) {
+    return NextResponse.json({ error: "Name and title are required" }, { status: 400 })
   }
-
-  if (!(await sessionHasPermission("speakers", session))) {
-    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
-  }
-
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 })
-  }
-
-  try {
-    const speaker: SpeakerContent = await request.json()
-
-    // Validate required fields
-    if (!speaker.name || !speaker.title) {
-      return NextResponse.json({ error: "Name and title are required" }, { status: 400 })
-    }
-
-    // Generate ID if not provided
-    if (!speaker.id) {
-      speaker.id = `speaker-${Date.now()}`
-    }
-
-    // Get current speakers
-    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").get()
-    const currentSpeakers: SpeakerContent[] = doc.exists ? doc.data()?.speakers || [] : []
-
-    // Add new speaker
-    currentSpeakers.push(speaker)
-
-    // Save
-    await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").set({
-      speakers: currentSpeakers,
-      updatedAt: new Date(),
-      updatedBy: session.email,
-    })
-
-    return NextResponse.json({ success: true, speaker })
-  } catch (error) {
-    console.error("Speaker create error:", error)
-    return NextResponse.json({ error: "Failed to create speaker" }, { status: 500 })
-  }
+  if (!speaker.id) speaker.id = `speaker-${Date.now()}`
+  console.log(`[DEMO] Speaker create simulated: ${speaker.name}`)
+  return NextResponse.json({ success: true, speaker })
 }
 
 export async function PUT(request: Request) {
-  const session = await verifyAdminSession()
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const speaker: SpeakerContent = await request.json()
+  if (!speaker.id) {
+    return NextResponse.json({ error: "Speaker ID is required" }, { status: 400 })
   }
-
-  if (!(await sessionHasPermission("speakers", session))) {
-    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
-  }
-
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 })
-  }
-
-  try {
-    const speaker: SpeakerContent = await request.json()
-
-    if (!speaker.id) {
-      return NextResponse.json({ error: "Speaker ID is required" }, { status: 400 })
-    }
-
-    // Get current speakers
-    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").get()
-    const currentSpeakers: SpeakerContent[] = doc.exists ? doc.data()?.speakers || [] : []
-
-    // Find and update speaker
-    const index = currentSpeakers.findIndex((s) => s.id === speaker.id)
-    if (index === -1) {
-      return NextResponse.json({ error: "Speaker not found" }, { status: 404 })
-    }
-
-    currentSpeakers[index] = speaker
-
-    // Save
-    await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").set({
-      speakers: currentSpeakers,
-      updatedAt: new Date(),
-      updatedBy: session.email,
-    })
-
-    return NextResponse.json({ success: true, speaker })
-  } catch (error) {
-    console.error("Speaker update error:", error)
-    return NextResponse.json({ error: "Failed to update speaker" }, { status: 500 })
-  }
+  console.log(`[DEMO] Speaker update simulated: ${speaker.id}`)
+  return NextResponse.json({ success: true, speaker })
 }
 
 export async function PATCH(request: Request) {
-  const session = await verifyAdminSession()
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const { speakers } = await request.json()
+  if (!speakers || !Array.isArray(speakers)) {
+    return NextResponse.json({ error: "Speakers array is required" }, { status: 400 })
   }
-
-  if (!(await sessionHasPermission("speakers", session))) {
-    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
-  }
-
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 })
-  }
-
-  try {
-    const { speakers }: { speakers: SpeakerContent[] } = await request.json()
-
-    if (!speakers || !Array.isArray(speakers)) {
-      return NextResponse.json({ error: "Speakers array is required" }, { status: 400 })
-    }
-
-    // Save reordered speakers
-    await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").set({
-      speakers,
-      updatedAt: new Date(),
-      updatedBy: session.email,
-    })
-
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error("Speaker reorder error:", error)
-    return NextResponse.json({ error: "Failed to reorder speakers" }, { status: 500 })
-  }
+  console.log(`[DEMO] Speaker reorder simulated: ${speakers.length} speakers`)
+  return NextResponse.json({ success: true })
 }
 
 export async function DELETE(request: Request) {
-  const session = await verifyAdminSession()
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get("id")
+  if (!id) {
+    return NextResponse.json({ error: "Speaker ID is required" }, { status: 400 })
   }
-
-  if (!(await sessionHasPermission("speakers", session))) {
-    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
-  }
-
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 })
-  }
-
-  try {
-    const { searchParams } = new URL(request.url)
-    const id = searchParams.get("id")
-
-    if (!id) {
-      return NextResponse.json({ error: "Speaker ID is required" }, { status: 400 })
-    }
-
-    // Bulk delete all speakers
-    if (id === "all") {
-      await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").set({
-        speakers: [],
-        updatedAt: new Date(),
-        updatedBy: session.email,
-      })
-      return NextResponse.json({ success: true, message: "All speakers deleted" })
-    }
-
-    // Get current speakers
-    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").get()
-    const currentSpeakers: SpeakerContent[] = doc.exists ? doc.data()?.speakers || [] : []
-
-    // Filter out the deleted speaker
-    const updatedSpeakers = currentSpeakers.filter((s) => s.id !== id)
-
-    if (updatedSpeakers.length === currentSpeakers.length) {
-      return NextResponse.json({ error: "Speaker not found" }, { status: 404 })
-    }
-
-    // Save
-    await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").set({
-      speakers: updatedSpeakers,
-      updatedAt: new Date(),
-      updatedBy: session.email,
-    })
-
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error("Speaker delete error:", error)
-    return NextResponse.json({ error: "Failed to delete speaker" }, { status: 500 })
-  }
+  console.log(`[DEMO] Speaker delete simulated: ${id}`)
+  return NextResponse.json({ success: true })
 }

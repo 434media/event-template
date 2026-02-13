@@ -1,19 +1,21 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { Space_Grotesk, JetBrains_Mono, Syne, Bebas_Neue } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import { BotIdClient } from "botid/client"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Providers } from "@/components/providers"
+import { DemoBanner } from "@/components/demo-banner"
 import "./globals.css"
 
-const protectedRoutes = [
-  { path: "/api/register", method: "POST" },
-  { path: "/api/pitch", method: "POST" },
-  { path: "/api/newsletter", method: "POST" },
-  { path: "/api/sponsor-contact", method: "POST" },
-]
+// DEMO MODE: BotID client-side protection removed.
+// In production, this component injects bot detection scripts:
+//   import { BotIdClient } from "botid/client"
+//   const protectedRoutes = [
+//     { path: "/api/register", method: "POST" },
+//     { path: "/api/pitch", method: "POST" },
+//     { path: "/api/newsletter", method: "POST" },
+//     { path: "/api/sponsor-contact", method: "POST" },
+//   ]
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -62,15 +64,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <BotIdClient protect={protectedRoutes} />
+        {/* DEMO MODE: BotIdClient and Vercel Analytics removed.
+            In production:
+              <BotIdClient protect={protectedRoutes} />
+            And in body:
+              <Analytics /> from @vercel/analytics
+        */}
       </head>
       <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} ${bebasNeue.variable} font-sans antialiased`}>
         <Providers>
+          <DemoBanner />
           <Navbar />
           {children}
           <Footer />
         </Providers>
-        <Analytics />
       </body>
     </html>
   )

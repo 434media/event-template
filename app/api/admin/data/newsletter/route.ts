@@ -1,110 +1,29 @@
 import { NextResponse } from "next/server"
-import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
-import { COLLECTIONS } from "@/lib/firebase/collections"
-import { verifyAdminSession, sessionHasPermission } from "@/lib/admin/session"
+import { DEMO_NEWSLETTER } from "@/lib/demo-data"
 
 export const dynamic = "force-dynamic"
 
-export async function GET(request: Request) {
-  const session = await verifyAdminSession()
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
+// DEMO MODE: Returns mock newsletter subscriber data.
+export async function GET() {
+  const subscribers = DEMO_NEWSLETTER.map((s) => ({
+    ...s,
+    subscribedAt: s.subscribedAt instanceof Date ? s.subscribedAt.toISOString() : s.subscribedAt,
+  }))
 
-  if (!(await sessionHasPermission("newsletter", session))) {
-    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
-  }
-
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ 
-      subscribers: [], 
-      total: 0,
-      message: "Firebase not configured" 
-    })
-  }
-
-  try {
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get("status") || "active"
-    const limit = parseInt(searchParams.get("limit") || "100")
-
-    let query = adminDb
-      .collection(COLLECTIONS.NEWSLETTER)
-      .orderBy("subscribedAt", "desc")
-      .limit(limit)
-
-    if (status !== "all") {
-      query = query.where("status", "==", status) as typeof query
-    }
-
-    const snapshot = await query.get()
-
-    const subscribers = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      subscribedAt: doc.data().subscribedAt?.toDate?.()?.toISOString() || null,
-    }))
-
-    return NextResponse.json({
-      subscribers,
-      total: subscribers.length,
-    })
-  } catch (error) {
-    console.error("Newsletter fetch error:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch subscribers" },
-      { status: 500 }
-    )
-  }
+  return NextResponse.json({
+    subscribers,
+    total: subscribers.length,
+  })
 }
 
 export async function DELETE(request: Request) {
-  const session = await verifyAdminSession()
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get("id")
+
+  if (!id) {
+    return NextResponse.json({ error: "Subscriber ID is required" }, { status: 400 })
   }
 
-  if (!(await sessionHasPermission("newsletter", session))) {
-    return NextResponse.json({ error: "Permission denied" }, { status: 403 })
-  }
-
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 })
-  }
-
-  try {
-    const { searchParams } = new URL(request.url)
-    const id = searchParams.get("id")
-
-    if (!id) {
-      return NextResponse.json({ error: "Subscriber ID is required" }, { status: 400 })
-    }
-
-    if (id === "all") {
-      const snapshot = await adminDb.collection(COLLECTIONS.NEWSLETTER).get()
-      const batch = adminDb.batch()
-      let count = 0
-
-      for (const doc of snapshot.docs) {
-        batch.delete(doc.ref)
-        count++
-
-        if (count % 500 === 0) {
-          await batch.commit()
-        }
-      }
-
-      if (count % 500 !== 0) {
-        await batch.commit()
-      }
-
-      return NextResponse.json({ success: true, message: `Deleted ${count} subscribers` })
-    }
-
-    await adminDb.collection(COLLECTIONS.NEWSLETTER).doc(id).delete()
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error("Newsletter delete error:", error)
-    return NextResponse.json({ error: "Failed to delete subscriber" }, { status: 500 })
-  }
+  console.log(`[DEMO] Newsletter delete simulated: ${id}`)
+  return NextResponse.json({ success: true })
 }

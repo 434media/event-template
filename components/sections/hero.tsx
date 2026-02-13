@@ -264,11 +264,9 @@ export function Hero() {
                     rel={sponsor.website ? "noopener noreferrer" : undefined}
                     className="opacity-50 hover:opacity-100 transition-opacity"
                   >
-                    <Image
+                    <img
                       src={sponsor.logoUrl}
                       alt={sponsor.name}
-                      width={80}
-                      height={32}
                       className="h-6 md:h-8 w-auto grayscale hover:grayscale-0 transition-all"
                     />
                   </a>

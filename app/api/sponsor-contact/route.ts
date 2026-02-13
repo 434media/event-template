@@ -1,27 +1,14 @@
 import { NextResponse } from "next/server"
-import { checkBotId } from "botid/server"
-import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
-import { COLLECTIONS, type SponsorContactDocument } from "@/lib/firebase/collections"
-import { sendSponsorInquiryConfirmation } from "@/lib/email/resend"
+
+// DEMO MODE: Firebase, Resend, and BotID imports removed.
+// In production, this route:
+//   1. Verifies bot protection via BotID
+//   2. Validates contact form fields
+//   3. Saves sponsor inquiry to Firestore
+//   4. Sends branded confirmation email via Resend
 
 export async function POST(request: Request) {
   try {
-    // Verify the request is not from a bot using BotID
-    // Can be disabled via DISABLE_BOT_PROTECTION=true env var for debugging
-    if (process.env.DISABLE_BOT_PROTECTION !== "true") {
-      const verification = await checkBotId()
-      if (verification.isBot) {
-        return NextResponse.json({ error: "Access denied" }, { status: 403 })
-      }
-    }
-
-    if (!isFirebaseConfigured()) {
-      return NextResponse.json(
-        { error: "Firebase is not configured. Please contact the administrator." },
-        { status: 503 }
-      )
-    }
-
     const data = await request.json()
 
     // Validate required fields
@@ -35,7 +22,6 @@ export async function POST(request: Request) {
       }
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(data.workEmail)) {
       return NextResponse.json(
@@ -44,38 +30,14 @@ export async function POST(request: Request) {
       )
     }
 
-    const contact: SponsorContactDocument = {
-      firstName: data.firstName.trim(),
-      lastName: data.lastName.trim(),
-      company: data.company.trim(),
-      workEmail: data.workEmail.toLowerCase().trim(),
-      phone: data.phone?.trim() || "",
-      message: data.message.trim(),
-      status: "new",
-      submittedAt: new Date(),
-    }
+    // DEMO: Simulate processing delay
+    await new Promise((resolve) => setTimeout(resolve, 600))
 
-    const docRef = await adminDb
-      .collection(COLLECTIONS.SPONSOR_CONTACTS)
-      .add(contact)
-
-    console.log(`New sponsor inquiry: ${docRef.id} — ${contact.company}`)
-
-    // Send confirmation email
-    const emailResult = await sendSponsorInquiryConfirmation(
-      contact.workEmail,
-      contact.firstName,
-      contact.lastName,
-      contact.company
-    )
-
-    if (!emailResult.success) {
-      console.warn(`Sponsor inquiry saved but email failed for ${contact.workEmail}`)
-    }
+    console.log(`[DEMO] Sponsor inquiry simulated: ${data.company}`)
 
     return NextResponse.json({
       success: true,
-      message: "Inquiry submitted successfully",
+      message: "Inquiry submitted successfully (demo mode)",
     })
   } catch (error) {
     console.error("Sponsor contact error:", error)

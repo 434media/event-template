@@ -83,7 +83,7 @@ export default function RegisterPage() {
             {/* Form Header with Logo */}
             <div className="flex items-start justify-between mb-6 pb-6 border-b border-border">
               <div>
-                <p className="font-mono text-xs text-primary tracking-widest font-semibold uppercase mb-1">Free Event</p>
+                <p className="font-mono text-xs text-primary tracking-widest font-semibold uppercase mb-1">Register Now</p>
                 <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">Registration Form</h2>
                 <p className="text-sm text-muted-foreground mt-1 font-medium">April 20–21, 2026 • San Antonio, TX</p>
               </div>

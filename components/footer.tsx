@@ -83,9 +83,7 @@ export function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="https://twitter.com/SATechBloc"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#"
                   className="text-muted-foreground hover:text-primary transition-colors font-medium"
                 >
                   Twitter / X
@@ -93,9 +91,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://www.linkedin.com/company/sa-tech-bloc/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#"
                   className="text-muted-foreground hover:text-primary transition-colors font-medium"
                 >
                   LinkedIn
@@ -103,9 +99,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://www.instagram.com/techbloc/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#"
                   className="text-muted-foreground hover:text-primary transition-colors font-medium"
                 >
                   Instagram

@@ -1,29 +1,11 @@
 import { NextResponse } from "next/server"
-import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
-import { COLLECTIONS } from "@/lib/firebase/collections"
+import { DEMO_SESSIONS } from "@/lib/demo-data"
 
 export const dynamic = "force-dynamic"
-export const revalidate = 60 // Cache for 60 seconds
+export const revalidate = 60
 
-// Public endpoint to fetch schedule for the website
+// DEMO MODE: Returns mock schedule data.
+// In production, fetches from Firestore content collection.
 export async function GET() {
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ sessions: [] })
-  }
-
-  try {
-    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("schedule").get()
-    
-    if (!doc.exists) {
-      return NextResponse.json({ sessions: [] })
-    }
-
-    const data = doc.data()
-    return NextResponse.json({
-      sessions: data?.sessions || [],
-    })
-  } catch (error) {
-    console.error("Public schedule fetch error:", error)
-    return NextResponse.json({ sessions: [] })
-  }
+  return NextResponse.json({ sessions: DEMO_SESSIONS })
 }

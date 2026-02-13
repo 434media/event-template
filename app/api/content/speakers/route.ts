@@ -1,29 +1,11 @@
 import { NextResponse } from "next/server"
-import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin"
-import { COLLECTIONS } from "@/lib/firebase/collections"
+import { DEMO_SPEAKERS } from "@/lib/demo-data"
 
 export const dynamic = "force-dynamic"
-export const revalidate = 60 // Cache for 60 seconds
+export const revalidate = 60
 
-// Public endpoint to fetch speakers for the website
+// DEMO MODE: Returns mock speaker data.
+// In production, fetches from Firestore content collection.
 export async function GET() {
-  if (!isFirebaseConfigured()) {
-    return NextResponse.json({ speakers: [] })
-  }
-
-  try {
-    const doc = await adminDb.collection(COLLECTIONS.CONTENT).doc("speakers").get()
-    
-    if (!doc.exists) {
-      return NextResponse.json({ speakers: [] })
-    }
-
-    const data = doc.data()
-    return NextResponse.json({
-      speakers: data?.speakers || [],
-    })
-  } catch (error) {
-    console.error("Public speakers fetch error:", error)
-    return NextResponse.json({ speakers: [] })
-  }
+  return NextResponse.json({ speakers: DEMO_SPEAKERS })
 }
