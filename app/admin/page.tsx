@@ -38,7 +38,7 @@ export default function AdminOverviewPage() {
   }, [])
 
   return (
-    <div className="p-8 lg:p-12">
+    <div className="p-8 lg:p-12 pt-16 md:mt-2">
       {/* Header */}
       <div className="mb-12">
         <p className="text-xs font-medium uppercase tracking-wider text-neutral-400 mb-1">

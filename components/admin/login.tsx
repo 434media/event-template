@@ -15,7 +15,7 @@ export function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+    <div className="min-dvh bg-white flex items-center justify-center p-4 pt-32">
       <div className="w-full max-w-lg">
         {/* Header */}
         <div className="mb-8 text-center">

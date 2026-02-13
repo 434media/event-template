@@ -120,7 +120,7 @@ export function AdminSidebar() {
   return (
     <>
       {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-16 left-0 right-0 bg-white border-b border-neutral-200 z-40 px-4 py-3">
+      <div className="lg:hidden fixed top-26 left-0 right-0 bg-white border-b border-neutral-200 z-40 px-4 py-3">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-sm font-semibold text-black">Admin Panel</h1>
@@ -216,7 +216,7 @@ export function AdminSidebar() {
       )}
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 bg-white border-r border-neutral-200 flex-col sticky left-0 top-16 h-[calc(100vh-4rem)] z-40">
+      <aside className="hidden lg:flex w-64 bg-white border-r border-neutral-200 flex-col sticky left-0 top-8 h-[calc(100vh-4rem)] z-40">
         {/* Logo */}
         <div className="p-6 border-b border-neutral-200">
           <Link href="/admin" className="block">
