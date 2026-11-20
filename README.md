@@ -157,12 +157,6 @@ FIREBASE_PROJECT_ID=your-project-id
 FIREBASE_CLIENT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 
-# Admin Session Secret (generate with: openssl rand -base64 32)
-ADMIN_SESSION_SECRET=your-secure-random-string
-
-# Admin Users (format: email|role|name|question|answer|pin)
-ADMIN_USERS=admin@example.com|superadmin|Admin|What is 2+2?|4|1234
-
 # Vercel Blob (for file uploads)
 BLOB_READ_WRITE_TOKEN=your-vercel-blob-token
 ```
@@ -203,7 +197,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - **Anniversary** (`/anniversary`) — 10-year celebration page
 
 ### Admin Dashboard (`/admin`)
-- Protected authentication with PIN verification
+- Demo only: closed (404) on deployments by `proxy.ts`; open in local development
 - Manage registrations, pitch submissions, newsletter subscribers
 - Content management for speakers, sponsors, schedule, partners
 - File uploads via Vercel Blob
@@ -270,8 +264,6 @@ Add the following environment variables in your Vercel project settings:
 - `FIREBASE_PROJECT_ID`
 - `FIREBASE_CLIENT_EMAIL`
 - `FIREBASE_PRIVATE_KEY`
-- `ADMIN_SESSION_SECRET`
-- `ADMIN_USERS`
 - `BLOB_READ_WRITE_TOKEN`
 
 ---

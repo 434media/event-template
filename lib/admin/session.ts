@@ -23,9 +23,11 @@ export interface SessionUser {
   uid: string
 }
 
-// DEMO: Always returns a valid admin session
-// In production, this verifies Firebase session cookies set via httpOnly cookies
+// DEMO: returns the demo admin in local development only, and no session
+// anywhere else, so nothing that calls this can fail open on a deployment.
+// In production, this verifies Firebase session cookies set via httpOnly cookies.
 export async function verifyAdminSession(): Promise<SessionUser | null> {
+  if (process.env.NODE_ENV !== "development") return null
   return {
     email: "demo@techday.sa",
     name: "Demo Admin",

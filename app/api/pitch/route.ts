@@ -68,22 +68,3 @@ export async function POST(request: Request) {
     )
   }
 }
-
-// GET endpoint for admin to retrieve pitch submissions
-export async function GET() {
-  try {
-    const { DEMO_PITCHES } = await import("@/lib/demo-data")
-
-    return NextResponse.json({
-      success: true,
-      count: DEMO_PITCHES.length,
-      submissions: DEMO_PITCHES,
-    })
-  } catch (error) {
-    console.error("Pitch submissions fetch error:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch pitch submissions" },
-      { status: 500 }
-    )
-  }
-}
